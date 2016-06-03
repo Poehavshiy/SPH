@@ -3,9 +3,10 @@
 //
 
 #include "Help.h"
+#include "SpaceParsing.h"
 
 //1- x1, 2-y1, 3-x2, 4-y2, 5-number of 1st type particles //seems ok
-void ReadWrite::parseBound(string &current, vector<vector<double>> &geometry) {
+void ReadWrite::parse_bound(string &current, vector<vector<double>> &geometry) {
     int j = 0, signs = 0;
     int n = 0;
     vector<double> curG;
@@ -26,19 +27,39 @@ void ReadWrite::parseBound(string &current, vector<vector<double>> &geometry) {
 }
 
 //
-Point ReadWrite::parseInit(const string &current) {
-    double x; double y;
+Point ReadWrite::parse_init(const string &current) {
+    double x;
+    double y;
     return Point(0, 0);
 }
 
+//
+//write boundary
+void ReadWrite::data_write(ostream &os, vector<vector<Particle>> &boundaries) {
+    for (int i = 0; i < boundaries.size(); ++i) {
+        for (int j = 0; j < boundaries[i].size(); ++j) {
+            os << boundaries[i][j];
+        }
+    }
+}
+
+//
+void ReadWrite::data_write(ostream &os, vector<Particle>& data) {
+    os << "next" << endl;
+    for (int i = 0; i < data.size(); ++i) {
+        os << data[i];
+    }
+}
+//
 ////seems ok
-void Help::fillBoundLine(vector<Particle> &current, vector<double> &line) {
-    double xstep = abs(line[2] - line[0]) / line[4];
-    double ystep = abs(line[3] - line[1]) / line[4];
+void Help::fill_bound_line(vector<Particle> &current, vector<double> &line) {
+    double xstep = (line[2] - line[0]) / line[4];
+    double ystep = (line[3] - line[1]) / line[4];
     //
     for (int i = 0; i < current.size(); ++i) {
-        current[i].set_pos(line[0] + xstep * i, line[2] + ystep * i);
+        current[i].set_pos(line[0] + xstep * i, line[1] + ystep * i);
     }
     current.push_back(Particle(1));
-    current[current.size()-1].set_pos(line[2], line[3]);
+    current[current.size() - 1].set_pos(line[2], line[3]);
 }
+//

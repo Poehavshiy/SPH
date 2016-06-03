@@ -5,47 +5,37 @@
 #ifndef SPHSM6_FLOW_H
 #define SPHSM6_FLOW_H
 
-#include "Particile.h"
 #include <sstream>
 #include <fstream>
-
-struct BoundaryPart {
-    vector<Particle> particiles;
-    double r;
-    BoundaryPart(vector<Particle>& income, double R){
-        particiles=income;
-        r=R;
-    }
-};
-
+#include "Calculator.h"
 
 
 class Flow {
-    vector <Particle> data;
+    SpaceParsing *s_distribution;
     //
-    vector<BoundaryPart> boundaries;//index -
+    Calculator* calculator;
+    //
+    vector<Particle> data;
+    //
+    vector<vector<Particle>> boundaries;//each vector represents line, consisted from Particles
     //1- x1, 2-y1, 3-x2, 4-y2, 5-number of 1st type particles
     vector<vector<double>> geometry;
     //
-    void setBound(const string& boundaryFile);
+    void set_bound(const string &boundaryFile);
     //
-    void setInit(const string& initFile);
+    void set_init(const string &initFile);
     //
-    void buildBoundPart();
+    void build_bound_part();
     //
-    void buildInitPart(vector<Point>& branch);
+    void build_init_part(vector<Point> &branch);
     //
-    void dataWrite(ostream& os);
-    //
-    void calculateStep();
+    void calculate_step();
 public:
     //
-    Flow(const string& boundaryFile, const string& initFile);
+    Flow(const string &boundaryFile, const string &initFile);
     //
     void calculate();
     //
-
-
 };
 
 

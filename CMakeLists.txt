@@ -3,5 +3,13 @@ project(SPHSm6)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp Particile.cpp Particile.h Flow.cpp Flow.h Help.cpp Help.h)
+set(
+        SOURCE_FILES
+        main.cpp
+        Particile.cpp Particile.h
+        Flow.cpp Flow.h
+        Help.cpp Help.h
+        SpaceParsing.cpp SpaceParsing.h
+        Calculator.cpp Calculator.h
+        )
 add_executable(SPHSm6 ${SOURCE_FILES})
