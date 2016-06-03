@@ -98,7 +98,7 @@ namespace calculations {
     }
 
 //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle &b, bool direct) {
+    double two_part_bforse(Particle &a, Particle& b, bool direct) {
         double r = calculations::r_ij(a, b);
         double ratio = r0 / r;
         if (ratio > 1) return 0;
@@ -123,6 +123,7 @@ namespace calculations {
     double calc_p_d(Particle &a, PartPointers &all_real, PartPointers_add &all_add) {
         double res = 0;
         for (int i = 0; i < all_real.size(); ++i) {
+
             for (int j = 0; j < all_real[i]->size(); ++j) {
                 res += calculations::two_part_p(a, *all_real[i]->operator[](j));
             }
@@ -144,12 +145,14 @@ namespace calculations {
         double res = 0;
         //здесь м посчитали часть производной скорости от других реальныз частиц
         for (int i = 0; i < all_real.size(); ++i) {
+
             for (int j = 0; j < all_real[i]->size(); ++j) {
                 res += calculations::two_part_v(a, *all_real[i]->operator[](j), direct);
             }
         }
         //теперь тут надо посчитать от симетричных частиц за границей
         for (int i = 0; i < all_add.size(); ++i) {
+
             for (int j = 0; j < all_add[i]->size(); ++j) {
                 res += calculations::two_part_v(a, all_add[i]->operator[](j), direct);
             }
@@ -157,8 +160,9 @@ namespace calculations {
         res = -res;
         //а вот тут надо посчитать производную от действия граничных частиц
         for (int i = 0; i < all_bound.size(); ++i) {
+
             for (int j = 0; j < all_bound[i]->size(); ++j) {
-                res += calculations::two_part_bforse(a, all_add[i]->operator[](j), direct);
+                res += calculations::two_part_bforse(a, *all_bound[i]->operator[](j), direct);
             }
         }
         return res;
@@ -234,7 +238,7 @@ void *Calculator::get_part_around(int row, int column, int i, int type) {
     else return &parsing->part_groups[r_row][r_column].symetric_group;
 }
 
-//
+//функция должна собрать все реальные частицы из  Cellов вокруг i,j Cell
 PartPointers Calculator::get_real_part(int &row, int &column) {
     vector<vector<Particle *> *> result;
     result.push_back(&(parsing->part_groups[row][column].real_group));
@@ -265,7 +269,7 @@ PartPointers_add Calculator::get_sym_part(int &row, int &column) {
     vector<vector<Particle> *> result;
     result.push_back(&(parsing->part_groups[row][column].symetric_group));
     for (int i = 0; i < 8; ++i) {
-        vector<Particle> *cur = (vector<Particle> *) get_part_around(row, column, i, 0);
+        vector<Particle> *cur = (vector<Particle> *) get_part_around(row, column, i, 2);
         if (cur != NULL) {
             result.push_back(cur);
         }
@@ -484,5 +488,7 @@ void Calculator::calculate() {
     vy_derivatives.clear();
     e_derivatives.clear();
     for_replacement.clear();
+    //заново нужно создать теневые частицы
+    parsing->create_symetric_groups();
 
 }

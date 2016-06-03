@@ -54,14 +54,15 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch) {
-    int number = 20;
+    int number = 100;
+    //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
-    double XYratio = X / Y;
-    int per_y = 2 * sqrt(number) / (XYratio + 1);
-    int per_x = number / per_y;
+   // double XYratio = X / Y;
+    int per_y = sqrt(number);
+    int per_x = per_y;//number / per_y;
     double xstep = X / per_x;
-    double ystep = Y / per_y;
+    double ystep = Y / (per_y-1);
     //
     double P = 1;
     double p = 0.1;
@@ -90,17 +91,19 @@ void Flow::calculate_step() {
 
 //
 void Flow::calculate() {
-    ofstream result("/home/nikita/SPHSm6/result.txt");
+    ofstream check("/home/nikita/SPHSm6/result.txt");
+    ofstream result("/home/nikita/SPHSm6/result1.txt");
     calculator = new Calculator(s_distribution);
-/*    for (int i = 0; i < 100; ++i) {
-        calculate_step();
+    for (int i = 0; i < 1; ++i) {
+        //calculate_step();
 //        ReadWrite::data_write(result, data);
-        result<<"next"<<endl;
-        result<<*s_distribution;
+        check<<"next"<<endl;
+        check<<*s_distribution;
    //     ReadWrite::data_write(result, boundaries);
     }
-    */
-    while (calculations::current_time < 1) {
+
+    while (calculations::current_time < 0.05) {
+       // cout<<calculations::current_time<<endl;
         calculator->calculate();
         ReadWrite::data_write(result, data);
         ReadWrite::data_write(result, boundaries);

@@ -44,7 +44,7 @@ namespace calculations {
     double two_part_e(Particle &a, Particle &b) ;
 
     //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle &b, bool direct) ;
+    double two_part_bforse(Particle &a, Particle& b, bool direct) ;
 
     //
     //Вот эти 3 функции считают соответствующую  производную для частицы а векторы, переддаваемые
