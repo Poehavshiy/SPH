@@ -9,10 +9,10 @@ namespace calculations {
 
     double current_time = 0;
 
-    double h = 2;
+    double h = 10;
 
 //для подсчета силы от гарничных частиц
-    double r0 = 10;
+    double r0 = 3;
 
     double D = 100;
 
@@ -44,10 +44,10 @@ namespace calculations {
         double result = 0;
         double x = r / h;
         if (x >= 0 && x <= 1) {
-            result = (1 / 3.14 * pow(h, 4)) * ((9.0 / 4.0) * pow(x, 2) - 3.0 * x);
+            result = (1 / (3.14 * pow(h, 4))) * ((9.0 / 4.0) * pow(x, 2) - 3.0 * x);
         }
         else if (x >= 1 && x <= 2) {
-            result = (1 / 3.14 * pow(h, 4)) * (3.0 / 4.0) * -pow(2 - x, 2);
+            result = (1 / (3.14 * pow(h, 4))) * (3.0 / 4.0) * -pow(2 - x, 2);
         }
         return result;
     }
@@ -98,7 +98,7 @@ namespace calculations {
     }
 
 //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle& b, bool direct) {
+    double two_part_bforse(Particle &a, Particle &b, bool direct) {
         double r = calculations::r_ij(a, b);
         double ratio = r0 / r;
         if (ratio > 1) return 0;
@@ -284,6 +284,7 @@ void Calculator::calculate_derivatives() {
      * частиц с которыми потенциально может провзаимодействовать любая частица в этой i,j области
      */
     for (int i = 0; i < parsing->cells_per_y; ++i) {
+
         for (int j = 0; j < parsing->cells_per_x; ++j) {
 
             PartPointers all_real = get_real_part(i, j);
@@ -424,8 +425,8 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
       */
     double new_P = new_e * 0.4 * new_p;
     Particle result(0, new_p, new_P, new_e, new_vx, new_vy, mass);
-    double new_x = a.X() + dt * vx_derivatives[index];
-    double new_y = a.Y() + dt * vy_derivatives[index];
+    double new_x = a.X() + dt * new_vx;
+    double new_y = a.Y() + dt * new_vy;
     Point new_pos(new_x, new_y);
     result.set_pos(new_pos);
     return result;
@@ -478,7 +479,6 @@ void Calculator::replace(from_second_replace &replase_inf) {
 void Calculator::calculate() {
 
     calculate_derivatives();
-
     calculate_final();
 
     calculations::current_time += calculations::deltaT;
@@ -490,5 +490,4 @@ void Calculator::calculate() {
     for_replacement.clear();
     //заново нужно создать теневые частицы
     parsing->create_symetric_groups();
-
 }

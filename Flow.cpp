@@ -64,9 +64,9 @@ void Flow::build_init_part(vector<Point> &branch) {
     double xstep = X / per_x;
     double ystep = Y / (per_y-1);
     //
-    double P = 1;
-    double p = 0.1;
-    double mass = 0.5;
+    double P = 100;
+    double p = 2;
+    double mass = 1;
     double e = P / (0.4 * p);
     for (int i = 0; i < number; ++i) {
         data.push_back(Particle(0, p, P, e, 10, 0, mass));
@@ -102,9 +102,17 @@ void Flow::calculate() {
    //     ReadWrite::data_write(result, boundaries);
     }
 
-    while (calculations::current_time < 0.05) {
+    while (calculations::current_time < 1) {
        // cout<<calculations::current_time<<endl;
-        calculator->calculate();
+        //cout<<data.size()<<endl;
+        //calculator->calculate();
+        calculations::current_time+=calculations::deltaT;
+        for(int i = 0; i<data.size() ; ++i) {
+            double newx=data[i].X()+0.1;
+            double newy=data[i].Y()+0.1;
+            data[i].set_pos(newx, newy);
+        }
+
         ReadWrite::data_write(result, data);
         ReadWrite::data_write(result, boundaries);
     }
