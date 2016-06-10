@@ -10,7 +10,26 @@
 #include <iostream>
 #include <vector>
 #include<map>
+<<<<<<< HEAD
+//
+//QTшные либы
+#include <QMainWindow>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
+#include <QMouseEvent>
+#include <QPointF>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QMenu>
+#include <QtGui>
+#include <QMenuBar>
+#include <QToolButton>
+#include <QtWidgets>
+//
+=======
 
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
 using namespace std;
 
 
@@ -72,12 +91,20 @@ public:
     }*/
 
     //get functions
+<<<<<<< HEAD
+    double X() const {
+=======
     double X() {
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
         return pos.x;
     }
 
     //
+<<<<<<< HEAD
+    double Y() const{
+=======
     double Y() {
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
         return pos.y;
     }
 

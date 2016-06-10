@@ -31,11 +31,26 @@ class Flow {
     //
     void calculate_step();
 public:
+<<<<<<< HEAD
+    friend class Flow_Drawer;
+    //
+    Flow(const string &boundaryFile, const string &initFile);
+    //
+    virtual void calculate();
+    //
+    const void* get_part(int type){
+        if( type == 0) return &boundaries;
+        else if(type == 1) return &data;
+        else if(type == 2) return s_distribution->get_parsing();
+    }
+
+=======
     //
     Flow(const string &boundaryFile, const string &initFile);
     //
     void calculate();
     //
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
 };
 
 

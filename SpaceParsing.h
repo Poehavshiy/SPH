@@ -66,6 +66,17 @@ public:
 
     friend class SpaceParsing;
 
+<<<<<<< HEAD
+    Point get_left_bottom() const {
+        return left_bottom;
+    }
+    //
+    Point get_right_top() const {
+        return right_top;
+    }
+
+=======
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
     //
     bool insert(Particle &particle) {
         bool inside = is_inside(particle);
@@ -108,6 +119,15 @@ public:
         boundary = false;
     }
 
+<<<<<<< HEAD
+    const vector<Particle>* get_shadow() const{
+        return &symetric_group;
+    }
+
+
+
+=======
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
     friend std::istream &operator<<(ostream &is, Cell &income) {
         is << income.left_bottom;
         is << ' ' << 800 << endl;
@@ -285,13 +305,24 @@ public:
 
     //
     friend std::istream &operator<<(ostream &is, SpaceParsing &income) {
+<<<<<<< HEAD
+        //
+=======
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
         for (int i = 0; i < income.cells_per_y; ++i) {
             for (int j = 0; j < income.cells_per_x; ++j) {
                 is << income.part_groups[i][j];
             }
         }
     }
+<<<<<<< HEAD
+    //
+    const vector<vector<Cell>>* get_parsing(){
+        return &part_groups;
+    }
+=======
 
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
 };
 
 

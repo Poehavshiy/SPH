@@ -91,6 +91,14 @@ void Flow::calculate_step() {
 
 //
 void Flow::calculate() {
+<<<<<<< HEAD
+
+    calculator = new Calculator(s_distribution);
+    while (calculations::current_time < 1) {
+        calculator->calculate();
+        calculations::current_time+=calculations::deltaT;
+    }
+=======
     ofstream check("/home/nikita/SPHSm6/result.txt");
     ofstream result("/home/nikita/SPHSm6/result1.txt");
     calculator = new Calculator(s_distribution);
@@ -117,4 +125,5 @@ void Flow::calculate() {
         ReadWrite::data_write(result, boundaries);
     }
     result.close();
+>>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
 }
