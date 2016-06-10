@@ -91,39 +91,10 @@ void Flow::calculate_step() {
 
 //
 void Flow::calculate() {
-<<<<<<< HEAD
 
     calculator = new Calculator(s_distribution);
     while (calculations::current_time < 1) {
         calculator->calculate();
         calculations::current_time+=calculations::deltaT;
     }
-=======
-    ofstream check("/home/nikita/SPHSm6/result.txt");
-    ofstream result("/home/nikita/SPHSm6/result1.txt");
-    calculator = new Calculator(s_distribution);
-    for (int i = 0; i < 1; ++i) {
-        //calculate_step();
-//        ReadWrite::data_write(result, data);
-        check<<"next"<<endl;
-        check<<*s_distribution;
-   //     ReadWrite::data_write(result, boundaries);
-    }
-
-    while (calculations::current_time < 1) {
-       // cout<<calculations::current_time<<endl;
-        //cout<<data.size()<<endl;
-        //calculator->calculate();
-        calculations::current_time+=calculations::deltaT;
-        for(int i = 0; i<data.size() ; ++i) {
-            double newx=data[i].X()+0.1;
-            double newy=data[i].Y()+0.1;
-            data[i].set_pos(newx, newy);
-        }
-
-        ReadWrite::data_write(result, data);
-        ReadWrite::data_write(result, boundaries);
-    }
-    result.close();
->>>>>>> 883cc5708c435c9115b864d6fdf26606dffc1703
 }
