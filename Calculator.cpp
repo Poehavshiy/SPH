@@ -9,7 +9,7 @@ namespace calculations {
 
     double current_time = 0;
 
-    double h = 10;
+    double h = 50;
 
 //для подсчета силы от гарничных частиц
     double r0 = 3;
@@ -378,19 +378,15 @@ void Calculator::calculate_final() {
 //
 //
 /*
- * вот это краегольно важная функция для рассчета значения на новом временном слое
+ * вот это краеугольно важная функция для рассчета значения на новом временном слое
  * в нее передается Cell и индексы этого Cell  в parsing->part_groups
  * индесы нужны для рассчета позиции производной для этой частицы в векторе производных
- *
- *
 */
 void Calculator::calc_t_values(Cell &target, int &row, int &colum) {
     //вектор содержащий частицы вылетившие из target
     //он содержит пары: новые i,j и индекс i вылетившей частицы
     vector<second_to_first> particles_to_rebase;
     for (int i = 0; i < target.real_group.size(); ++i) {
-        //индекс в одномерном векторе производных для частиц
-        int index = row * parsing->cells_per_y * parsing->cells_per_x + colum * target.real_group.size() + i;
 
         //вернули новые параметры
         Particle new_param = ronge_cutt(*target.real_group[i], index);
@@ -405,8 +401,9 @@ void Calculator::calc_t_values(Cell &target, int &row, int &colum) {
         //теперь после того как мы нашли новые параметры и выяснили, нужно ли что то перемещать
         //можно старой частеце установить новые параметры
         target.real_group[i]->set_from(new_param);
+        ++index;
     }
-    //теперь для этой частицы сформирован вектор частиц, которые нужно переместить
+    //теперь для этого Cell сформирован вектор частиц, которые нужно переместить
     for_replacement.push_back(pair<vector<second_to_first>, Cell *>(particles_to_rebase, &target));
 }
 
@@ -490,4 +487,5 @@ void Calculator::calculate() {
     for_replacement.clear();
     //заново нужно создать теневые частицы
     parsing->create_symetric_groups();
+    index=0;
 }

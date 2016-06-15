@@ -120,6 +120,10 @@ public:
         return &symetric_group;
     }
 
+    const vector<Particle*>* get_real() const {
+        return &real_group;
+    }
+
 
 
     friend std::istream &operator<<(ostream &is, Cell &income) {
@@ -229,8 +233,8 @@ class SpaceParsing {
     }
 
     SpaceParsing(vector<vector<double>> &geometry) {
-        cells_per_x = 9;
-        cells_per_y = 3;
+        cells_per_x = 33;
+        cells_per_y = 11;
         part_groups.resize(cells_per_y);
         for (int i = 0; i < cells_per_y; ++i) {
             part_groups[i].resize(cells_per_x);

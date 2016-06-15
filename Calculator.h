@@ -76,6 +76,8 @@ namespace calculations {
 }
 
 class Calculator {
+    int index = 0;
+
     vector<from_second_replace> for_replacement;
 
     SpaceParsing *parsing;

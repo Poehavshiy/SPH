@@ -26,6 +26,7 @@ void Flow::set_bound(const string &boundaryFile) {
     build_bound_part();
     bound.close();
 }
+
 //
 void Flow::build_bound_part() {
 
@@ -36,6 +37,7 @@ void Flow::build_bound_part() {
         boundaries.push_back(current);
     }
 }
+
 //
 void Flow::set_init(const string &initFile) {
     fstream initCond;
@@ -54,17 +56,17 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch) {
-    int number = 100;
+    int number = 600;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
-   // double XYratio = X / Y;
+    // double XYratio = X / Y;
     int per_y = sqrt(number);
     int per_x = per_y;//number / per_y;
     double xstep = X / per_x;
-    double ystep = Y / (per_y-1);
+    double ystep = Y / (per_y - 1);
     //
-    double P = 100;
+    double P = 1000000000;
     double p = 2;
     double mass = 1;
     double e = P / (0.4 * p);
@@ -80,6 +82,7 @@ void Flow::build_init_part(vector<Point> &branch) {
     }
 
 }
+
 //
 void Flow::calculate_step() {
     for (int i = 0; i < data.size(); ++i) {
@@ -95,6 +98,6 @@ void Flow::calculate() {
     calculator = new Calculator(s_distribution);
     while (calculations::current_time < 1) {
         calculator->calculate();
-        calculations::current_time+=calculations::deltaT;
+        calculations::current_time += calculations::deltaT;
     }
 }

@@ -7,14 +7,16 @@ MainWindow::MainWindow(QWidget *parent)
     view = new MyQGraphicsView;//creating grafic scence inside of main window
     this->setGeometry(100, 100, 900, 900);
     this->setCentralWidget(view);
-    go = new QPushButton("stop", this);
+    go = new QPushButton("start", this);
     this->setMenuWidget(go);
+   // connect(go, SIGNAL (released()), this, SLOT (start()));
 
+    // основа рассчета
 
-    // Connect button signal to appropriate slot
     timer = new QTimer;
     connect(timer, SIGNAL (timeout()), this, SLOT (start()));
     timer->start(100);
+
     //
 }
 
