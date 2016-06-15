@@ -29,13 +29,10 @@ class Flow {
     //
     void build_init_part(vector<Point> &branch);
     //
-    void calculate_step();
 public:
     friend class Flow_Drawer;
     //
     Flow(const string &boundaryFile, const string &initFile);
-    //
-    virtual void calculate();
     //
     const void* get_part(int type){
         if( type == 0) return &boundaries;

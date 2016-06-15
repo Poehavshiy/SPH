@@ -56,7 +56,7 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch) {
-    int number = 600;
+    int number = 100;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
@@ -66,12 +66,12 @@ void Flow::build_init_part(vector<Point> &branch) {
     double xstep = X / per_x;
     double ystep = Y / (per_y - 1);
     //
-    double P = 1000000000;
+    double P = 100000000000;
     double p = 2;
     double mass = 1;
     double e = P / (0.4 * p);
     for (int i = 0; i < number; ++i) {
-        data.push_back(Particle(0, p, P, e, 10, 0, mass));
+        data.push_back(Particle(0, p, P, e, 0, 0, mass));
     }
     for (int i = 0; i <= per_y; ++i) {
         for (int j = 0; j <= per_x; ++j) {
@@ -81,23 +81,4 @@ void Flow::build_init_part(vector<Point> &branch) {
         }
     }
 
-}
-
-//
-void Flow::calculate_step() {
-    for (int i = 0; i < data.size(); ++i) {
-        double P = data[i].P();
-        P = rand() % 150 + 1;
-        data[i].set_pressure(P);
-    }
-}
-
-//
-void Flow::calculate() {
-
-    calculator = new Calculator(s_distribution);
-    while (calculations::current_time < 1) {
-        calculator->calculate();
-        calculations::current_time += calculations::deltaT;
-    }
 }

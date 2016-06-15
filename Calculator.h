@@ -7,9 +7,30 @@
 
 #include "SpaceParsing.h"
 
-typedef pair<pair<int, int>, int> second_to_first;
-//из этого cell нужно переместить такие то частицы туда то туда то
-typedef pair<vector<second_to_first>, Cell *> from_second_replace;
+struct From_cell_to_cells {
+    Cell* from;
+    vector<pair<Cell*, int>> to_cell_pid;
+    From_cell_to_cells(Cell* f, vector<pair<Cell*, int>>& targets) {
+        from=f;
+        to_cell_pid = targets;
+    }
+    int size() {
+        return to_cell_pid.size();
+    }
+
+    void replace() {
+        vector<int> del;
+        for(int i=0; i<to_cell_pid.size(); ++i) {
+            del.push_back(to_cell_pid[i].second);
+            Particle* remove = from->get_real()->operator[](del.back());
+            to_cell_pid[i].first->add_part(remove);
+        }
+        std::sort(del.begin(), del.end(), greater<int>());
+        for(int i = 0; i < del.size(); ++i) {
+            from->remove_part(del[i]);
+        }
+    }
+};
 
 namespace calculations {
 
@@ -78,7 +99,7 @@ namespace calculations {
 class Calculator {
     int index = 0;
 
-    vector<from_second_replace> for_replacement;
+    vector<From_cell_to_cells> for_replacement;
 
     SpaceParsing *parsing;
 
@@ -125,19 +146,19 @@ class Calculator {
                             PartPointers_add &all_add);
 
     //
-    void calc_t_values(Cell &target, int &row, int &colum);
+    void calc_t_values(Cell &target, const int &row,const int &colum);
 
     //
     Particle ronge_cutt(Particle &a, int &index);
 
     //
-    std::pair<int, int> rebaze(Particle &new_part, int &row, int &colum);
+    std::pair<int, int> rebaze(Particle &new_part,const int &row,const int &colum);
 
     void calculate_derivatives();
 
     void calculate_final();
 
-    void replace(from_second_replace &replase_inf);
+    void replace();
 
 public:
 

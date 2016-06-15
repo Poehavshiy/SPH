@@ -15,18 +15,20 @@
     </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Calculator.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/MyQGraphicsView.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/MainWindow.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Particile.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MyQGraphicsView.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Flow_drawer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Flow.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Particile.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Calculator.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/MainWindow.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Help.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Help.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Flow_drawer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Particile.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Flow.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Help.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/myqgraphicsview.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SpaceParsing.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SpaceParsing.cpp" isTestSource="false" />

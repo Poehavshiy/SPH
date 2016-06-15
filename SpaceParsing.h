@@ -19,16 +19,18 @@ class Cell {
     static int C;//для дебажирования юзаю
 
     bool is_inside(Particle &particle) {
-        if ((particle.X() >= left_bottom.x && particle.X() <= right_top.x)
-            && (particle.Y() >= left_bottom.y && particle.Y() <= right_top.y)) {
+        if (
+                (particle.X() >= left_bottom.x && particle.X() < right_top.x)
+                && (particle.Y() >= left_bottom.y && particle.Y() < right_top.y)
+                ) {
             return true;
         }
         return false;
     }
 
     void create_sim_part(Particle *target) {
-       // cout << Cell::C << endl;
-       // Cell::C++;
+        // cout << Cell::C << endl;
+        // Cell::C++;
         //
         Particle new_part = *target;
         new_part.set_vx(new_part.Vx() * -1);
@@ -69,14 +71,15 @@ public:
     Point get_left_bottom() const {
         return left_bottom;
     }
+
     //
     Point get_right_top() const {
         return right_top;
     }
 
-    //
+    //попытка вставки частицы в this Cell
     bool insert(Particle &particle) {
-        bool inside = is_inside(particle);
+        bool inside = is_inside(particle);//проверка вхождения частицы внутрь
         if (inside == true && particle.boundary_status() == true) {
             boundary_group.push_back(&particle);
             boundary = true;
@@ -96,14 +99,23 @@ public:
         return boundary;
     }
 
+    void add_part(Particle* p) {
+        real_group.push_back(p);
+    }
+
     void create_simetric() {
-     //   cout << Cell::C << endl;
-     //   Cell::C++;
+        //   cout << Cell::C << endl;
+        //   Cell::C++;
         for (int i = 0; i < real_group.size(); ++i) {
             create_sim_part(real_group[i]);
-          //  cout << Cell::C << endl;
-          //  Cell::C++;
+            //  cout << Cell::C << endl;
+            //  Cell::C++;
         }
+    }
+
+    void remove_part(int& index) {
+        swap(real_group.back(), real_group[index]);
+        real_group.pop_back();
     }
 
     Cell(Point &l_b, Point &r_t) {
@@ -116,14 +128,13 @@ public:
         boundary = false;
     }
 
-    const vector<Particle>* get_shadow() const{
+    const vector<Particle> *get_shadow() const {
         return &symetric_group;
     }
 
-    const vector<Particle*>* get_real() const {
+    const vector<Particle *> *get_real() const {
         return &real_group;
     }
-
 
 
     friend std::istream &operator<<(ostream &is, Cell &income) {
@@ -217,8 +228,8 @@ class SpaceParsing {
     void distribute_initial(vector<Particle> &data) {
         for (int i = 0; i < data.size(); ++i) {
             bool status = insert(data[i]);
+            assert (status == true);
         }
-
     }
 
     //
@@ -243,7 +254,7 @@ class SpaceParsing {
     }
     //
 
-    std::pair<int, int> find_around(int &row, int &column, Particle &target) {
+    std::pair<int, int> find_around(const int &row,const int &column, Particle &target) {
         int r = row;
         int c = column;
         if (r - 1 >= 0 && part_groups[r - 1][c].is_inside(target) == true) {//case0
@@ -258,15 +269,16 @@ class SpaceParsing {
             std::pair<int, int> result(r, c - 1);
             return result;
         }
-        else if (c - 1 >= 0 && r + 1 < cells_per_y && part_groups[r + 1][c + 1].is_inside(target) == true) { //case3
-            std::pair<int, int> result(r + 1, c + 1);
+        else if (c - 1 >= 0 && r + 1 < cells_per_y && part_groups[r + 1][c - 1].is_inside(target) == true) { //case3
+            std::pair<int, int> result(r + 1, c - 1);
             return result;
         }
         else if (r + 1 < cells_per_y && part_groups[r + 1][c].is_inside(target) == true) {//case4
             std::pair<int, int> result(r + 1, c);
             return result;
         }
-        else if (r + 1 < cells_per_y && c + 1 < cells_per_x && part_groups[r + 1][c + 1].is_inside(target) == true) {//case5
+        else if (r + 1 < cells_per_y && c + 1 < cells_per_x &&
+                 part_groups[r + 1][c + 1].is_inside(target) == true) {//case5
             std::pair<int, int> result(r + 1, c + 1);
             return result;
         }
@@ -278,9 +290,7 @@ class SpaceParsing {
             std::pair<int, int> result(r - 1, c + 1);
             return result;
         }
-
     }
-
 
 
 public:
@@ -310,8 +320,9 @@ public:
             }
         }
     }
+
     //
-    const vector<vector<Cell>>* get_parsing(){
+    const vector<vector<Cell>> *get_parsing() {
         return &part_groups;
     }
 };

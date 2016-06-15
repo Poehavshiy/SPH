@@ -371,9 +371,7 @@ void Calculator::calculate_final() {
         }
     }
     //теперь переместим частицы в другие cell
-    for (int i = 0; i < for_replacement.size(); ++i) {
-        replace(for_replacement[i]);
-    }
+    replace();
 }
 //
 //
@@ -382,29 +380,31 @@ void Calculator::calculate_final() {
  * в нее передается Cell и индексы этого Cell  в parsing->part_groups
  * индесы нужны для рассчета позиции производной для этой частицы в векторе производных
 */
-void Calculator::calc_t_values(Cell &target, int &row, int &colum) {
-    //вектор содержащий частицы вылетившие из target
-    //он содержит пары: новые i,j и индекс i вылетившей частицы
-    vector<second_to_first> particles_to_rebase;
-    for (int i = 0; i < target.real_group.size(); ++i) {
-
+void Calculator::calc_t_values(Cell &target_cell,const int &row,const int &colum) {
+    //Cell*-куда, ште - идекс в target
+    vector<pair<Cell*, int>> to_cell_pid;
+    for (int i = 0; i < target_cell.real_group.size(); ++i) {
         //вернули новые параметры
-        Particle new_param = ronge_cutt(*target.real_group[i], index);
+        Particle new_param = ronge_cutt(*target_cell.real_group[i], index);
         //определили, нужно ли перемещать частицу
+        if(index == 3) {
+            int r=0;
+        }
         std::pair<int, int> new_indexes = rebaze(new_param, row, colum);
         if (new_indexes.first != -1) {
-            //если нужно, то запомнили индексы куда переместить и индекс частицы в векторе
+            //если нужно, то запомнили Cell куда переместить и откуда
             //target.real_group которую нужно переместить
-            pair<pair<int, int>, int> new_pair(new_indexes, i);
-            particles_to_rebase.push_back(new_pair);
+            pair<Cell*, int> replace_i_to(&parsing->part_groups[new_indexes.first][ new_indexes.second], i);
+            to_cell_pid.push_back(replace_i_to);
         }
         //теперь после того как мы нашли новые параметры и выяснили, нужно ли что то перемещать
         //можно старой частеце установить новые параметры
-        target.real_group[i]->set_from(new_param);
+        target_cell.real_group[i]->set_from(new_param);
         ++index;
     }
+    From_cell_to_cells new_replace_set(&target_cell, to_cell_pid);
+    for_replacement.push_back(new_replace_set);
     //теперь для этого Cell сформирован вектор частиц, которые нужно переместить
-    for_replacement.push_back(pair<vector<second_to_first>, Cell *>(particles_to_rebase, &target));
 }
 
 //пока что это просто эйлер этот метод находит параметры на +dt слое и возвращает их
@@ -415,11 +415,7 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
     double new_e = a.E() + dt * e_derivatives[index];
     double new_vx = a.Vx() + dt * vx_derivatives[index];
     double new_vy = a.Vy() + dt * vy_derivatives[index];
-    //    double e = P / (0.4 * p);
-    /*
-      Particle(bool status, double p = 0,
-             double P = 0, double E = 0, double Vx = 0, double Vy = 0, double M = 0);
-      */
+    //
     double new_P = new_e * 0.4 * new_p;
     Particle result(0, new_p, new_P, new_e, new_vx, new_vy, mass);
     double new_x = a.X() + dt * new_vx;
@@ -434,8 +430,8 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
  * и если все таки нужно то куда
  * куда возвращается в виде пары индексов
 */
-std::pair<int, int> Calculator::rebaze(Particle &new_part, int &row, int &colum) {
-    if (parsing->part_groups[row][row].is_inside(new_part) == true) {
+std::pair<int, int> Calculator::rebaze(Particle &new_part,const int &row, const int &colum) {
+    if (parsing->part_groups[row][colum].is_inside(new_part) == true) {
         return pair<int, int>(-1, -1);
     }
     else {
@@ -450,21 +446,10 @@ std::pair<int, int> Calculator::rebaze(Particle &new_part, int &row, int &colum)
  * переместить все частицы которые нужно перемещать
  * информации о них хранится в ячейках вектора for_replacement
  */
-void Calculator::replace(from_second_replace &replase_inf) {
-    //typedef pair<pair<int,int>, int> second_to_first;
-    //typedef pair<vector<second_to_first>, Cell*> from_second_replace;
-    for (int count = 0; count < replase_inf.first.size(); ++count) {
-        //индексы Cell куда мы переместим частицы из Cell*
-        int i = replase_inf.first[count].first.first;
-        int j = replase_inf.first[count].first.second;
-        int replace_id = replase_inf.first[count].second;
-        //добавили эту частицу
-        parsing->part_groups[i][j].real_group.push_back(replase_inf.second->real_group[replace_id]);
-        //теперь удалим этот элемент из вектора
-        swap(replase_inf.second->real_group[replace_id], replase_inf.second->real_group.back());
-        replase_inf.second->real_group.pop_back();
+void Calculator::replace() {
+    for(int i=0; i<for_replacement.size(); ++i) {
+        for_replacement[i].replace();
     }
-
 }
 
 //основной метод, вызываемый снаружи
@@ -477,7 +462,7 @@ void Calculator::calculate() {
 
     calculate_derivatives();
     calculate_final();
-
+    int check=for_replacement.size();
     calculations::current_time += calculations::deltaT;
     // очистим все вспомогательные вектора
     p_derivatives.clear();

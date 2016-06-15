@@ -9,9 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->setCentralWidget(view);
     go = new QPushButton("start", this);
     this->setMenuWidget(go);
-   // connect(go, SIGNAL (released()), this, SLOT (start()));
+    //connect(go, SIGNAL (released()), this, SLOT (start()));
 
     // основа рассчета
+
 
     timer = new QTimer;
     connect(timer, SIGNAL (timeout()), this, SLOT (start()));

@@ -10,6 +10,8 @@
 #include <iostream>
 #include <vector>
 #include<map>
+#include <assert.h>
+#include "algorithm"
 //
 //QTшные либы
 #include <QMainWindow>
