@@ -62,6 +62,7 @@ class Particle {
     double mass;
     //position
     Point pos;
+    double molar_mass = 0.029;
     //
     double density;
     double pressure;
@@ -125,6 +126,10 @@ public:
     //
     double M() {
         return mass;
+    }
+    //
+    double T() {
+       return  pressure*molar_mass/density*8.31;
     }
     //
     Point position() {

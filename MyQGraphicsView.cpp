@@ -5,6 +5,10 @@ MyQGraphicsView::MyQGraphicsView(QWidget *parent) :
         QGraphicsView(parent) {
     //boudCounter=0;
     scene = new QGraphicsScene();
+    //Исключительно для дебага
+    scene_debug = scene;
+    //
+
     this->setSceneRect(-100, -100, 600, 600);
     this->setScene(scene);
     flow = new Flow_Drawer(file1, file2);
@@ -38,7 +42,7 @@ void MyQGraphicsView::draw() {
     double rad = 20;
     scene->addEllipse(i - rad, i - rad, rad * 2.0, rad * 2.0,
                       QPen(Qt::green), QBrush(Qt::SolidPattern));*/
-    if(calculations::current_time<5) {
+    if(calculations::current_time<10) {
         flow->calculate_step(scene);
     }
 

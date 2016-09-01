@@ -4,17 +4,56 @@
 
 
 #include "Calculator.h"
+#include "Flow.h"
+QGraphicsScene *scene_debug;
+//typedef vector<vector<Particle*>*> PartPointers;
+//typedef vector<vector<Particle>*> PartPointers_add;
+
+void draw_debug(PartPointers &all_real, PartPointers_add &all_add, PartPointers &all_bound) {
+    double rad = 2;
+    for (int i = 0; i < all_real.size(); ++i) {
+        for (int j = 0; j < all_real[i]->size(); ++j) {
+            Particle *curent = all_real[i]->operator[](j);
+            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+                              QPen(Qt::green), QBrush(Qt::SolidPattern));
+        }
+    }
+    //
+    for (int i = 0; i < all_add.size(); ++i) {
+        for (int j = 0; j < all_add[i]->size(); ++j) {
+            Particle *curent = &all_add[i]->operator[](j);
+            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+                                    QPen(Qt::blue), QBrush(Qt::SolidPattern));
+        }
+    }
+    //
+    for (int i = 0; i < all_bound.size(); ++i) {
+        for (int j = 0; j < all_bound[i]->size(); ++j) {
+            Particle *curent = all_bound[i]->operator[](j);
+            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+                                    QPen(Qt::black), QBrush(Qt::SolidPattern));
+        }
+    }
+
+}
+
 
 namespace calculations {
 
     double current_time = 0;
 
-    double h = 50;
+    double h = 20;
+
+    double R = 8.31;
+
+    double k = 1.2;
+
+    double M = 0.029;
 
 //для подсчета силы от гарничных частиц
-    double r0 = 3;
+    double r0 = 13;
 
-    double D = 100;
+    double D = 0.01;//равен квадрату наибольшей скорости
 
     double n1 = 4;
 
@@ -27,7 +66,7 @@ namespace calculations {
     }
 
 //
-    double w_test(double r) {
+  /*  double w_test(double r) {
         double result = 0;
         double x = r / h;
         if (x >= 0 && x <= 1) {
@@ -38,9 +77,17 @@ namespace calculations {
         }
         return result;
     }
-
-//
-    double grad_w_test(double r) {
+*/
+  double w_test(double r) {
+     // assert(r>0);
+      double result = 0;
+      if(r<2) {
+          result = (15 / (7 * 3.14 * h * h)) * ((2 / 3 - 9 / 8 * pow(r, 2)) + 19 / 24 * pow(r, 3) - 5 / 32 * pow(r, 4));
+      }
+      return result;
+  }
+//вооооооооооооооооот тут косяк
+  /*  double grad_w_test(double r) {
         double result = 0;
         double x = r / h;
         if (x >= 0 && x <= 1) {
@@ -51,15 +98,30 @@ namespace calculations {
         }
         return result;
     }
-
+*/
+  double grad_w_test(double x, double y, bool direction) {
+      double result = 0;
+      double r = sqrt(x*x+y*y)/h;
+      if(r<2 && r>-2) {
+          if(direction == 0) {
+              result = (15 / (7 * 3.14 * h * h)) * x * (-5 * pow(r, 2) + 19 * r - 72);
+          }
+          else
+              result = (15 / (7 * 3.14 * h * h)) * y * (-5 * pow(r, 2) + 19 * r - 72);
+      }
+      int a=1;
+      return result;
+  }
 //
     double two_part_p(Particle &a, Particle &b) {
         double M = b.M();
         double vx = a.Vx() - b.Vx();
         double vy = a.Vy() - b.Vy();
         //скалярное произведение Vil и Wij
-        double d_Wx = grad_w_test(b.X() - a.X());
-        double d_Wy = grad_w_test(b.Y() - a.Y());
+        double deltaX = b.X() - a.X();
+        double deltaY = b.Y() - a.Y();
+        double d_Wx = grad_w_test(deltaX,deltaY, 0 );
+        double d_Wy = grad_w_test(deltaX,deltaY, 1);
         double VijWij = (vx * d_Wx) + (vy * d_Wy);
         double res = M * VijWij;
         return res;
@@ -68,10 +130,10 @@ namespace calculations {
 //
     double two_part_v(Particle &a, Particle &b, bool direct) {
         double M = b.M();
-        double r = abs(a.X() - b.X());
-        if (direct == 1) r = abs(a.Y() - b.Y());
-        double Wij = grad_w_test(r);
-        //
+        double deltaX = b.X() - a.X();
+        double deltaY = b.Y() - a.Y();
+        double Wij = grad_w_test(deltaX, deltaY, direct);
+
         double brackets = (a.P() / pow(a.p(), 2) +
                            b.P() / pow(b.p(), 2));
         //
@@ -84,9 +146,9 @@ namespace calculations {
         double vx = a.Vx() - b.Vx();
         double vy = a.Vy() - b.Vy();
         //скалярное произведение Vil и Wij
-        double d_Wx = grad_w_test(b.X() - a.X());
-        double d_Wy = grad_w_test(b.Y() - a.Y());
-        double VijWij = (vx * d_Wx) + (vy * d_Wy);
+        double deltaX = b.X() - a.X();
+        double deltaY = b.Y() - a.Y();
+        double VijWij = (vx * grad_w_test(deltaX, deltaY, 0)) + (vy * grad_w_test(deltaX, deltaY, 1));
         //
         double M = b.M();
         double brackets = (a.P() / pow(a.p(), 2) +
@@ -103,8 +165,8 @@ namespace calculations {
         double ratio = r0 / r;
         if (ratio > 1) return 0;
         else {
-            double x = abs(a.X() - b.X());
-            if (direct == 1) x = abs(a.Y() - b.Y());
+            double x = a.X() - b.X();//abs(a.X() - b.X());
+            if (direct == 1) x = a.Y() - b.Y();//abs(a.Y() - b.Y());
             double res = D * (pow(ratio, n1) - pow(ratio, n2)) * x / r;
             res = res / a.M();
             return res;
@@ -142,6 +204,12 @@ namespace calculations {
                     PartPointers &all_real,
                     PartPointers &all_bound,
                     PartPointers_add &all_add, bool direct) {
+        if (for_debugin == &a) {
+            draw_debug(all_real, all_add, all_bound);
+            double rad = 5;
+            scene_debug->addEllipse(a.X() - rad, a.Y() - rad, rad * 2.0, rad * 2.0,
+                                    QPen(Qt::red), QBrush(Qt::SolidPattern));
+        }
         double res = 0;
         //здесь м посчитали часть производной скорости от других реальныз частиц
         for (int i = 0; i < all_real.size(); ++i) {
@@ -370,7 +438,7 @@ void Calculator::calculate_final() {
             parsing->part_groups[i][j].symetric_group.clear();
         }
     }
-    //теперь переместим частицы в другие cell
+    //теперь переместим частицы в другие cells
     replace();
 }
 //
@@ -380,21 +448,21 @@ void Calculator::calculate_final() {
  * в нее передается Cell и индексы этого Cell  в parsing->part_groups
  * индесы нужны для рассчета позиции производной для этой частицы в векторе производных
 */
-void Calculator::calc_t_values(Cell &target_cell,const int &row,const int &colum) {
+void Calculator::calc_t_values(Cell &target_cell, const int &row, const int &colum) {
     //Cell*-куда, ште - идекс в target
-    vector<pair<Cell*, int>> to_cell_pid;
+    vector<pair<Cell *, int>> to_cell_pid;
     for (int i = 0; i < target_cell.real_group.size(); ++i) {
         //вернули новые параметры
         Particle new_param = ronge_cutt(*target_cell.real_group[i], index);
         //определили, нужно ли перемещать частицу
-        if(index == 3) {
-            int r=0;
+        if (index == 3) {
+            int r = 0;
         }
         std::pair<int, int> new_indexes = rebaze(new_param, row, colum);
         if (new_indexes.first != -1) {
             //если нужно, то запомнили Cell куда переместить и откуда
             //target.real_group которую нужно переместить
-            pair<Cell*, int> replace_i_to(&parsing->part_groups[new_indexes.first][ new_indexes.second], i);
+            pair<Cell *, int> replace_i_to(&parsing->part_groups[new_indexes.first][new_indexes.second], i);
             to_cell_pid.push_back(replace_i_to);
         }
         //теперь после того как мы нашли новые параметры и выяснили, нужно ли что то перемещать
@@ -416,6 +484,14 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
     double new_vx = a.Vx() + dt * vx_derivatives[index];
     double new_vy = a.Vy() + dt * vy_derivatives[index];
     //
+    //Пересчитаем D
+    double new_V = pow(new_vx*new_vx+new_vy*new_vy, 0.5);
+    if (new_V > largest_V) largest_V = new_V;
+    //Пересчитаем delta_t
+    double c = sqrt(1.4*calculations::R*a.T()/ calculations::M);
+    double new_dt = calculations::h / c;
+    if (new_dt < dt) dt = new_dt;
+    //
     double new_P = new_e * 0.4 * new_p;
     Particle result(0, new_p, new_P, new_e, new_vx, new_vy, mass);
     double new_x = a.X() + dt * new_vx;
@@ -430,7 +506,7 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
  * и если все таки нужно то куда
  * куда возвращается в виде пары индексов
 */
-std::pair<int, int> Calculator::rebaze(Particle &new_part,const int &row, const int &colum) {
+std::pair<int, int> Calculator::rebaze(Particle &new_part, const int &row, const int &colum) {
     if (parsing->part_groups[row][colum].is_inside(new_part) == true) {
         return pair<int, int>(-1, -1);
     }
@@ -447,11 +523,81 @@ std::pair<int, int> Calculator::rebaze(Particle &new_part,const int &row, const 
  * информации о них хранится в ячейках вектора for_replacement
  */
 void Calculator::replace() {
-    for(int i=0; i<for_replacement.size(); ++i) {
+    for (int i = 0; i < for_replacement.size(); ++i) {
         for_replacement[i].replace();
     }
 }
+//
+void Calculator::recalculate_consts() {
+    double v_max = -100500;
+    double min_dt = 100500;
+    double cur_max_v, cur_min_dt;
+    for (int i = 0; i < parsing->cells_per_y; ++i) {
+        for (int j = 0; j < parsing->cells_per_x; ++j) {
+            bool status = get_maxv_mindt(parsing->part_groups[i][j], cur_max_v, cur_min_dt);
+            if(status != false) {
+                if(cur_max_v > v_max) {
+                    v_max = cur_max_v;
+                }
+                if(cur_min_dt < min_dt) {
+                    min_dt = cur_min_dt;
+                }
+            }
+        }
+    }
+    //непосредственно переприсвоим
+    calculations::D = v_max*v_max;
+    calculations::deltaT = min_dt;
+}
 
+bool Calculator::get_maxv_mindt(Cell &target,double& cur_max_vin,double& cur_min_dtin) {
+    if(target.real_group.size() == 0) return false;
+    else {
+        double v_max = -100500;
+        double min_dt = 100500;
+        double cur_max_v, cur_min_dt;
+        for (int i = 0; i < target.real_group.size(); ++i) {
+            cur_max_v = sqrt(
+                    target.real_group.operator[](i)->Vx()*target.real_group.operator[](i)->Vx()+
+                    target.real_group.operator[](i)->Vy()*target.real_group.operator[](i)->Vy()
+            );
+            if(cur_max_v>v_max) {
+                v_max = cur_max_v;
+            }
+            double C = sqrt((calculations::k*calculations::R/calculations::M)*target.real_group.operator[](i)->T());
+            cur_min_dt = C/calculations::h;
+            if(cur_min_dt < min_dt) {
+                min_dt = cur_min_dt;
+            }
+        }
+        cur_max_vin = cur_max_v;
+        cur_min_dt = cur_min_dt;
+        return true;
+    }
+}
+
+void Calculator::check_empty() {
+    for (int i = 0; i < parsing->cells_per_y; ++i) {
+
+        for (int j = 0; j < parsing->cells_per_x; ++j) {
+            parsing->part_groups[i][j].emptiness();
+        }
+    }
+}
+
+int Calculator::calc_non_empty(vector<std::pair<int, int>>& indexes_of_nonempty) {
+    int counter = 0;
+    for (int i = 0; i < parsing->cells_per_y; ++i) {
+        for (int j = 0; j < parsing->cells_per_x; ++j) {
+            if (parsing->part_groups[i][j].is_non_empty() == true) {
+                ++counter;
+                indexes_of_nonempty.push_back(pair<int,int>(i,j));
+            }
+        }
+    }
+    return counter;
+
+}
 //основной метод, вызываемый снаружи
 /*
  * в нем сначала дергается calculate_derivatives();-метод, высчитывающий производные
@@ -460,10 +606,15 @@ void Calculator::replace() {
 */
 void Calculator::calculate() {
 
+    check_empty();
+    //для дебажтрования
+    vector<std::pair<int, int>> indexes_of_nonempty;
+    int how_many_nonempty = calc_non_empty(indexes_of_nonempty);
+    //
     calculate_derivatives();
     calculate_final();
-    int check=for_replacement.size();
-    calculations::current_time += calculations::deltaT;
+    recalculate_consts();
+    int check = for_replacement.size();
     // очистим все вспомогательные вектора
     p_derivatives.clear();
     vx_derivatives.clear();
@@ -472,5 +623,10 @@ void Calculator::calculate() {
     for_replacement.clear();
     //заново нужно создать теневые частицы
     parsing->create_symetric_groups();
-    index=0;
+    index = 0;
+    calculations::D = largest_V*largest_V;
+    calculations::deltaT = dt;
+    calculations::current_time += calculations::deltaT;
+    // cout<<calculations::deltaT<<endl;
+  //  assert(calculations::deltaT<1);
 }

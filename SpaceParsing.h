@@ -14,6 +14,7 @@ class Cell {
     vector<Particle> symetric_group;
     Point left_bottom;
     Point right_top;
+    bool is_contain;
     bool boundary;
     vector<Particle> *boundary_line;
     static int C;//для дебажирования юзаю
@@ -136,6 +137,14 @@ public:
         return &real_group;
     }
 
+    void emptiness() {
+        if(real_group.size() != 0) is_contain = true;
+        else is_contain = false;
+    }
+
+    bool is_non_empty() {
+        return is_contain;
+    }
 
     friend std::istream &operator<<(ostream &is, Cell &income) {
         is << income.left_bottom;
@@ -227,8 +236,13 @@ class SpaceParsing {
     //
     void distribute_initial(vector<Particle> &data) {
         for (int i = 0; i < data.size(); ++i) {
+            Particle debug = data[i];
             bool status = insert(data[i]);
             assert (status == true);
+          //  cout<<i<<endl;
+            if(i==288) {
+                int a=0;
+            }
         }
     }
 
@@ -244,8 +258,8 @@ class SpaceParsing {
     }
 
     SpaceParsing(vector<vector<double>> &geometry) {
-        cells_per_x = 33;
-        cells_per_y = 11;
+        cells_per_x = 10;
+        cells_per_y = 10;
         part_groups.resize(cells_per_y);
         for (int i = 0; i < cells_per_y; ++i) {
             part_groups[i].resize(cells_per_x);
@@ -295,6 +309,7 @@ class SpaceParsing {
 
 public:
     friend class Calculator;
+    friend class Calculator_Drawer;
 
     static SpaceParsing *init
             (

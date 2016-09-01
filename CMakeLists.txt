@@ -19,7 +19,8 @@ set(
         Calculator.cpp Calculator.h
         MainWindow.cpp MainWindow.h
         MyQGraphicsView.cpp myqgraphicsview.h
-        Flow_drawer.cpp Flow_drawer.h)
+        Flow_drawer.cpp Flow_drawer.h
+)
 
 
 # Tell CMake to create the helloworld executable

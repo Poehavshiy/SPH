@@ -38,6 +38,12 @@ namespace calculations {
 
     extern double h;
 
+    extern double R;
+
+    extern double M;
+
+    extern double k;
+
     //для подсчета силы от гарничных частиц
     extern double r0;
 
@@ -53,7 +59,7 @@ namespace calculations {
     double w_test(double r);
 
     //
-    double grad_w_test(double r);
+    double grad_w_test(double x, double y, bool direction);
 
     //
     double two_part_p(Particle &a, Particle &b) ;
@@ -97,7 +103,13 @@ namespace calculations {
 }
 
 class Calculator {
+protected:
     int index = 0;
+
+    double largest_V = 0;
+
+    double dt = 0.1;
+
 
     vector<From_cell_to_cells> for_replacement;
 
@@ -154,11 +166,19 @@ class Calculator {
     //
     std::pair<int, int> rebaze(Particle &new_part,const int &row,const int &colum);
 
-    void calculate_derivatives();
+    virtual void calculate_derivatives();
 
     void calculate_final();
 
+    void recalculate_consts(); //пересчитывает D, deltaT
+
+    bool get_maxv_mindt(Cell &target,double& cur_max_v,double& cur_min_dt);
+
     void replace();
+
+    void check_empty();
+
+    int calc_non_empty(vector<std::pair<int, int>>& indexes_of_nonempty);
 
 public:
 

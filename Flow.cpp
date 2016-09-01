@@ -5,6 +5,8 @@
 #include "Flow.h"
 #include "Help.h"
 
+Particle* for_debugin;
+
 Flow::Flow(const string &boundaryFile, const string &initFile) {
     set_bound(boundaryFile);
 
@@ -56,7 +58,7 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch) {
-    int number = 100;
+    int number = 400;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
@@ -66,7 +68,7 @@ void Flow::build_init_part(vector<Point> &branch) {
     double xstep = X / per_x;
     double ystep = Y / (per_y - 1);
     //
-    double P = 100000000000;
+    double P = 10;
     double p = 2;
     double mass = 1;
     double e = P / (0.4 * p);
@@ -80,5 +82,6 @@ void Flow::build_init_part(vector<Point> &branch) {
             data[per_x * i + j].set_pos(curX, curY);
         }
     }
+    for_debugin = &data[71];
 
 }

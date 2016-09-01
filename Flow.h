@@ -9,8 +9,12 @@
 #include <fstream>
 #include "Calculator.h"
 
+extern Particle* for_debugin;
+extern QGraphicsScene *scene_debug;
+
 
 class Flow {
+    //
     SpaceParsing *s_distribution;
     //
     Calculator* calculator;
