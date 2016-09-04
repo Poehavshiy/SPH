@@ -14,6 +14,7 @@ extern QGraphicsScene *scene_debug;
 
 
 class Flow {
+    double maxP, maxp, maxe;
     //
     SpaceParsing *s_distribution;
     //
@@ -31,7 +32,7 @@ class Flow {
     //
     void build_bound_part();
     //
-    void build_init_part(vector<Point> &branch);
+    void build_init_part(vector<Point> &branch,vector<double>& cond, int step);
     //
 public:
     friend class Flow_Drawer;

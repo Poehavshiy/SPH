@@ -42,7 +42,7 @@ namespace calculations {
 
     double current_time = 0;
 
-    double h = 20;
+    double h = 40;
 
     double R = 8.31;
 
@@ -53,7 +53,7 @@ namespace calculations {
 //для подсчета силы от гарничных частиц
     double r0 = 13;
 
-    double D = 0.01;//равен квадрату наибольшей скорости
+    double D = 0;//0.01;//равен квадрату наибольшей скорости
 
     double n1 = 4;
 
@@ -87,6 +87,7 @@ namespace calculations {
       return result;
   }
 //вооооооооооооооооот тут косяк
+    //1я функция
   /*  double grad_w_test(double r) {
         double result = 0;
         double x = r / h;
@@ -99,7 +100,8 @@ namespace calculations {
         return result;
     }
 */
-  double grad_w_test(double x, double y, bool direction) {
+    //2я функция
+  /*double grad_w_test(double x, double y, bool direction) {
       double result = 0;
       double r = sqrt(x*x+y*y)/h;
       if(r<2 && r>-2) {
@@ -111,6 +113,20 @@ namespace calculations {
       }
       int a=1;
       return result;
+  }*/
+  double grad_w_test(double x, double y, bool direction) {
+      double result = 0;
+      double a = 5/(3.14*h*h);
+      double r = sqrt(x*x+y*y);
+      if(r > h) return 0;
+      //x=abs(x);
+      //y=abs(y);
+      if(direction == 0)
+          result = 12*a*x*(pow(h,2) - 2*h*r+pow(r,2))/pow(h,4);
+      else
+          result = 12*a*y*(pow(h,2) - 2*h*r+pow(r,2))/pow(h,4);
+
+      return result;
   }
 //
     double two_part_p(Particle &a, Particle &b) {
@@ -120,7 +136,7 @@ namespace calculations {
         //скалярное произведение Vil и Wij
         double deltaX = b.X() - a.X();
         double deltaY = b.Y() - a.Y();
-        double d_Wx = grad_w_test(deltaX,deltaY, 0 );
+        double d_Wx = grad_w_test(deltaX,deltaX, 0 );
         double d_Wy = grad_w_test(deltaX,deltaY, 1);
         double VijWij = (vx * d_Wx) + (vy * d_Wy);
         double res = M * VijWij;
@@ -130,8 +146,8 @@ namespace calculations {
 //
     double two_part_v(Particle &a, Particle &b, bool direct) {
         double M = b.M();
-        double deltaX = b.X() - a.X();
-        double deltaY = b.Y() - a.Y();
+        double deltaX = b.X() - a.X();//abs(b.X() - a.X());
+        double deltaY = b.Y() - a.Y();//abs(b.Y() - a.Y());
         double Wij = grad_w_test(deltaX, deltaY, direct);
 
         double brackets = (a.P() / pow(a.p(), 2) +
@@ -146,8 +162,8 @@ namespace calculations {
         double vx = a.Vx() - b.Vx();
         double vy = a.Vy() - b.Vy();
         //скалярное произведение Vil и Wij
-        double deltaX = b.X() - a.X();
-        double deltaY = b.Y() - a.Y();
+        double deltaX = b.X() - a.X();//abs(b.X() - a.X());
+        double deltaY = b.Y() - a.Y();//abs(b.Y() - a.Y());
         double VijWij = (vx * grad_w_test(deltaX, deltaY, 0)) + (vy * grad_w_test(deltaX, deltaY, 1));
         //
         double M = b.M();

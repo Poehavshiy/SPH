@@ -166,6 +166,7 @@ public:
 };
 
 class SpaceParsing {
+    vector<Particle>* data_ptr;
     int cells_per_x;
     int cells_per_y;
     double x_size;
@@ -235,10 +236,11 @@ class SpaceParsing {
 
     //
     void distribute_initial(vector<Particle> &data) {
+        data_ptr = &data;
         for (int i = 0; i < data.size(); ++i) {
             Particle debug = data[i];
             bool status = insert(data[i]);
-            assert (status == true);
+//            assert (status == true);
           //  cout<<i<<endl;
             if(i==288) {
                 int a=0;
@@ -258,8 +260,8 @@ class SpaceParsing {
     }
 
     SpaceParsing(vector<vector<double>> &geometry) {
-        cells_per_x = 10;
-        cells_per_y = 10;
+        cells_per_x = 32;
+        cells_per_y = 8;
         part_groups.resize(cells_per_y);
         for (int i = 0; i < cells_per_y; ++i) {
             part_groups[i].resize(cells_per_x);

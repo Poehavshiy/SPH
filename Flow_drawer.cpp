@@ -5,6 +5,35 @@
 #include "Flow_drawer.h"
 #include "myqgraphicsview.h"
 
+Flow_Drawer::COLOUR Flow_Drawer::GetColour(double v,double vmin,double vmax)
+{
+    COLOUR c = {1.0,1.0,1.0}; // white
+    double dv;
+
+    if (v < vmin)
+        v = vmin;
+    if (v > vmax)
+        v = vmax;
+    dv = vmax - vmin;
+
+    if (v < (vmin + 0.25 * dv)) {
+        c.r = 0;
+        c.g = 4 * (v - vmin) / dv;
+    } else if (v < (vmin + 0.5 * dv)) {
+        c.r = 0;
+        c.b = 1 + 4 * (vmin + 0.25 * dv - v) / dv;
+    } else if (v < (vmin + 0.75 * dv)) {
+        c.r = 4 * (v - vmin - 0.5 * dv) / dv;
+        c.b = 0;
+    } else {
+        c.g = 1 + 4 * (vmin + 0.75 * dv - v) / dv;
+        c.b = 0;
+    }
+
+    return(c);
+}
+
+
 Flow_Drawer::Flow_Drawer(const string &boundaryFile, const string &initFile) :
         Flow(boundaryFile, initFile) {
     calculator = new Calculator(s_distribution);
@@ -114,12 +143,78 @@ void Flow_Drawer::draw_data_bycells(QGraphicsScene *scene) {
     }
 }
 
+void Flow_Drawer::draw_dataP(QGraphicsScene *scene){
+    const vector<vector<Cell>> *data = reinterpret_cast<const vector<vector<Cell>> *>(this->get_part(2));
+    double rad = 2;
+    for (int i = 0; i < data->size(); ++i) {
+        for (int j = 0; j < data->operator[](i).size(); ++j) {
+            const Cell *current = &data->operator[](i)[j];
+            const vector<Particle *> *curent_real = current->get_real();
+            for (int i = 0; i < curent_real->size(); ++i) {
+                double value = curent_real->operator[](i)->P();
+                COLOUR currentC = GetColour(value, 0 ,maxP);
+                QColor QTcurrentC;
+                QTcurrentC.setRgb(255*currentC.r,255*currentC.g, 255*currentC.b);
+                scene->addEllipse(curent_real->operator[](i)->X() - rad,
+                                  curent_real->operator[](i)->Y() - rad,
+                                  rad * 2.0, rad * 2.0, QTcurrentC , QBrush(Qt::SolidPattern));
+            }
+        }
+    }
+}
+
+void Flow_Drawer::max_minP(QGraphicsScene *scene ){
+    const vector<vector<Cell>> *data = reinterpret_cast<const vector<vector<Cell>> *>(this->get_part(2));
+    double rad = 2;
+    double Pmax_cur = -10050000;
+    double Pmin_cur = 10050000;
+
+    for (int i = 0; i < data->size(); ++i) {
+        for (int j = 0; j < data->operator[](i).size(); ++j) {
+            const Cell *current = &data->operator[](i)[j];
+            const vector<Particle *> *curent_real = current->get_real();
+            for (int i = 0; i < curent_real->size(); ++i) {
+                double P = curent_real->operator[](i)->P();
+                if(P > Pmax_cur) Pmax_cur = P;
+                if(P < Pmin_cur) Pmin_cur = P;
+                if(Pmax_cur > maxP && critical_iter==0) {
+                    crit_i = i;
+                    crit_j = j;
+                    critical_iter = iteration;
+
+                }
+            }
+        }
+    }
+    QString PmaxStr = QString::number(Pmax_cur);
+    QString PminStr = QString::number(Pmin_cur);
+    QString res = "Pmax=" + PmaxStr + "\n" + "Pmin=" + PminStr;
+    QGraphicsTextItem *text = scene->addText(res);
+    text->setPos(-50, -100);
+};
+
+void Flow_Drawer::show_iter(QGraphicsScene *scene) {
+    QString res ="iteration=" + QString::number(iteration);
+    QGraphicsTextItem *text = scene->addText(res);
+    text->setPos(-50, -120);
+
+    res ="crit_iteration=" + QString::number(critical_iter) + " i=" + QString::number(crit_i) + " j=" + QString::number(crit_j);
+    QGraphicsTextItem *text1 = scene->addText(res);
+    text1->setPos(-50, -140);
+}
+
 void Flow_Drawer::calculate_step(QGraphicsScene *scene) {
     draw_boundary(scene);
     draw_grid(scene);
     draw_shadow(scene);
     //
+
+    max_minP(scene);
+
+    show_iter(scene);
+    //
     calculator->calculate();
-    draw_data_bycells(scene);
+    draw_dataP(scene);
     // cout<<data.size();
+    iteration++;
 }

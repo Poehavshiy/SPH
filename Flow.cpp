@@ -44,21 +44,44 @@ void Flow::build_bound_part() {
 void Flow::set_init(const string &initFile) {
     fstream initCond;
     initCond.open(initFile);
-    vector<Point> branch;
+    vector<vector<Point>> branches;
     double x, y;
-    while (initCond >> x >> y) {
-        // if(current.find_first_not_of('*')!='/') {
-        Point cur(x, y);
-        branch.push_back(cur);
-        //}
+    string line;
+    string point_str;
+    int count = 0;
+    while (std::getline(initCond, line))
+    {
+        if(line == "Branch") {
+            std::getline(initCond, point_str);
+            vector<Point> branch_cur;
+            do {
+                initCond >> x >> y;
+                Point cur(x, y);
+                if(x!=999) branch_cur.push_back(cur);
+            }
+            while(x!=999);
+            count ++;
+            branches.push_back(branch_cur);
+        }
+
     }
-    build_init_part(branch);
+    vector<vector<double>> conditions;
+    conditions = {
+            {1000000, 1, 1},
+            {100,    1, 1}
+    };
+    for(int i = 0; i < branches.size(); ++i) {
+        build_init_part(branches[i], conditions[i], i);
+    }
+    maxP = 1000000;
+    maxp=1;
+    maxe = maxP / (0.4 * maxp);
     initCond.close();
 }
 
 //fill branc with particles with initial patameters
-void Flow::build_init_part(vector<Point> &branch) {
-    int number = 400;
+void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step) {
+    int number = 150;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
@@ -68,18 +91,19 @@ void Flow::build_init_part(vector<Point> &branch) {
     double xstep = X / per_x;
     double ystep = Y / (per_y - 1);
     //
-    double P = 10;
-    double p = 2;
-    double mass = 1;
+    double P = cond[0];
+    double p = cond[1];
+    double mass = cond[2];
     double e = P / (0.4 * p);
     for (int i = 0; i < number; ++i) {
         data.push_back(Particle(0, p, P, e, 0, 0, mass));
     }
+
     for (int i = 0; i <= per_y; ++i) {
         for (int j = 0; j <= per_x; ++j) {
             double curX = branch[0].x + j * xstep;
             double curY = branch[0].y + i * ystep;
-            data[per_x * i + j].set_pos(curX, curY);
+            data[step*number+per_x * i + j].set_pos(curX, curY);
         }
     }
     for_debugin = &data[71];
