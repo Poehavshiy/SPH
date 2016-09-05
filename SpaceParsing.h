@@ -259,9 +259,9 @@ class SpaceParsing {
         }
     }
 
-    SpaceParsing(vector<vector<double>> &geometry) {
-        cells_per_x = 32;
-        cells_per_y = 8;
+    SpaceParsing(vector<vector<double>> &geometry, int per_x, int per_y) {
+        cells_per_y = per_y;
+        cells_per_x = per_x;
         part_groups.resize(cells_per_y);
         for (int i = 0; i < cells_per_y; ++i) {
             part_groups[i].resize(cells_per_x);
@@ -269,6 +269,11 @@ class SpaceParsing {
 
     }
     //
+    void set_cells_perax(int per_x, int per_y) {
+        cells_per_x = per_x;
+        cells_per_y = per_y;
+    }
+
 
     std::pair<int, int> find_around(const int &row,const int &column, Particle &target) {
         int r = row;
@@ -312,14 +317,15 @@ class SpaceParsing {
 public:
     friend class Calculator;
     friend class Calculator_Drawer;
-
     static SpaceParsing *init
             (
                     vector<vector<double>> &geometry,
                     vector<vector<Particle>> &boundaries,
-                    vector<Particle> &data
+                    vector<Particle> &data,
+                    int per_x,
+                    int per_y
             ) {
-        SpaceParsing *space = new SpaceParsing(geometry);
+        SpaceParsing *space = new SpaceParsing(geometry, per_x, per_y);
         space->build_cells(boundaries);
         space->distribute_boundaries(boundaries);
         space->distribute_initial(data);
@@ -327,7 +333,6 @@ public:
 
         return space;
     }
-
     //
     friend std::istream &operator<<(ostream &is, SpaceParsing &income) {
         //

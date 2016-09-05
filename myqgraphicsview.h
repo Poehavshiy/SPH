@@ -22,8 +22,8 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent *e);
 
 private:
-    string file1 = "/home/nikita/SPHSm6/txt/testB_1.txt";
-    string file2 = "/home/nikita/SPHSm6/txt/testI_1.txt";
+    string file1 = "/home/nikita/SPHSm6/txt/testB_3.txt";
+    string file2 = "/home/nikita/SPHSm6/txt/testI_3.txt";
     QGraphicsScene *scene;
     Flow_Drawer *flow;
     //

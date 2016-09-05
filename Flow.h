@@ -26,7 +26,7 @@ class Flow {
     //1- x1, 2-y1, 3-x2, 4-y2, 5-number of 1st type particles
     vector<vector<double>> geometry;
     //
-    void set_bound(const string &boundaryFile);
+    void set_bound(const string &boundaryFile, int& x, int& y);
     //
     void set_init(const string &initFile);
     //

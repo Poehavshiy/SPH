@@ -32,6 +32,7 @@ using namespace std;
 
 
 //
+
 struct Point {
     Point() {
         x=0;
@@ -71,6 +72,17 @@ class Particle {
     double vx;
     double vy;
     //
+    double p0;
+
+    static constexpr double R_costil = 8.31;
+
+    static constexpr double k_costil = 1.2;
+
+    static constexpr double molar = 0.029;
+
+    static constexpr double h0 = 40;
+
+
 public:
     Particle();
 
@@ -130,6 +142,14 @@ public:
     //
     double T() {
        return  pressure*molar_mass/density*8.31;
+    }
+    //
+    double C() {
+        double C = sqrt((k_costil * R_costil )/( molar * this->T()));
+    }
+    //
+    double h() {
+        return h0*(pow((p0/density), 2));
     }
     //
     Point position() {

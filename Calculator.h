@@ -8,25 +8,27 @@
 #include "SpaceParsing.h"
 
 struct From_cell_to_cells {
-    Cell* from;
-    vector<pair<Cell*, int>> to_cell_pid;
-    From_cell_to_cells(Cell* f, vector<pair<Cell*, int>>& targets) {
-        from=f;
+    Cell *from;
+    vector<pair<Cell *, int>> to_cell_pid;
+
+    From_cell_to_cells(Cell *f, vector<pair<Cell *, int>> &targets) {
+        from = f;
         to_cell_pid = targets;
     }
+
     int size() {
         return to_cell_pid.size();
     }
 
     void replace() {
         vector<int> del;
-        for(int i=0; i<to_cell_pid.size(); ++i) {
+        for (int i = 0; i < to_cell_pid.size(); ++i) {
             del.push_back(to_cell_pid[i].second);
-            Particle* remove = from->get_real()->operator[](del.back());
+            Particle *remove = from->get_real()->operator[](del.back());
             to_cell_pid[i].first->add_part(remove);
         }
         std::sort(del.begin(), del.end(), greater<int>());
-        for(int i = 0; i < del.size(); ++i) {
+        for (int i = 0; i < del.size(); ++i) {
             from->remove_part(del[i]);
         }
     }
@@ -44,6 +46,10 @@ namespace calculations {
 
     extern double k;
 
+    extern double alpha;
+
+    extern double beta;
+
     //для подсчета силы от гарничных частиц
     extern double r0;
 
@@ -52,6 +58,8 @@ namespace calculations {
     extern double n1, n2;
 
     extern double deltaT;//требует глубокого переосмысления
+
+    extern double viscous;
 
     double r_ij(Particle &a, Particle &b);
 
@@ -62,16 +70,25 @@ namespace calculations {
     double grad_w_test(double x, double y, bool direction);
 
     //
-    double two_part_p(Particle &a, Particle &b) ;
+    double two_part_p(Particle &a, Particle &b);
 
     //
-    double two_part_v(Particle &a, Particle &b, bool direct) ;
+    double two_part_E(Particle &a, Particle &b, bool direct);
 
     //
-    double two_part_e(Particle &a, Particle &b) ;
+    double two_part_art_visc(Particle &a, Particle &b);
+
+    //
+    double two_part_art_heat(Particle &a, Particle &b, bool direct);
+
+    //
+    double two_part_v(Particle &a, Particle &b, bool direct);
+
+    //
+    double two_part_e(Particle &a, Particle &b);
 
     //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle& b, bool direct) ;
+    double two_part_bforse(Particle &a, Particle &b, bool direct);
 
     //
     //Вот эти 3 функции считают соответствующую  производную для частицы а векторы, переддаваемые
@@ -82,7 +99,7 @@ namespace calculations {
      * от взаимодействия целевой Particle &a и all_real[i][j]
      *
      */
-    double calc_p_d(Particle &a, PartPointers &all_real, PartPointers_add &all_add) ;
+    double calc_p_d(Particle &a, PartPointers &all_real, PartPointers_add &all_add);
 
     //
     /*
@@ -158,13 +175,13 @@ protected:
                             PartPointers_add &all_add);
 
     //
-    void calc_t_values(Cell &target, const int &row,const int &colum);
+    void calc_t_values(Cell &target, const int &row, const int &colum);
 
     //
     Particle ronge_cutt(Particle &a, int &index);
 
     //
-    std::pair<int, int> rebaze(Particle &new_part,const int &row,const int &colum);
+    std::pair<int, int> rebaze(Particle &new_part, const int &row, const int &colum);
 
     virtual void calculate_derivatives();
 
@@ -172,13 +189,13 @@ protected:
 
     void recalculate_consts(); //пересчитывает D, deltaT
 
-    bool get_maxv_mindt(Cell &target,double& cur_max_v,double& cur_min_dt);
+    bool get_maxv_mindt(Cell &target, double &cur_max_v, double &cur_min_dt);
 
     void replace();
 
     void check_empty();
 
-    int calc_non_empty(vector<std::pair<int, int>>& indexes_of_nonempty);
+    int calc_non_empty(vector<std::pair<int, int>> &indexes_of_nonempty);
 
 public:
 

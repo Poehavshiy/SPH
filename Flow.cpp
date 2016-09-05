@@ -8,18 +8,23 @@
 Particle* for_debugin;
 
 Flow::Flow(const string &boundaryFile, const string &initFile) {
-    set_bound(boundaryFile);
+    int per_x, per_y;
+
+    set_bound(boundaryFile, per_x, per_y);
 
     set_init(initFile);
 
-    s_distribution = SpaceParsing::init(geometry, boundaries, data);
+    s_distribution = SpaceParsing::init(geometry, boundaries, data, per_x, per_y);
 }
 
 ////parsing boundary and initial conditions files
-void Flow::set_bound(const string &boundaryFile) {
+void Flow::set_bound(const string &boundaryFile, int& x, int& y) {
     fstream bound;
     bound.open(boundaryFile);
     string current;
+    int per_x, per_y;
+    bound>>per_x>>per_y;
+    getline(bound, current);
     while (std::getline(bound, current)) {
         if (current.find_first_not_of('*') != '/') {
             ReadWrite::parse_bound(current, geometry);
@@ -27,6 +32,8 @@ void Flow::set_bound(const string &boundaryFile) {
     }
     build_bound_part();
     bound.close();
+    x = per_x;
+    y = per_y;
 }
 
 //
@@ -67,13 +74,13 @@ void Flow::set_init(const string &initFile) {
     }
     vector<vector<double>> conditions;
     conditions = {
-            {1000000, 1, 1},
-            {100,    1, 1}
+            {100000, 1, 1},
+            {10,    1, 1}
     };
     for(int i = 0; i < branches.size(); ++i) {
         build_init_part(branches[i], conditions[i], i);
     }
-    maxP = 1000000;
+    maxP = 100000;
     maxp=1;
     maxe = maxP / (0.4 * maxp);
     initCond.close();
@@ -81,7 +88,7 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step) {
-    int number = 150;
+    int number = 300;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);

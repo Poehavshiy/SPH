@@ -168,6 +168,7 @@ void Flow_Drawer::max_minP(QGraphicsScene *scene ){
     double rad = 2;
     double Pmax_cur = -10050000;
     double Pmin_cur = 10050000;
+    double Vmax = -100500;
 
     for (int i = 0; i < data->size(); ++i) {
         for (int j = 0; j < data->operator[](i).size(); ++j) {
@@ -175,6 +176,7 @@ void Flow_Drawer::max_minP(QGraphicsScene *scene ){
             const vector<Particle *> *curent_real = current->get_real();
             for (int i = 0; i < curent_real->size(); ++i) {
                 double P = curent_real->operator[](i)->P();
+                double V = sqrt(pow(curent_real->operator[](i)->Vx(),2)+ pow(curent_real->operator[](i)->Vy(),2));
                 if(P > Pmax_cur) Pmax_cur = P;
                 if(P < Pmin_cur) Pmin_cur = P;
                 if(Pmax_cur > maxP && critical_iter==0) {
@@ -183,12 +185,13 @@ void Flow_Drawer::max_minP(QGraphicsScene *scene ){
                     critical_iter = iteration;
 
                 }
+                if(V > Vmax) Vmax = V;
             }
         }
     }
     QString PmaxStr = QString::number(Pmax_cur);
     QString PminStr = QString::number(Pmin_cur);
-    QString res = "Pmax=" + PmaxStr + "\n" + "Pmin=" + PminStr;
+    QString res = "Pmax=" + PmaxStr + "\n" + "Pmin=" + PminStr + " Vmax=" + QString::number(Vmax);
     QGraphicsTextItem *text = scene->addText(res);
     text->setPos(-50, -100);
 };

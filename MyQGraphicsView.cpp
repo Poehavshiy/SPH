@@ -42,7 +42,7 @@ void MyQGraphicsView::draw() {
     double rad = 20;
     scene->addEllipse(i - rad, i - rad, rad * 2.0, rad * 2.0,
                       QPen(Qt::green), QBrush(Qt::SolidPattern));*/
-    if(calculations::current_time<25) {
+    if(calculations::current_time<100) {
         flow->calculate_step(scene);
     }
 

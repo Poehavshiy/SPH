@@ -31,5 +31,7 @@ Particle::Particle(bool status, double p,
     vy = Vy;
     //
     mass = M;
+
+    p0 = p;
 };
 //

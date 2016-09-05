@@ -15,21 +15,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="926c6e3e-e6f7-4707-a31b-dee2342f2b9b" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/txt/testB_.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/txt/testB_3.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/txt/testI_3.txt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/txt/testB.txt" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/txt/testI.txt" afterPath="$PROJECT_DIR$/txt/testI_.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Calculator.cpp" afterPath="$PROJECT_DIR$/Calculator.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Calculator.h" afterPath="$PROJECT_DIR$/Calculator.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow.cpp" afterPath="$PROJECT_DIR$/Flow.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow.h" afterPath="$PROJECT_DIR$/Flow.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow_drawer.cpp" afterPath="$PROJECT_DIR$/Flow_drawer.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow_drawer.h" afterPath="$PROJECT_DIR$/Flow_drawer.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyQGraphicsView.cpp" afterPath="$PROJECT_DIR$/MyQGraphicsView.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Particile.cpp" afterPath="$PROJECT_DIR$/Particile.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Particile.h" afterPath="$PROJECT_DIR$/Particile.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SpaceParsing.h" afterPath="$PROJECT_DIR$/SpaceParsing.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myqgraphicsview.h" afterPath="$PROJECT_DIR$/myqgraphicsview.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB.txt" afterPath="$PROJECT_DIR$/txt/testB.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_1.txt" afterPath="$PROJECT_DIR$/txt/testB_1.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_2.txt" afterPath="$PROJECT_DIR$/txt/testB_2.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI.txt" afterPath="$PROJECT_DIR$/txt/testI.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_1.txt" afterPath="$PROJECT_DIR$/txt/testI_1.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_2.txt" afterPath="$PROJECT_DIR$/txt/testI_2.txt" />
     </list>
     <ignored path="SPHSm6.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,62 +55,27 @@
       <file leaf-file-name="myqgraphicsview.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myqgraphicsview.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
+            <state relative-caret-position="375">
               <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpaceParsing.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SpaceParsing.h">
+      <file leaf-file-name="Flow_drawer.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="263" column="23" selection-start-line="263" selection-start-column="23" selection-end-line="263" selection-end-column="23" />
+            <state relative-caret-position="89">
+              <caret line="180" column="46" selection-start-line="180" selection-start-column="46" selection-end-line="180" selection-end-column="46" />
               <folding>
-                <element signature="e#127#4675#1" expanded="false" />
-                <element signature="e#419#710#0" expanded="false" />
-                <element signature="e#716#2060#0" expanded="false" />
-                <element signature="e#2287#2754#0" expanded="false" />
-                <element signature="e#2760#2859#0" expanded="false" />
-                <element signature="e#2865#2916#0" expanded="false" />
-                <element signature="e#2922#2989#0" expanded="false" />
-                <element signature="e#2995#3263#0" expanded="false" />
-                <element signature="e#3269#3388#0" expanded="false" />
-                <element signature="e#3394#3508#0" expanded="false" />
-                <element signature="e#3514#3554#0" expanded="false" />
-                <element signature="e#3560#3642#0" expanded="false" />
-                <element signature="e#3648#3726#0" expanded="false" />
-                <element signature="e#3849#3903#0" expanded="false" />
-                <element signature="e#4875#5633#0" expanded="false" />
-                <element signature="e#5639#6381#0" expanded="false" />
-                <element signature="e#6387#6790#0" expanded="false" />
-                <element signature="e#6796#7247#0" expanded="false" />
-                <element signature="e#7618#7941#0" expanded="false" />
-                <element signature="e#8213#9906#0" expanded="false" />
-                <element signature="e#10462#10740#0" expanded="false" />
-                <element signature="e#10746#10831#0" expanded="false" />
+                <element signature="e#96#727#0" expanded="false" />
+                <element signature="e#900#1460#0" expanded="false" />
+                <element signature="e#1462#1975#0" expanded="false" />
+                <element signature="e#1977#3096#0" expanded="false" />
+                <element signature="e#3098#3957#0" expanded="false" />
+                <element signature="e#3959#5189#0" expanded="false" />
+                <element signature="e#7565#7971#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testI_1.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/txt/testI_1.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testB_1.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/txt/testB_1.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -115,19 +83,13 @@
       <file leaf-file-name="Flow.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Flow.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="72" column="46" selection-start-line="72" selection-start-column="46" selection-end-line="72" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Flow.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Flow.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="42" column="42" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="42" />
-              <folding />
+            <state relative-caret-position="179">
+              <caret line="90" column="18" selection-start-line="90" selection-start-column="18" selection-end-line="90" selection-end-column="18" />
+              <folding>
+                <element signature="e#102#343#0" expanded="false" />
+                <element signature="e#345#848#0" expanded="false" />
+                <element signature="e#850#1142#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -145,7 +107,6 @@
         <option value="$PROJECT_DIR$/ReadWrite.h" />
         <option value="$PROJECT_DIR$/testB.sph" />
         <option value="$PROJECT_DIR$/testI.sph" />
-        <option value="$PROJECT_DIR$/Particile.cpp" />
         <option value="$PROJECT_DIR$/a.txt" />
         <option value="$PROJECT_DIR$/result.txt" />
         <option value="$PROJECT_DIR$/Help.cpp" />
@@ -160,31 +121,34 @@
         <option value="$PROJECT_DIR$/Calculator_Drawer.h" />
         <option value="$PROJECT_DIR$/Calculator_Drawer.cpp" />
         <option value="$PROJECT_DIR$/MainWindow.cpp" />
-        <option value="$PROJECT_DIR$/Particile.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Calculator.h" />
         <option value="$PROJECT_DIR$/Flow_drawer.h" />
-        <option value="$PROJECT_DIR$/Calculator.cpp" />
-        <option value="$PROJECT_DIR$/MyQGraphicsView.cpp" />
-        <option value="$PROJECT_DIR$/txt/testB_2.txt" />
-        <option value="$PROJECT_DIR$/Flow_drawer.cpp" />
         <option value="$PROJECT_DIR$/txt/testI_2.txt" />
+        <option value="$PROJECT_DIR$/txt/testI.txt" />
+        <option value="$PROJECT_DIR$/Flow_drawer.cpp" />
+        <option value="$PROJECT_DIR$/MyQGraphicsView.cpp" />
+        <option value="$PROJECT_DIR$/txt/testI_3.txt" />
+        <option value="$PROJECT_DIR$/Calculator.h" />
         <option value="$PROJECT_DIR$/Flow.h" />
         <option value="$PROJECT_DIR$/txt/testB.txt" />
-        <option value="$PROJECT_DIR$/txt/testI.txt" />
-        <option value="$PROJECT_DIR$/myqgraphicsview.h" />
-        <option value="$PROJECT_DIR$/txt/testB_1.txt" />
         <option value="$PROJECT_DIR$/SpaceParsing.h" />
+        <option value="$PROJECT_DIR$/txt/testB_3.txt" />
+        <option value="$PROJECT_DIR$/txt/testB_2.txt" />
         <option value="$PROJECT_DIR$/txt/testI_1.txt" />
+        <option value="$PROJECT_DIR$/txt/testB_1.txt" />
+        <option value="$PROJECT_DIR$/Particile.cpp" />
+        <option value="$PROJECT_DIR$/Particile.h" />
+        <option value="$PROJECT_DIR$/Calculator.cpp" />
+        <option value="$PROJECT_DIR$/myqgraphicsview.h" />
         <option value="$PROJECT_DIR$/Flow.cpp" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="65" />
-    <option name="y" value="-4" />
+    <option name="y" value="24" />
     <option name="width" value="1301" />
-    <option name="height" value="772" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -461,20 +425,24 @@
       <workItem from="1472719179254" duration="2287000" />
       <workItem from="1472724919566" duration="14140000" />
       <workItem from="1472979556404" duration="8583000" />
-      <workItem from="1472994378159" duration="9522000" />
+      <workItem from="1472994378159" duration="9669000" />
+      <workItem from="1473009512836" duration="5768000" />
+      <workItem from="1473057828761" duration="1568000" />
+      <workItem from="1473061159764" duration="13076000" />
+      <workItem from="1473078307025" duration="3848000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50039000" />
+    <option name="totallyTimeSpent" value="74446000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
+    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23981553" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34080717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46935725" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -482,7 +450,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47832587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41255605" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -525,26 +493,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Calculator.cpp</url>
-          <line>624</line>
-          <option name="timeStamp" value="257" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="268" />
+      <option name="time" value="273" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Flow.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testB.txt" />
     <entry file="file:///usr/include/c++/4.9/ext/string_conversions.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -624,13 +577,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/result.txt" />
-    <entry file="file://$PROJECT_DIR$/Help.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/4.9/bits/valarray_after.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6060">
@@ -687,46 +633,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Particile.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particile.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="196" column="35" selection-start-line="196" selection-start-column="35" selection-end-line="196" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MainWindow.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Calculator.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="184" column="22" selection-start-line="184" selection-start-column="22" selection-end-line="184" selection-end-column="22" />
-          <folding>
-            <element signature="e#125#834#1" expanded="false" />
-            <element signature="e#837#2698#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -740,107 +651,89 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Flow_drawer.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="21" column="14" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="14" />
+        <state relative-caret-position="405">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding>
             <element signature="e#179#486#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_3.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MyQGraphicsView.cpp">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="33" column="2" selection-start-line="33" selection-start-column="2" selection-end-line="33" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Calculator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="78" column="53" selection-start-line="78" selection-start-column="53" selection-end-line="78" selection-end-column="53" />
+          <folding>
+            <element signature="e#125#846#1" expanded="false" />
+            <element signature="e#2997#4995#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Help.cpp">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file:///usr/include/c++/4.9/bits/stl_vector.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
+        <state relative-caret-position="121">
+          <caret line="779" column="0" selection-start-line="779" selection-start-column="0" selection-end-line="779" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="188" column="48" selection-start-line="188" selection-start-column="48" selection-end-line="188" selection-end-column="48" />
-          <folding>
-            <element signature="e#96#727#0" expanded="false" />
-            <element signature="e#900#1460#0" expanded="false" />
-            <element signature="e#1462#1975#0" expanded="false" />
-            <element signature="e#1977#3096#0" expanded="false" />
-            <element signature="e#3098#3957#0" expanded="false" />
-            <element signature="e#3959#5189#0" expanded="false" />
-            <element signature="e#7349#7755#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Calculator.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1365">
-          <caret line="150" column="15" selection-start-line="150" selection-start-column="15" selection-end-line="150" selection-end-column="15" />
-          <folding>
-            <element signature="e#219#1408#0" expanded="false" />
-            <element signature="e#1783#1896#0" expanded="false" />
-            <element signature="e#1903#2284#0" expanded="false" />
-            <element signature="e#1903#2528#0" expanded="false" />
-            <element signature="e#2580#2951#0" expanded="false" />
-            <element signature="e#2971#3394#0" expanded="false" />
-            <element signature="e#5359#5892#0" expanded="false" />
-            <element signature="e#6576#6845#0" expanded="false" />
-            <element signature="e#6576#8295#0" expanded="false" />
-            <element signature="e#8297#8772#0" expanded="false" />
-            <element signature="e#8777#10323#0" expanded="false" />
-            <element signature="e#10325#10799#0" expanded="false" />
-            <element signature="e#10801#11210#0" expanded="false" />
-            <element signature="e#11212#11617#0" expanded="false" />
-            <element signature="e#11620#12723#0" expanded="false" />
-            <element signature="e#12725#13193#0" expanded="false" />
-            <element signature="e#13195#13642#0" expanded="false" />
-            <element signature="e#13644#14091#0" expanded="false" />
-            <element signature="e#14093#14461#0" expanded="false" />
-            <element signature="e#14467#15541#0" expanded="false" />
-            <element signature="e#15548#17083#0" expanded="false" />
-            <element signature="e#17085#18087#0" expanded="false" />
-            <element signature="e#18089#18711#0" expanded="false" />
-            <element signature="e#18968#19672#0" expanded="false" />
-            <element signature="e#19674#20664#0" expanded="false" />
-            <element signature="e#20666#20879#0" expanded="false" />
-            <element signature="e#20881#21310#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_2.txt">
+    <entry file="file://$PROJECT_DIR$/txt/testB_3.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="3" selection-end-column="12" />
+          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_2.txt">
+    <entry file="file://$PROJECT_DIR$/txt/testB_.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="15">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB.txt">
+    <entry file="file://$PROJECT_DIR$/Flow.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+        <state relative-caret-position="-16">
+          <caret line="28" column="62" selection-start-line="28" selection-start-column="62" selection-end-line="28" selection-end-column="62" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI.txt">
+    <entry file="file://$PROJECT_DIR$/txt/testI_.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
@@ -848,34 +741,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myqgraphicsview.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="42" column="42" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SpaceParsing.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="263" column="23" selection-start-line="263" selection-start-column="23" selection-end-line="263" selection-end-column="23" />
+        <state relative-caret-position="136">
+          <caret line="262" column="28" selection-start-line="262" selection-start-column="28" selection-end-line="262" selection-end-column="28" />
           <folding>
             <element signature="e#127#4675#1" expanded="false" />
             <element signature="e#419#710#0" expanded="false" />
@@ -895,27 +764,127 @@
             <element signature="e#5639#6381#0" expanded="false" />
             <element signature="e#6387#6790#0" expanded="false" />
             <element signature="e#6796#7247#0" expanded="false" />
-            <element signature="e#7618#7941#0" expanded="false" />
-            <element signature="e#8213#9906#0" expanded="false" />
-            <element signature="e#10462#10740#0" expanded="false" />
-            <element signature="e#10746#10831#0" expanded="false" />
+            <element signature="e#8234#8349#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="2" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="2" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/txt/testI_1.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        <state relative-caret-position="30">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Particile.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Particile.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="151" column="27" selection-start-line="151" selection-start-column="27" selection-end-line="151" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Calculator.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-382">
+          <caret line="129" column="19" selection-start-line="129" selection-start-column="19" selection-end-line="129" selection-end-column="19" />
+          <folding>
+            <element signature="e#220#1415#0" expanded="false" />
+            <element signature="e#1870#1983#0" expanded="false" />
+            <element signature="e#1992#2395#0" expanded="false" />
+            <element signature="e#2734#3127#0" expanded="false" />
+            <element signature="e#3149#3596#0" expanded="false" />
+            <element signature="e#6484#7041#0" expanded="false" />
+            <element signature="e#9364#9505#0" expanded="false" />
+            <element signature="e#9364#9859#0" expanded="false" />
+            <element signature="e#9864#10133#0" expanded="false" />
+            <element signature="e#9864#11583#0" expanded="false" />
+            <element signature="e#11585#12060#0" expanded="false" />
+            <element signature="e#12065#13623#0" expanded="false" />
+            <element signature="e#13625#14099#0" expanded="false" />
+            <element signature="e#14101#14510#0" expanded="false" />
+            <element signature="e#14512#14917#0" expanded="false" />
+            <element signature="e#14920#16023#0" expanded="false" />
+            <element signature="e#16025#16493#0" expanded="false" />
+            <element signature="e#16495#16942#0" expanded="false" />
+            <element signature="e#16944#17391#0" expanded="false" />
+            <element signature="e#17393#17761#0" expanded="false" />
+            <element signature="e#17767#18841#0" expanded="false" />
+            <element signature="e#18848#20383#0" expanded="false" />
+            <element signature="e#20385#21398#0" expanded="false" />
+            <element signature="e#21400#22018#0" expanded="false" />
+            <element signature="e#23924#24137#0" expanded="false" />
+            <element signature="e#24139#24570#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myqgraphicsview.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="180" column="46" selection-start-line="180" selection-start-column="46" selection-end-line="180" selection-end-column="46" />
+          <folding>
+            <element signature="e#96#727#0" expanded="false" />
+            <element signature="e#900#1460#0" expanded="false" />
+            <element signature="e#1462#1975#0" expanded="false" />
+            <element signature="e#1977#3096#0" expanded="false" />
+            <element signature="e#3098#3957#0" expanded="false" />
+            <element signature="e#3959#5189#0" expanded="false" />
+            <element signature="e#7565#7971#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Flow.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="72" column="46" selection-start-line="72" selection-start-column="46" selection-end-line="72" selection-end-column="46" />
-          <folding />
+        <state relative-caret-position="179">
+          <caret line="90" column="18" selection-start-line="90" selection-start-column="18" selection-end-line="90" selection-end-column="18" />
+          <folding>
+            <element signature="e#102#343#0" expanded="false" />
+            <element signature="e#345#848#0" expanded="false" />
+            <element signature="e#850#1142#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
