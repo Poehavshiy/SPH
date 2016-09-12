@@ -2,7 +2,7 @@
 
 //from QT
 MyQGraphicsView::MyQGraphicsView(QWidget *parent) :
-        QGraphicsView(parent) {
+        QGraphicsView(parent){
     //boudCounter=0;
     scene = new QGraphicsScene();
     //Исключительно для дебага
@@ -12,6 +12,8 @@ MyQGraphicsView::MyQGraphicsView(QWidget *parent) :
     this->setSceneRect(-100, -100, 600, 600);
     this->setScene(scene);
     flow = new Flow_Drawer(file1, file2);
+    //
+    vis = new Visualisator(flow, path_tovis);
 }
 
 //
@@ -45,7 +47,8 @@ void MyQGraphicsView::draw() {
     if(calculations::current_time<100) {
         flow->calculate_step(scene);
     }
-
+    //тут же и запишем слой
+    vis->write_step();
 }
 
 //

@@ -74,8 +74,8 @@ void Flow::set_init(const string &initFile) {
     }
     vector<vector<double>> conditions;
     conditions = {
-            {100000, 1, 1},
-            {10,    1, 1}
+            {100000, 1, 0.1},
+            {100,    1, 0.1}
     };
     for(int i = 0; i < branches.size(); ++i) {
         build_init_part(branches[i], conditions[i], i);
@@ -88,7 +88,7 @@ void Flow::set_init(const string &initFile) {
 
 //fill branc with particles with initial patameters
 void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step) {
-    int number = 300;
+    int number = 400;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);

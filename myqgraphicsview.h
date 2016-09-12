@@ -2,6 +2,7 @@
 #define MyQGraphicsView_H
 
 #include "Flow_drawer.h"
+#include "Visualisator.h"
 
 class MyQGraphicsView : public QGraphicsView {
 Q_OBJECT
@@ -24,6 +25,8 @@ public slots:
 private:
     string file1 = "/home/nikita/SPHSm6/txt/testB_3.txt";
     string file2 = "/home/nikita/SPHSm6/txt/testI_3.txt";
+    string path_tovis = "/home/nikita/SPHSm6/csv";
+    Visualisator* vis;
     QGraphicsScene *scene;
     Flow_Drawer *flow;
     //

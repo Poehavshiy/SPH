@@ -43,7 +43,7 @@ namespace calculations {
 
     double current_time = 0;
 
-    double h = 40;
+    double h = 25;
 
     double R = 8.31;
 
@@ -53,12 +53,12 @@ namespace calculations {
 
     double viscous = 0.00023;
 
-    double alpha = 0.9;
+    double alpha = 1.1;
 
-    double beta = 0.9;
+    double beta = 1.1;
 
 //для подсчета силы от гарничных частиц
-    double r0 = 10;
+    double r0 = 2;
 
     double D = 0;//0.01;//равен квадрату наибольшей скорости
 
@@ -295,6 +295,15 @@ namespace calculations {
                 res += calculations::two_part_p(a, *all_real[i]->operator[](j));
             }
         }
+        //теперь от виртуальных частиц
+        //теперь тут надо посчитать от симетричных частиц за границей
+        for (int i = 0; i < all_add.size(); ++i) {
+
+            for (int j = 0; j < all_add[i]->size(); ++j) {
+                res += calculations::two_part_p(a, all_add[i]->operator[](j));
+            }
+        }
+
         return res;
     }
 
@@ -350,6 +359,15 @@ namespace calculations {
         for (int i = 0; i < all_real.size(); ++i) {
             for (int j = 0; j < all_real[i]->size(); ++j) {
                 res += calculations::two_part_e(a, *all_real[i]->operator[](j));
+            }
+        }
+        //
+        //теперь от виртуальных частиц
+        //теперь тут надо посчитать от симетричных частиц за границей
+        for (int i = 0; i < all_add.size(); ++i) {
+
+            for (int j = 0; j < all_add[i]->size(); ++j) {
+                res += calculations::two_part_e(a, all_add[i]->operator[](j));
             }
         }
         return res;

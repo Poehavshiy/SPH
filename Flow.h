@@ -37,6 +37,8 @@ class Flow {
 public:
     friend class Flow_Drawer;
     //
+    friend class Visualisator;
+    //
     Flow(const string &boundaryFile, const string &initFile);
     //
     const void* get_part(int type){
