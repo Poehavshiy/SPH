@@ -43,7 +43,7 @@ namespace calculations {
 
     double current_time = 0;
 
-    double h = 25;
+    double h = 11;
 
     double R = 8.31;
 
@@ -58,220 +58,211 @@ namespace calculations {
     double beta = 1.1;
 
 //для подсчета силы от гарничных частиц
-    double r0 = 2;
+    double r0 = 0.5;
 
-    double D = 0;//0.01;//равен квадрату наибольшей скорости
+    double D = 0;//равен квадрату наибольшей скорости
 
     double n1 = 12;
 
     double n2 = 6;
 
-    double deltaT = 0.001;//требует глубокого переосмысления
+    double deltaT = 0.001;//меняется по оду расчета
 
-    double r_ij(Particle &a, Particle &b) {
-        return sqrt(pow(a.X() - b.X(), 2) + pow(a.Y() - b.Y(), 2));
+    void delta_coor(Particle &a, Particle &b, double &deltaX, double& deltaY) {
+        deltaX = a.X() - b.X();
+        deltaY = a.Y() - b.Y();
     }
 
-//
-    /*  double w_test(double r) {
-          double result = 0;
-          double x = r / h;
-          if (x >= 0 && x <= 1) {
-              result = (1 / 3.14 * pow(h, 3)) * (1 - (3.0 / 2.0) * pow(x, 2) + (3.0 / 4.0) * pow(x, 3));
-          }
-          else if (x >= 1 && x <= 2) {
-              result = (1 / 3.14 * pow(h, 3)) * (1.0 / 4.0) * pow(2 - x, 3);
-          }
-          return result;
-      }
-  */
-    double w_test(double r) {
-        // assert(r>0);
-        double result = 0;
-        if (r < 2) {
-            result = (15 / (7 * 3.14 * h * h)) *
-                     ((2 / 3 - 9 / 8 * pow(r, 2)) + 19 / 24 * pow(r, 3) - 5 / 32 * pow(r, 4));
-        }
-        return result;
-    }
-//вооооооооооооооооот тут косяк
-    //1я функция
-    /*  double grad_w_test(double r) {
-          double result = 0;
-          double x = r / h;
-          if (x >= 0 && x <= 1) {
-              result = (1 / (3.14 * pow(h, 4))) * ((9.0 / 4.0) * pow(x, 2) - 3.0 * x);
-          }
-          else if (x >= 1 && x <= 2) {
-              result = (1 / (3.14 * pow(h, 4))) * (3.0 / 4.0) * -pow(2 - x, 2);
-          }
-          return result;
-      }
-  */
-    //2я функция
-    /*double grad_w_test(double x, double y, bool direction) {
-        double result = 0;
-        double r = sqrt(x*x+y*y)/h;
-        if(r<2 && r>-2) {
-            if(direction == 0) {
-                result = (15 / (7 * 3.14 * h * h)) * x * (-5 * pow(r, 2) + 19 * r - 72);
-            }
-            else
-                result = (15 / (7 * 3.14 * h * h)) * y * (-5 * pow(r, 2) + 19 * r - 72);
-        }
-        int a=1;
-        return result;
-    }*/
-    double grad_w_test(double x, double y, bool direction) {
-        double result = 0;
-        double a = 5 / (3.14 * h * h);
-        double r = sqrt(x * x + y * y);
-        if (r > h) return 0;
-        //x=abs(x);
-        //y=abs(y);
-        if (direction == 0)
-            result = 12 * a * x * (pow(h, 2) - 2 * h * r + pow(r, 2)) / pow(h, 4);
-        else
-            result = 12 * a * y * (pow(h, 2) - 2 * h * r + pow(r, 2)) / pow(h, 4);
-
-        return result;
+    void delta_velocity(Particle &a, Particle &b, double &delta_Vx, double& delta_Vy) {
+        delta_Vx = a.Vx() - b.Vx();
+        delta_Vy = a.Vy() - b.Vy();
     }
 
+    //Производная W по координате direction(0-x 1-y)
+    /*
+       double grad_w_test(double x, double y, bool direction, double h_inc) {
+           double r = hypot(x, y);
+           double minR = 0.001;
+           if (r > 2 * h_inc || r < minR) return 0;
+           //
+           double result = 0;
+           double a = -2 / (3 * h_inc);
+           double b = 1 / (6 * h_inc);
+           double factor;
+           if (direction == 0) {
+               factor = x / r;
+           } else {
+               factor = y / r;
+           }
+
+           if (r > 0 && r < h_inc) {
+               result = -3 * (a * pow(h_inc - r, 2) + b * pow(r - 2 * h_inc, 2)) / pow(h_inc, 3);
+           } else if (r > h_inc && r < 2 * h_inc) {
+               result = -3 * b * (pow(r - 2 * h_inc, 2)) / pow(h_inc, 3);
+           }
+
+
+           result *= factor;
+           return result;
+       }
+   */
     double grad_w_test(double x, double y, bool direction, double h_inc) {
-        double result = 0;
-        double a = 5 / (3.14 * h_inc * h_inc);
-        double r = sqrt(x * x + y * y);
-        if (r > h) return 0;
-        //x=abs(x);
-        //y=abs(y);
-        if (direction == 0)
-            result = 12 * a * x * (pow(h_inc, 2) - 2 * h_inc * r + pow(r, 2)) / pow(h_inc, 4);
-        else
-            result = 12 * a * y * (pow(h_inc, 2) - 2 * h_inc * r + pow(r, 2)) / pow(h_inc, 4);
-
-        return result;
-    }
-//
-    double two_part_p(Particle &a, Particle &b) {
-        double M = b.M();
-        double vx = a.Vx() - b.Vx();
-        double vy = a.Vy() - b.Vy();
-        //скалярное произведение Vil и Wij
-        double deltaX = b.X() - a.X();
-        double deltaY = b.Y() - a.Y();
-        double d_Wx = grad_w_test(deltaX, deltaX, 0, a.h());
-        double d_Wy = grad_w_test(deltaX, deltaY, 1, a.h());
-        double VijWij = (vx * d_Wx) + (vy * d_Wy);
-        double res = M * VijWij;
-        return res;
+        double a = 1 / ( 3.14 * pow(h ,4) );
+        double r = hypot(x, y)/h;
+        double minR = 0.001;
+        if(r < 0 || r > 2 || r < minR) return 0;
+        double result;
+        double factor;
+        if (direction == 0) {
+            factor = x / hypot(x, y);
+        } else {
+            factor = y / hypot(x, y);
+        }
+        if( r> 0 && r< 1) result = 9*r*r/4 - 3*r;
+        else if( r> 1 && r<2 ) result = -(3/4)*pow( 2- x, 2) ;
+        return result*a*factor;
     }
 
+    //для вязкости
     double two_part_E(Particle &a, Particle &b, bool direct) {
         //direct 0 -> вычисляем Exy, если direct 1 -> вычисляем Eyx
-        double mj_pj = b.M()/b.p();
+        double mj_pj = b.M() / b.p();
+
+        //произведение Yскорости на Xпроизводную
         double Vj_y_Wi_x;
+        //произведение Xскорости на Yпроизводную
         double Vj_x_Wi_y;
-        double deltaX = b.X() - a.X();
-        double deltaY = b.Y() - a.Y();
-        if(direct == 0) {
-            Vj_y_Wi_x = b.Vy()*grad_w_test(deltaX,deltaY, 0, a.h());
-            Vj_x_Wi_y = b.Vx()*grad_w_test(deltaX,deltaY, 1, a.h());
+        double deltaX;
+        double deltaY;
+        delta_coor(a, b, deltaX, deltaY);
+
+        if (direct == 0) {
+            Vj_y_Wi_x = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
+            Vj_x_Wi_y = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
+        } else {
+            Vj_y_Wi_x = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
+            Vj_x_Wi_y = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
         }
-        else {
-            Vj_y_Wi_x = b.Vx()*grad_w_test(deltaX,deltaY, 1, a.h());
-            Vj_x_Wi_y = b.Vy()*grad_w_test(deltaX,deltaY, 0, a.h());
-        }
-        double result = mj_pj*(Vj_y_Wi_x+Vj_x_Wi_y);
+        double result = mj_pj * (Vj_y_Wi_x + Vj_x_Wi_y);
         return result;
     }
 
-    //
+    //искусскственная вязкость
     double two_part_art_visc(Particle &a, Particle &b) {
         double aR = sqrt(pow(a.X(), 2) + pow(a.Y(), 2));
         double bR = sqrt(pow(b.X(), 2) + pow(b.Y(), 2));
-        double deltaR = aR-bR;
+        double deltaR = aR - bR;
         //
         double av = sqrt(pow(a.Vx(), 2) + pow(a.Vy(), 2));
         double bv = sqrt(pow(b.Vx(), 2) + pow(b.Vy(), 2));
-        double deltaV = aR-bR;
+        double deltaV = aR - bR;
 
 
-        double phi = a.h()* deltaR * deltaV/(pow(deltaR,2) + pow(0.1*a.h(),2));
+        double phi = a.h() * deltaR * deltaV / (pow(deltaR, 2) + pow(0.1 * a.h(), 2));
         double result;
-        if(deltaR*deltaV < 0) result = 0;
-        else result = 2*(-alpha * 0.5*(a.C() + b.C())*phi + beta * pow(phi,2))/(a.p() + b.p());
+        if (deltaR * deltaV < 0) result = 0;
+        else result = 2 * (-alpha * 0.5 * (a.C() + b.C()) * phi + beta * pow(phi, 2)) / (a.p() + b.p());
         return result;
     }
 
-    //Теплопроводность
-
+    //искусственная теплота
     double two_part_art_heat(Particle &a, Particle &b, bool direct) {
-       /* double deltaX = b.X() - a.X();
-        double deltaY = b.Y() - a.Y();
-        double divVa = b.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
-        double qi = alpha*h*a.p()*a.C()*abs(divVa)+beta*h*a.p()*pow(divVa,2);
+        /* double deltaX = b.X() - a.X();
+         double deltaY = b.Y() - a.Y();
+         double divVa = b.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
+         double qi = alpha*h*a.p()*a.C()*abs(divVa)+beta*h*a.p()*pow(divVa,2);
 
-        double divVb = a.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
-        double qj = alpha*h*b.p()*b.C()*abs(divV)+beta*h*b.p()*pow(divV,2);*/
+         double divVb = a.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
+         double qj = alpha*h*b.p()*b.C()*abs(divV)+beta*h*b.p()*pow(divV,2);*/
         return 0;
 
     }
 
     //
+
+//
+    double two_part_p(Particle &a, Particle &b) {
+        double Mj = b.M();
+        double delta_vx, delta_vy;
+        double deltaX, deltaY;
+        delta_coor(a, b, deltaX, deltaY);
+        delta_velocity(a, b, delta_vx, delta_vy);
+        //скалярное произведение скоростей и градиента
+        double d_Wx = grad_w_test(deltaX, deltaY, 0, a.h());
+        double d_Wy = grad_w_test(deltaX, deltaY, 1, a.h());
+        double VijWij = (delta_vx * d_Wx) + (delta_vy * d_Wy);
+        double res = Mj * VijWij;
+        return res;
+    }
+
+    //
     double two_part_v(Particle &a, Particle &b, bool direct) {
-        double M = b.M();
-        double deltaX = b.X() - a.X();//abs(b.X() - a.X());
-        double deltaY = b.Y() - a.Y();//abs(b.Y() - a.Y());
+        double Mj = b.M();
+        double deltaX ;
+        double deltaY ;
+        delta_coor(a , b, deltaX, deltaY);
         double Wij = grad_w_test(deltaX, deltaY, direct, a.h());
 
-        double brackets1 = (a.P() / pow(a.p(), 2) +
-                           b.P() / pow(b.p(), 2));
+        double brackets1 = -(a.P() / pow(a.p(), 2) +
+                            b.P() / pow(b.p(), 2));
         //
-        double res = M * brackets1 * Wij;//1е слагаемоеж
+        double res = Mj * brackets1 * Wij;//1е слагаемоеж
         //считаем 2е
-        double brackets2 = viscous*two_part_E(a, b, direct)/pow(a.p(), 2) +
-                //второе слагаемое  Ej a b поменяли
-                viscous*two_part_E(b, a, direct)/pow(b.p(), 2);
-        res += M * brackets2 * Wij;
-        //добавим иск вязкость
-        double H = two_part_art_visc(a, b);
+        if (EULER == false) {
+            double brackets2 = viscous * two_part_E(a, b, direct) / pow(a.p(), 2) +
+                               //второе слагаемое  Ej a b поменяли
+                               viscous * two_part_E(b, a, direct) / pow(b.p(), 2);
+            res += Mj * brackets2 * Wij;
+            //добавим иск вязкость
+            double H = two_part_art_visc(a, b);
 
-        res+= H*Wij;
+            res += H * Wij;
+        }
 
         return res;
     }
 
 //
-    double two_part_e(Particle &a, Particle &b) {
-        double vx = a.Vx() - b.Vx();
-        double vy = a.Vy() - b.Vy();
-        //скалярное произведение Vil и Wij
-        double deltaX = b.X() - a.X();//abs(b.X() - a.X());
-        double deltaY = b.Y() - a.Y();//abs(b.Y() - a.Y());
-        double VijWij = (vx * grad_w_test(deltaX, deltaY, 0,a.h())) + (vy * grad_w_test(deltaX, deltaY, 1,a.h()));
+    double two_part_energy(Particle &a, Particle &b) {
+        double delta_vx, delta_vy;
+        double deltaX, deltaY;
+        delta_coor(a, b, deltaX, deltaY);
+        delta_velocity(a, b, delta_vx, delta_vy);
+        //скалярное произведение Vij и Wij
+        double VijWij = (delta_vx * grad_w_test(deltaX, deltaY, 0, a.h())) +
+                        (delta_vy * grad_w_test(deltaX, deltaY, 1, a.h()));
         //
-        double M = b.M();
-        double H = two_part_art_visc(a, b);
+        double Mj = b.M();
         double brackets1 = (a.P() / pow(a.p(), 2) +
-                           b.P() / pow(b.p(), 2) + H);
+                            b.P() / pow(b.p(), 2));
         //
-        double res = 0.5 * VijWij * M * brackets1;
+        double H = two_part_art_visc(a, b);
+        if (EULER == false) {
+            double H = two_part_art_visc(a, b);
+            brackets1 += H;
+        }
+        double res = 0.5 * VijWij * Mj * brackets1;
+        if (EULER == false) {
+            ///?????????????????????????????????
+            double brackets2 = (viscous / (2 * a.p())) * two_part_E(a, b, 0) * two_part_E(a, b, 1);
+            res += brackets2;
+        }
+        //??????????????????????????????????????????
         //вязкость
-        double brackets2 = (viscous/(2*a.p()))*two_part_E(a,b,0) * two_part_E(a,b,1);
-        res+= brackets2;
-
         return res;
 
     }
 
 //высчитывает часть производной скорости от действия граничной частицы
     double two_part_bforse(Particle &a, Particle &b, bool direct) {
-        double r = calculations::r_ij(a, b);
+        double deltaX, deltaY;
+        delta_coor(a, b, deltaX, deltaY);
+        double r = hypot(deltaX, deltaY);
         double ratio = r0 / r;
         if (ratio > 1) return 0;
         else {
-            double x = (a.X() - b.X());
-            if (direct == 1) x = (a.Y() - b.Y());
+            double x = deltaX;
+            if (direct == 1) x = deltaY;
             double res = D * (pow(ratio, n1) - pow(ratio, n2)) * x / r;
             res = res / a.M();
             return -res;
@@ -339,7 +330,6 @@ namespace calculations {
                 res += calculations::two_part_v(a, all_add[i]->operator[](j), direct);
             }
         }
-        res = -res;
         //а вот тут надо посчитать производную от действия граничных частиц
         for (int i = 0; i < all_bound.size(); ++i) {
 
@@ -358,7 +348,7 @@ namespace calculations {
         double res = 0;
         for (int i = 0; i < all_real.size(); ++i) {
             for (int j = 0; j < all_real[i]->size(); ++j) {
-                res += calculations::two_part_e(a, *all_real[i]->operator[](j));
+                res += calculations::two_part_energy(a, *all_real[i]->operator[](j));
             }
         }
         //
@@ -367,7 +357,7 @@ namespace calculations {
         for (int i = 0; i < all_add.size(); ++i) {
 
             for (int j = 0; j < all_add[i]->size(); ++j) {
-                res += calculations::two_part_e(a, all_add[i]->operator[](j));
+                res += calculations::two_part_energy(a, all_add[i]->operator[](j));
             }
         }
         return res;
@@ -606,7 +596,7 @@ Particle Calculator::ronge_cutt(Particle &a, int &index) {
     double new_vx = a.Vx() + dt * vx_derivatives[index];
     double new_vy = a.Vy() + dt * vy_derivatives[index];
     //
-    //Пересчитаем D
+    //определение наибольшей скорости для пересчета D
     double new_V = pow(new_vx * new_vx + new_vy * new_vy, 0.5);
     if (new_V > largest_V) largest_V = new_V;
     //Пересчитаем delta_t

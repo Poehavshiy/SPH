@@ -48,7 +48,7 @@ void MyQGraphicsView::draw() {
         flow->calculate_step(scene);
     }
     //тут же и запишем слой
-    vis->write_step();
+    //vis->write_step();
 }
 
 //

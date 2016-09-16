@@ -117,7 +117,7 @@ public:
     }
 
     //
-    double P() {
+    double P() const {
         return pressure;
     }
 

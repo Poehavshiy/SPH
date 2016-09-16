@@ -7,6 +7,8 @@
 
 #include "SpaceParsing.h"
 
+const bool EULER = 1;
+
 struct From_cell_to_cells {
     Cell *from;
     vector<pair<Cell *, int>> to_cell_pid;
@@ -61,7 +63,9 @@ namespace calculations {
 
     extern double viscous;
 
-    double r_ij(Particle &a, Particle &b);
+    void delta_coor(Particle &a, Particle &b, double& deltaX, double& deltaY);
+
+    void delta_velocity(Particle &a, Particle &b, double& delta_Vx, double& delta_Vy);
 
     //
     double w_test(double r);
@@ -85,7 +89,7 @@ namespace calculations {
     double two_part_v(Particle &a, Particle &b, bool direct);
 
     //
-    double two_part_e(Particle &a, Particle &b);
+    double two_part_energy(Particle &a, Particle &b);
 
     //высчитывает часть производной скорости от действия граничной частицы
     double two_part_bforse(Particle &a, Particle &b, bool direct);
@@ -139,6 +143,7 @@ protected:
     vector<double> vy_derivatives;
 
     vector<double> e_derivatives;
+
 
     //
     PartPointers_add get_sym_part(int &row, int &column);

@@ -23,9 +23,10 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent *e);
 
 private:
-    string file1 = "/home/nikita/SPHSm6/txt/testB_3.txt";
-    string file2 = "/home/nikita/SPHSm6/txt/testI_3.txt";
-    string path_tovis = "/home/nikita/SPHSm6/csv";
+    string calc_case = "1";
+    string file1 = "/home/nikita/SPH/txt/testB_" + calc_case + ".txt";
+    string file2 = "/home/nikita/SPH/txt/testI_" +calc_case + ".txt";
+    string path_tovis = "/home/nikita/SPHS/csv";
     Visualisator* vis;
     QGraphicsScene *scene;
     Flow_Drawer *flow;

@@ -73,16 +73,18 @@ void Flow::set_init(const string &initFile) {
 
     }
     vector<vector<double>> conditions;
+    maxP = 100000000;
+    maxp=1;
+    maxe = maxP / (0.4 * maxp);
+
     conditions = {
-            {100000, 1, 0.1},
-            {100,    1, 0.1}
+            {maxP, maxp, 0.1, 10, 0},
+            {1,    maxp, 0.1, 0, 0}
     };
     for(int i = 0; i < branches.size(); ++i) {
         build_init_part(branches[i], conditions[i], i);
     }
-    maxP = 100000;
-    maxp=1;
-    maxe = maxP / (0.4 * maxp);
+
     initCond.close();
 }
 
@@ -96,14 +98,16 @@ void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step)
     int per_y = sqrt(number);
     int per_x = per_y;//number / per_y;
     double xstep = X / per_x;
-    double ystep = Y / (per_y - 1);
+    double ystep = Y / per_y ;
     //
     double P = cond[0];
     double p = cond[1];
     double mass = cond[2];
+    double Vx = cond[3];
+    double Vy = cond[4];
     double e = P / (0.4 * p);
     for (int i = 0; i < number; ++i) {
-        data.push_back(Particle(0, p, P, e, 0, 0, mass));
+        data.push_back(Particle(0, p, P, e, Vx, Vy, mass));
     }
 
     for (int i = 0; i <= per_y; ++i) {

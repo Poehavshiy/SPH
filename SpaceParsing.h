@@ -29,23 +29,23 @@ class Cell {
         return false;
     }
 
-    void create_sim_part(Particle *target) {
+    //boundary_cell это ячейка, которая является ближайшей граничной
+    void create_sim_part(Particle *target, Cell *boundary_cell) {
         // cout << Cell::C << endl;
         // Cell::C++;
-        //
+        //Новой ячейке присвоили все кастарой
         Particle new_part = *target;
-        new_part.set_vx(new_part.Vx() * -1);
+        new_part.set_vx(new_part.Vx() * -1);//а скорость наоборот
         new_part.set_vy(new_part.Vy() * -1);
         //Это все процесс вычисления позиции симетричной частицы за границей
-        Point A = boundary_group[0]->position();
-        Point B = boundary_group[1]->position();
+        Point A = boundary_cell->boundary_group[0]->position();
+        Point B = boundary_cell->boundary_group[1]->position();
         double Dx, Dy;
         Point C = target->position();
         if (A == B) {
             Dx = A.x;
             Dy = A.y;
-        }
-        else {
+        } else {
             Point vector_AC(C.x - A.x, C.y - A.y);
             Point vector_AB(B.x - A.x, B.y - A.y);
             //
@@ -61,7 +61,7 @@ class Cell {
         //
         Point new_pos(Dx + (Dx - C.x), Dy + (Dy - C.y));
         new_part.set_pos(new_pos);
-        symetric_group.push_back(new_part);
+        boundary_cell->symetric_group.push_back(new_part);
     }
     //
 public:
@@ -69,6 +69,7 @@ public:
 
     friend class SpaceParsing;
 
+    //получение углов квадрата
     Point get_left_bottom() const {
         return left_bottom;
     }
@@ -84,8 +85,7 @@ public:
         if (inside == true && particle.boundary_status() == true) {
             boundary_group.push_back(&particle);
             boundary = true;
-        }
-        else if (inside == true && particle.boundary_status() == false) {
+        } else if (inside == true && particle.boundary_status() == false) {
             real_group.push_back(&particle);
         }
         return inside;
@@ -100,33 +100,23 @@ public:
         return boundary;
     }
 
-    void add_part(Particle* p) {
+    void add_part(Particle *p) {
         real_group.push_back(p);
     }
 
-    void create_simetric() {
+    void create_simetric(Cell *boundary_cell) {
         //   cout << Cell::C << endl;
         //   Cell::C++;
         for (int i = 0; i < real_group.size(); ++i) {
-            create_sim_part(real_group[i]);
+            create_sim_part(real_group[i], boundary_cell);
             //  cout << Cell::C << endl;
             //  Cell::C++;
         }
     }
 
-    void remove_part(int& index) {
+    void remove_part(int &index) {
         swap(real_group.back(), real_group[index]);
         real_group.pop_back();
-    }
-
-    Cell(Point &l_b, Point &r_t) {
-        left_bottom = l_b;
-        right_top = r_t;
-        boundary = false;
-    }
-
-    Cell() {
-        boundary = false;
     }
 
     const vector<Particle> *get_shadow() const {
@@ -137,11 +127,12 @@ public:
         return &real_group;
     }
 
+    //проверить на пустоту и если пуста, сделать пустой
     void emptiness() {
-        if(real_group.size() != 0) is_contain = true;
+        if (real_group.size() != 0) is_contain = true;
         else is_contain = false;
     }
-
+    //внешняя проверка на пустоту
     bool is_non_empty() {
         return is_contain;
     }
@@ -163,10 +154,20 @@ public:
             is << income.symetric_group[i].X() << ' ' << income.symetric_group[i].Y() << ' ' << 500 << endl;
         }
     }
+
+    Cell(Point &l_b, Point &r_t) {
+        left_bottom = l_b;
+        right_top = r_t;
+        boundary = false;
+    }
+
+    Cell() {
+        boundary = false;
+    }
 };
 
 class SpaceParsing {
-    vector<Particle>* data_ptr;
+    vector<Particle> *data_ptr;
     int cells_per_x;
     int cells_per_y;
     double x_size;
@@ -241,20 +242,38 @@ class SpaceParsing {
             Particle debug = data[i];
             bool status = insert(data[i]);
 //            assert (status == true);
-          //  cout<<i<<endl;
-            if(i==288) {
-                int a=0;
+            //  cout<<i<<endl;
+            if (i == 288) {
+                int a = 0;
             }
         }
     }
 
     //
+    Cell *is_near_boundary(int row, int column) {
+        //если это ячейка НЕ ГРАНИЧНАЯ
+
+        for (int i = 0; i < 8; i+=2) {
+            Cell* current = get_cell_clockwise(row, column, i);
+            if (current != nullptr && current->is_boundary())
+                return current;
+        }
+        return nullptr;
+    }
+
+    //
     void create_symetric_groups() {
+        Cell *boundary_cell = nullptr;
         for (int i = 0; i < part_groups.size(); ++i) {
             for (int j = 0; j < part_groups[i].size(); ++j) {
+                boundary_cell = is_near_boundary(i, j);
+
                 if (part_groups[i][j].is_boundary() == true) {
-                    part_groups[i][j].create_simetric();
+                    part_groups[i][j].create_simetric(&part_groups[i][j]);
+                } else if (part_groups[i][j].is_boundary() == false && boundary_cell != nullptr) {
+                    part_groups[i][j].create_simetric(boundary_cell);
                 }
+
             }
         }
     }
@@ -268,55 +287,106 @@ class SpaceParsing {
         }
 
     }
+
     //
     void set_cells_perax(int per_x, int per_y) {
         cells_per_x = per_x;
         cells_per_y = per_y;
     }
 
-
-    std::pair<int, int> find_around(const int &row,const int &column, Particle &target) {
+    //для перемещения частиц
+    std::pair<int, int> find_around(const int &row, const int &column, Particle &target) {
         int r = row;
         int c = column;
         if (r - 1 >= 0 && part_groups[r - 1][c].is_inside(target) == true) {//case0
             std::pair<int, int> result(r - 1, c);
             return result;
-        }
-        else if (r - 1 >= 0 && c - 1 >= 0 && part_groups[r - 1][c - 1].is_inside(target) == true) {//case1
+        } else if (r - 1 >= 0 && c - 1 >= 0 && part_groups[r - 1][c - 1].is_inside(target) == true) {//case1
             std::pair<int, int> result(r - 1, c - 1);
             return result;
-        }
-        else if (c - 1 >= 0 && part_groups[r][c - 1].is_inside(target) == true) { //case2
+        } else if (c - 1 >= 0 && part_groups[r][c - 1].is_inside(target) == true) { //case2
             std::pair<int, int> result(r, c - 1);
             return result;
-        }
-        else if (c - 1 >= 0 && r + 1 < cells_per_y && part_groups[r + 1][c - 1].is_inside(target) == true) { //case3
+        } else if (c - 1 >= 0 && r + 1 < cells_per_y && part_groups[r + 1][c - 1].is_inside(target) == true) { //case3
             std::pair<int, int> result(r + 1, c - 1);
             return result;
-        }
-        else if (r + 1 < cells_per_y && part_groups[r + 1][c].is_inside(target) == true) {//case4
+        } else if (r + 1 < cells_per_y && part_groups[r + 1][c].is_inside(target) == true) {//case4
             std::pair<int, int> result(r + 1, c);
             return result;
-        }
-        else if (r + 1 < cells_per_y && c + 1 < cells_per_x &&
-                 part_groups[r + 1][c + 1].is_inside(target) == true) {//case5
+        } else if (r + 1 < cells_per_y && c + 1 < cells_per_x &&
+                   part_groups[r + 1][c + 1].is_inside(target) == true) {//case5
             std::pair<int, int> result(r + 1, c + 1);
             return result;
-        }
-        else if (c + 1 < cells_per_x && part_groups[r][c + 1].is_inside(target) == true) {//case6
+        } else if (c + 1 < cells_per_x && part_groups[r][c + 1].is_inside(target) == true) {//case6
             std::pair<int, int> result(r, c + 1);
             return result;
-        }
-        else if (r - 1 >= 0 && c + 1 < cells_per_x && part_groups[r - 1][c + 1].is_inside(target) == true) {
+        } else if (r - 1 >= 0 && c + 1 < cells_per_x && part_groups[r - 1][c + 1].is_inside(target) == true) {
             std::pair<int, int> result(r - 1, c + 1);
             return result;
         }
     }
 
+    //
+    Cell* get_cell_clockwise(const int &row, const int &column, int n) {
+        int r = row;
+        int c = column;
+        Cell* result;
+        int res_r, res_c;
+        //эта функция не должна отрабатывать для ГРАНИЧНЫХ ячеек
+        switch (n) {
+            case 0:
+                res_r = r + 1;
+                res_c = c;
+                if(res_r ==  cells_per_y) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (1):
+                res_r = r + 1;
+                res_c = c + 1;
+                if(res_r == cells_per_y || res_c == cells_per_x) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (2):
+                res_r = r;
+                res_c = c + 1;
+                if(res_c == cells_per_x ) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (3):
+                res_r = r - 1;
+                res_c = c + 1;
+                if(res_r == -1 || res_c == cells_per_x) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (4):
+                res_r = r - 1;
+                res_c = c;
+                if(res_r == -1 )return nullptr;
+                return &part_groups[res_r][res_c];
+            case (5):
+                res_r = r - 1;
+                res_c = c - 1;
+                if(res_r == -1 || res_c == -1) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (6):
+                res_r = r;
+                res_c = c - 1;
+                if( res_c == -1 ) return nullptr;
+                return &part_groups[res_r][res_c];
+            case (7):
+                res_r = r + 1;
+                res_c = c - 1;
+                if( res_r == cells_per_y || res_c == -1 ) return nullptr;
+                return &part_groups[res_r][res_c];
+            default:
+
+                return nullptr;
+        }
+
+    };
+
 
 public:
     friend class Calculator;
+
     friend class Calculator_Drawer;
+
     static SpaceParsing *init
             (
                     vector<vector<double>> &geometry,
@@ -333,6 +403,7 @@ public:
 
         return space;
     }
+
     //
     friend std::istream &operator<<(ostream &is, SpaceParsing &income) {
         //
