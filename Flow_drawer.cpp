@@ -36,22 +36,24 @@ Flow_Drawer::COLOUR Flow_Drawer::GetColour(double v, double vmin, double vmax) {
 Flow_Drawer::Flow_Drawer(const string &boundaryFile, const string &initFile) :
         Flow(boundaryFile, initFile) {
     calculator = new Calculator(s_distribution);
+    cof  = 3;
+    cof1 = 200;
 }
 
 void Flow_Drawer::draw_boundary(QGraphicsScene *scene) {
-    const vector <vector<Particle>> *data = reinterpret_cast<const vector <vector<Particle>> *>(this->get_part(0));
+    const vector<vector<Particle>> *draw = reinterpret_cast<const vector<vector<Particle>> *>(this->get_part(0));
     double rad = 2;
-    for (int i = 0; i < data->size(); ++i) {
-        for (int j = 0; j < data->operator[](i).size(); ++j) {
-            Particle *curent = const_cast<Particle *>(&data->operator[](i)[j]);
-            scene->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+    for (int i = 0; i < draw->size(); ++i) {
+        for (int j = 0; j < draw->operator[](i).size(); ++j) {
+            Particle *curent = const_cast<Particle *>(&draw->operator[](i)[j]);
+            scene->addEllipse(curent->X()*cof + cof1 - rad, curent->Y()*cof - rad, rad * 2.0, rad * 2.0,
                               QPen(Qt::black), QBrush(Qt::SolidPattern));
         }
     }
 }
 
 void Flow_Drawer::draw_data(QGraphicsScene *scene) {
-    const vector <Particle> *data = reinterpret_cast<const vector <Particle> *>(this->get_part(1));
+    const vector<Particle> *data = reinterpret_cast<const vector<Particle> *>(this->get_part(1));
     //   const vector<Particle> *data = (vector<Particle> *)this->get_part(1);
     double rad = 2;
     for (int i = 0; i < data->size(); ++i) {
@@ -62,7 +64,7 @@ void Flow_Drawer::draw_data(QGraphicsScene *scene) {
 }
 
 void Flow_Drawer::draw_grid(QGraphicsScene *scene) {
-    const vector <vector<Cell>> *data = reinterpret_cast<const vector <vector<Cell>> *>(this->get_part(2));
+    const vector<vector<Cell>> *data = reinterpret_cast<const vector<vector<Cell>> *>(this->get_part(2));
     double rad = 2;
     for (int i = 0; i < data->size(); ++i) {
         for (int j = 0; j < data->operator[](i).size(); ++j) {
@@ -73,10 +75,10 @@ void Flow_Drawer::draw_grid(QGraphicsScene *scene) {
             int colour[3] = {0, 0, 0};
             colour[1] = 128;
             QColor myC(colour[0], colour[1], colour[2]);
-            QPointF pt1(l_b.x, l_b.y);
-            QPointF pt2(l_b.x, r_t.y);
-            QPointF pt3(r_t.x, r_t.y);
-            QPointF pt4(r_t.x, l_b.y);
+            QPointF pt1(l_b.x* cof + cof1, l_b.y * cof);
+            QPointF pt2(l_b.x * cof + cof1, r_t.y*cof);
+            QPointF pt3(r_t.x*cof + cof1, r_t.y*cof);
+            QPointF pt4(r_t.x*cof + cof1, l_b.y*cof);
             //
             QLineF lt1(pt1, pt2);
             QLineF lt2(pt2, pt3);
@@ -94,28 +96,28 @@ void Flow_Drawer::draw_grid(QGraphicsScene *scene) {
 }
 
 void Flow_Drawer::draw_shadow(QGraphicsScene *scene) {
-    const vector <vector<Cell>> *data = reinterpret_cast<const vector <vector<Cell>> *>(this->get_part(2));
+    const vector<vector<Cell>> *draw = reinterpret_cast<const vector<vector<Cell>> *>(this->get_part(2));
     double rad = 2;
-    for (int i = 0; i < data->size(); ++i) {
-        for (int j = 0; j < data->operator[](i).size(); ++j) {
-            const Cell *current = &data->operator[](i)[j];
-            const vector <Particle> *curent_shadow = current->get_shadow();
+    for (int i = 0; i < draw->size(); ++i) {
+        for (int j = 0; j < draw->operator[](i).size(); ++j) {
+            const Cell *current = &draw->operator[](i)[j];
+            const vector<Particle> *curent_shadow = current->get_shadow();
             for (int k = 0; k < curent_shadow->size(); ++k) {
                 double value = curent_shadow->operator[](k).P();
 
-                COLOUR currentC = GetColour(value, 0, 10);
+                COLOUR currentC = GetColour(value, 0, maxP);
                 QColor QTcurrentC;
                 QTcurrentC.setRgb(255 * currentC.r, 255 * currentC.g, 255 * currentC.b);
-                scene->addEllipse(curent_shadow->operator[](k).X() - rad,
-                                  curent_shadow->operator[](k).Y() - rad,
-                                  rad * 2.0, rad * 2.0, QTcurrentC, QBrush(Qt::SolidPattern));
+                scene->addEllipse(curent_shadow->operator[](k).X()*cof  + cof1 - rad,
+                                  curent_shadow->operator[](k).Y()*cof - rad,
+                                  rad * 2.0, rad * 2.0, QPen(Qt::black), QBrush(Qt::black));
             }
         }
     }
 }
 
 void Flow_Drawer::draw_data_bycells(QGraphicsScene *scene) {
-    const vector <vector<Cell>> *data = reinterpret_cast<const vector <vector<Cell>> *>(this->get_part(2));
+    const vector<vector<Cell>> *data = reinterpret_cast<const vector<vector<Cell>> *>(this->get_part(2));
     double rad = 2;
     int c[6][3] = {
             {255, 0,   0},
@@ -146,81 +148,58 @@ void Flow_Drawer::draw_data_bycells(QGraphicsScene *scene) {
 }
 
 void Flow_Drawer::draw_dataP(QGraphicsScene *scene) {
-    const vector <vector<Cell>> *data = reinterpret_cast<const vector <vector<Cell>> *>(this->get_part(2));
     double rad = 2;
-    for (int i = 0; i < data->size(); ++i) {
-        for (int j = 0; j < data->operator[](i).size(); ++j) {
-            const Cell *current = &data->operator[](i)[j];
-            const vector<Particle *> *curent_real = current->get_real();
-            for (int k = 0; k < curent_real->size(); ++k) {
-                double value = curent_real->operator[](k)->P();
-                COLOUR currentC = GetColour(value, 0, maxP);
-                QColor QTcurrentC;
-                QTcurrentC.setRgb(255 * currentC.r, 255 * currentC.g, 255 * currentC.b);
-                scene->addEllipse(curent_real->operator[](k)->X() - rad,
-                                  curent_real->operator[](k)->Y() - rad,
-                                  rad * 2.0, rad * 2.0, QTcurrentC, QBrush(Qt::SolidPattern));
-            }
-        }
+    for (int i = 0; i < data.size(); ++i) {
+        double value = data[i].P();
+        COLOUR currentC = GetColour(value, 0, calculator->get_maxP());
+        QColor QTcurrentC;
+        QTcurrentC.setRgb(255 * currentC.r, 255 * currentC.g, 255 * currentC.b);
+        scene->addEllipse(data[i].X()*cof - rad  + cof1,
+                          data[i].Y()*cof - rad,
+                          rad * 2.0, rad * 2.0, QTcurrentC, QBrush(Qt::SolidPattern));
     }
 }
 
-void Flow_Drawer::max_minP(QGraphicsScene *scene) {
-    const vector <vector<Cell>> *data = reinterpret_cast<const vector <vector<Cell>> *>(this->get_part(2));
-    double rad = 2;
-    double Pmax_cur = -10050000;
-    double Pmin_cur = 10050000;
-    double Vmax = -100500;
+void Flow_Drawer::show_information(QGraphicsScene *scene) {
+    set_text("iteration=", scene, pair<int, int>(-50, -150), calculator->get_iteration());
+    set_text("time=", scene, pair<int, int>(-50, -130), calculator->get_time());
+    set_text("maxP=", scene, pair<int, int>(-50, -110), calculator->get_maxP());
+    set_text("minP=", scene, pair<int, int>(-50, -90), calculator->get_minP());
+    set_text("maxV=", scene, pair<int, int>(50, -150), calculator->get_maxV());
+    set_text("theoreticalV=", scene, pair<int, int>(50, -130), calculator->get_V_theory());
+}
 
-    for (int i = 0; i < data->size(); ++i) {
-        for (int j = 0; j < data->operator[](i).size(); ++j) {
-            const Cell *current = &data->operator[](i)[j];
-            const vector<Particle *> *curent_real = current->get_real();
-            for (int i = 0; i < curent_real->size(); ++i) {
-                double P = curent_real->operator[](i)->P();
-                double V = sqrt(pow(curent_real->operator[](i)->Vx(), 2) + pow(curent_real->operator[](i)->Vy(), 2));
-                if (P > Pmax_cur) Pmax_cur = P;
-                if (P < Pmin_cur) Pmin_cur = P;
-                if (Pmax_cur > maxP && critical_iter == 0) {
-                    crit_i = i;
-                    crit_j = j;
-                    critical_iter = iteration;
+void Flow_Drawer::set_text(QString&& text, QGraphicsScene *scene,pair<int, int>&& position, double&& value ){
+    QString test_to_show = text + QString::number(value);
+    QGraphicsTextItem *text_item = scene->addText(test_to_show);
+    text_item->setPos(position.first, position.second);
+}
 
-                }
-                if (V > Vmax) Vmax = V;
-            }
+void Flow_Drawer::write_py_data(int target_itertion ){
+    if(target_itertion == calculator->get_iteration()) {
+        std::ofstream outfile (mathplot_path + "mathplot.txt");
+        outfile << "begin.\n";
+        for (int i = 0; i < data.size(); ++i) {
+            double x = data[i].X();
+            double y = data[i].Y();
+            double value = data[i].P();
+            outfile << x << " " << y << " " << value << '\n';
         }
+        outfile << "end.\n";
     }
-    QString PmaxStr = QString::number(Pmax_cur);
-    QString PminStr = QString::number(Pmin_cur);
-    QString res = "Pmax=" + PmaxStr + "\n" + "Pmin=" + PminStr + " Vmax=" + QString::number(Vmax);
-    QGraphicsTextItem *text = scene->addText(res);
-    text->setPos(-50, -100);
-};
-
-void Flow_Drawer::show_iter(QGraphicsScene *scene) {
-    QString res = "iteration=" + QString::number(iteration);
-    QGraphicsTextItem *text = scene->addText(res);
-    text->setPos(-50, -120);
-
-    res = "crit_iteration=" + QString::number(critical_iter) + " i=" + QString::number(crit_i) + " j=" +
-          QString::number(crit_j);
-    QGraphicsTextItem *text1 = scene->addText(res);
-    text1->setPos(-50, -140);
 }
 
 void Flow_Drawer::calculate_step(QGraphicsScene *scene) {
+    calculator->calculate();
     draw_boundary(scene);
     draw_grid(scene);
     draw_shadow(scene);
     //
 
-    max_minP(scene);
-
-    show_iter(scene);
-    //
-    calculator->calculate();
+    show_information(scene);
     draw_dataP(scene);
+    write_py_data(130);
+
+    //draw_data_bycells(scene);
     // cout<<data.size();
-    iteration++;
 }

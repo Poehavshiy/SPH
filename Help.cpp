@@ -33,24 +33,6 @@ Point ReadWrite::parse_init(const string &current) {
     return Point(0, 0);
 }
 
-//
-//write boundary
-void ReadWrite::data_write(ostream &os, vector<vector<Particle>> &boundaries) {
-    for (int i = 0; i < boundaries.size(); ++i) {
-        for (int j = 0; j < boundaries[i].size(); ++j) {
-            os << boundaries[i][j];
-        }
-    }
-}
-
-//
-void ReadWrite::data_write(ostream &os, vector<Particle>& data) {
-    os << "next" << endl;
-    for (int i = 0; i < data.size(); ++i) {
-        os << data[i];
-    }
-}
-//
 ////seems ok
 void Help::fill_bound_line(vector<Particle> &current, vector<double> &line) {
     double xstep = (line[2] - line[0]) / line[4];

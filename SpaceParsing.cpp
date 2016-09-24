@@ -3,4 +3,3 @@
 //
 
 #include "SpaceParsing.h"
-int Cell:: C=0;

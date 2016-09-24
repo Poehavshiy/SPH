@@ -30,7 +30,9 @@
 //
 using namespace std;
 
-
+enum DERIVATIVES {
+    DENSITY, VX, VY, ENERGY
+};
 //
 
 struct Point {
@@ -73,10 +75,15 @@ class Particle {
     double vy;
     //
     double p0;
+    //производные
+    double density_dir;
+    double energy_dir;
+    double vx_dir;
+    double vy_dir;
 
     static constexpr double R_costil = 8.31;
 
-    static constexpr double k_costil = 1.2;
+    static constexpr double k_costil = 1.4;
 
     static constexpr double molar = 0.029;
 
@@ -89,18 +96,6 @@ public:
     //
     Particle(bool status, double p = 0,
              double P = 0, double E = 0, double Vx = 0, double Vy = 0, double M = 0);
-    //
-   /* Particle(const Particle& left) {
-        bool isBoundary=left.isBoundary;
-        double mass=left.mass;
-        Point pos=left.pos;
-        double density=left.density;
-        double pressure=left.pressure;
-        double energy=left.energy;
-        double vx=left.vx;
-        double vy=left.vy;
-    }*/
-
     //get functions
     double X() const {
         return pos.x;
@@ -112,7 +107,7 @@ public:
     }
 
     //
-    double p() {
+    double p() const{
         return density;
     }
 
@@ -121,42 +116,44 @@ public:
         return pressure;
     }
 
-    double E() {
+    double E() const{
         return energy;
     }
 
+    double V() const {
+        return hypot(vx, vy);
+    }
     //
-    double Vx() {
+    double Vx() const{
         return vx;
     }
 
     //
-    double Vy() {
+    double Vy() const{
         return vy;
     }
 
     //
-    double M() {
+    double M() const{
         return mass;
     }
     //
-    double T() {
-       return  pressure*molar_mass/density*8.31;
+    double T() const{
+       return  pressure*molar_mass/(density*R_costil);
     }
     //
-    double C() {
-        double C = sqrt((k_costil * R_costil )/( molar * this->T()));
+    double C() const{
+        double C = sqrt( k_costil * (k_costil - 1) * energy );
     }
     //
-    double h() {
+    double h() const{
         return h0*(pow((p0/density), 2));
     }
     //
-    Point position() {
+    Point position() const{
         return pos;
     }
 
-    //
     void set_pos(double X, double Y) {
         pos.x = X;
         pos.y = Y;
@@ -175,6 +172,35 @@ public:
         vy=income;
     }
     //
+    void set_p_dir(double inc){
+        density_dir = inc;
+    }
+    //
+    void set_vx_dir(double inc) {
+        vx_dir = inc;
+    }
+    //
+
+    void set_vy_dir(double inc) {
+        vy_dir = inc;
+    }
+    //
+    void set_dir(double& inc, DERIVATIVES& what_dir) {
+        if (what_dir == DENSITY) {
+           density_dir = inc;
+        } else if (what_dir == VX) {
+           vx_dir = inc;
+        } else if (what_dir == VY) {
+            vy_dir = inc;
+        } else if (what_dir == ENERGY) {
+           energy_dir = inc;
+        }
+    }
+    //
+    void set_e_dir(double inc) {
+        energy_dir = inc;
+    }
+    //
     void set_pressure(double& data) {
         pressure=data;
     }
@@ -189,6 +215,18 @@ public:
     //
     void set_mass(double& data) {
         mass=data;
+    }
+
+    //пересчет значений
+    void ronge_kutt(double dt){
+        density += dt * density_dir;
+        energy +=  dt * energy_dir;
+        vx +=      dt * vx_dir;
+        vy +=      dt *vy_dir;
+        //
+        pos.x += dt * vx;
+        pos.y += dt * vy;
+        pressure = energy * (k_costil -1) * density;
     }
     //
     void set_from(Particle& data) {
@@ -208,14 +246,8 @@ public:
         return isBoundary;
     }
     //
-    friend std::istream& operator<<(ostream& is, Particle& income) {
-        is<<income.X()<<' '<<income.Y()<<' '<<income.P()<<endl;
-    }
-
 };
 
-typedef vector<vector<Particle*>*> PartPointers;
-typedef vector<vector<Particle>*> PartPointers_add;
 
 
 #endif //SPHSM6_PARTICILE_H

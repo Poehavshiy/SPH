@@ -11,10 +11,14 @@
 
 extern Particle* for_debugin;
 extern QGraphicsScene *scene_debug;
-
+#define PI 3.14159265
 
 class Flow {
+    bool sphere ;
+
     double maxP, maxp, maxe;
+
+    int N;
     //
     SpaceParsing *s_distribution;
     //
@@ -32,8 +36,11 @@ class Flow {
     //
     void build_bound_part();
     //
-    void build_init_part(vector<Point> &branch,vector<double>& cond, int step);
+    void build_init_part(vector<Point> &branch,vector<double>& cond, int step, double r);
     //
+    void build_init_part(vector<Point> &branch, vector<double> &cond, int step);
+    //
+    void build_sphere( pair<double, double> center,double rad, int angle_step, int partic_per_step, vector<double>& cond);
 public:
     friend class Flow_Drawer;
     //

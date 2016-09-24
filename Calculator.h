@@ -2,215 +2,168 @@
 // Created by nikita on 30.05.16.
 //
 
+//тут старое вычисление скоростей
+/*
+    double calc_V_d(Particle &a, Cell &home_cell, vector<Cell *> &for_sum_calculating, bool direct) {
+        if (for_debugin == &a) {
+            //draw_debug(all_real, all_add, all_bound);
+            double rad = 5;
+            scene_debug->addEllipse(a.X() - rad, a.Y() - rad, rad * 2.0, rad * 2.0,
+                                    QPen(Qt::red), QBrush(Qt::SolidPattern));
+        }
+        double res = 0;
+        //здесь м посчитали часть производной скорости от других реальныз частиц
+        for_sum_calculating.push_back(&home_cell);
+        for (int i = 0; i < for_sum_calculating.size(); ++i) {
+            const vector<Particle *> *real = for_sum_calculating[i]->get_real();
+            for (int j = 0; j < real->size(); ++j) {
+                res += calculations::two_part_v(a, *real->operator[](j), direct);
+            }
+        }
+        //теперь от виртуальных частиц
+        //теперь тут надо посчитать от симетричных частиц за границей
+        for (int i = 0; i < for_sum_calculating.size(); ++i) {
+            const vector<Particle> *shadow = for_sum_calculating[i]->get_shadow();
+            for (int j = 0; j < shadow->size(); ++j) {
+                res += calculations::two_part_v(a, shadow->operator[](j), direct);
+            }
+        }
+        //а вот тут надо посчитать производную от действия граничных частиц
+        for (int i = 0; i < for_sum_calculating.size(); ++i) {
+            const vector<Particle *> *bound = for_sum_calculating[i]->get_bound();
+            for (int j = 0; j < bound->size(); ++j) {
+                res += calculations::two_part_bforse(a, *bound->operator[](j), direct);
+            }
+        }
+        return res;
+    }
+    */
+
+
 #ifndef SPHSM6_CALCULATOR_H
 #define SPHSM6_CALCULATOR_H
 
 #include "SpaceParsing.h"
 
 const bool EULER = 1;
-
-struct From_cell_to_cells {
-    Cell *from;
-    vector<pair<Cell *, int>> to_cell_pid;
-
-    From_cell_to_cells(Cell *f, vector<pair<Cell *, int>> &targets) {
-        from = f;
-        to_cell_pid = targets;
-    }
-
-    int size() {
-        return to_cell_pid.size();
-    }
-
-    void replace() {
-        vector<int> del;
-        for (int i = 0; i < to_cell_pid.size(); ++i) {
-            del.push_back(to_cell_pid[i].second);
-            Particle *remove = from->get_real()->operator[](del.back());
-            to_cell_pid[i].first->add_part(remove);
-        }
-        std::sort(del.begin(), del.end(), greater<int>());
-        for (int i = 0; i < del.size(); ++i) {
-            from->remove_part(del[i]);
-        }
-    }
-};
-
-namespace calculations {
-
-    extern double current_time;
-
-    extern double h;
-
-    extern double R;
-
-    extern double M;
-
-    extern double k;
-
-    extern double alpha;
-
-    extern double beta;
-
-    //для подсчета силы от гарничных частиц
-    extern double r0;
-
-    extern double D;
-
-    extern double n1, n2;
-
-    extern double deltaT;//требует глубокого переосмысления
-
-    extern double viscous;
-
-    void delta_coor(Particle &a, Particle &b, double& deltaX, double& deltaY);
-
-    void delta_velocity(Particle &a, Particle &b, double& delta_Vx, double& delta_Vy);
-
-    //
-    double w_test(double r);
-
-    //
-    double grad_w_test(double x, double y, bool direction);
-
-    //
-    double two_part_p(Particle &a, Particle &b);
-
-    //
-    double two_part_E(Particle &a, Particle &b, bool direct);
-
-    //
-    double two_part_art_visc(Particle &a, Particle &b);
-
-    //
-    double two_part_art_heat(Particle &a, Particle &b, bool direct);
-
-    //
-    double two_part_v(Particle &a, Particle &b, bool direct);
-
-    //
-    double two_part_energy(Particle &a, Particle &b);
-
-    //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle &b, bool direct);
-
-    //
-    //Вот эти 3 функции считают соответствующую  производную для частицы а векторы, переддаваемые
-    //в функции содержат все частицы, которые потенциально могут прореагировать с а
-
-    /*
-     * просто без задней мысли идем по всем реальным частицам и находим часть
-     * от взаимодействия целевой Particle &a и all_real[i][j]
-     *
-     */
-    double calc_p_d(Particle &a, PartPointers &all_real, PartPointers_add &all_add);
-
-    //
-    /*
-    * просто без задней мысли идем по всем реальным граничным и теневым частицам и находим часть
-    * от взаимодействия целевой Particle &a и all_real[i][j]
-    * от взаимодействия целевой Particle &a и all_add[i][j]
-    * от взаимодействия целевой Particle &a и all_bound[i][j]
-    */
-    double calc_V_d(Particle &a,
-                    PartPointers &all_real,
-                    PartPointers &all_bound,
-                    PartPointers_add &all_add, bool direct);
-
-    //
-    double calc_E_d(Particle &a,
-                    PartPointers &all_real,
-                    PartPointers_add &all_add);
-}
-
+#define FUNCTION_NUMBER 4;
+//
 class Calculator {
 protected:
-    int index = 0;
-
-    double largest_V = 0;
-
-    double dt = 0.1;
-
-
-    vector<From_cell_to_cells> for_replacement;
+    Particle* debug_draw_part;
+    bool debug_mode ;
+    double max_V = 0;
+    double max_C = 0;
+    double dt = 0.001;
+    //всякие информативные штуки
+    double V_theoretical;
+    double max_P = 0;
+    double min_P = 0;
+    function<double(const Particle &, const Particle &, bool)> derivative_functions[4];
 
     SpaceParsing *parsing;
+    //с нэймспэйса
+    static double h ;
+    static double R  ;
+    static double k  ;
+    static double M  ;
+    static double viscous ;
+    static double alpha ;
+    static double beta ;
+//для подсчета силы от гарничных частиц
+    static double r0;
+    static double D;//равен квадрату наибольшей скорости
+    static double n1;
+    static double n2;
+    static  int iteration;
+    //бывшие функции нэймспэйса
+    static void delta_coor(const Particle &a, const Particle &b, double &deltaX, double &deltaY);
 
-    vector<double> p_derivatives;
-
-    vector<double> vx_derivatives;
-
-    vector<double> vy_derivatives;
-
-    vector<double> e_derivatives;
-
-
-    //
-    PartPointers_add get_sym_part(int &row, int &column);
-
-    //
-    PartPointers get_bound_part(int &row, int &column);
-
-    //
-    PartPointers get_real_part(int &row, int &column);
-
-    //
-    void *get_part_around(int row, int column, int i, int type);
+    static void delta_velocity(const Particle &a, const Particle &b, double &delta_Vx, double &delta_Vy);
 
     //
-    void calc_p_derivatives(Cell &target,
-                            PartPointers &all_real,
-                            PartPointers_add &all_add);
+    static double grad_w_test(double x, double y, bool direction, double h_inc);
 
     //
-    void calc_vx_derivatives(Cell &target,
-                             PartPointers &all_real,
-                             PartPointers &all_bound,
-                             PartPointers_add &all_add);
+    static double two_part_p(const Particle &a, const Particle &b, bool direct );
+
+    static double two_part_v(const Particle &a, const Particle &b, bool direct );
+
+    static double two_part_energy(const Particle &a, const Particle &b, bool direct );
 
     //
-    void calc_vy_derivatives(Cell &target,
-                             PartPointers &all_real,
-                             PartPointers &all_bound,
-                             PartPointers_add &all_add);
+    static double two_part_E(const Particle &a, const Particle &b, bool direct);
 
     //
-    void calc_e_derivatives(Cell &target,
-                            PartPointers &all_real,
-                            PartPointers_add &all_add);
+    static double two_part_art_visc(const Particle &a, const Particle &b);
 
     //
-    void calc_t_values(Cell &target, const int &row, const int &colum);
+    static double two_part_art_heat(const Particle &a, const Particle &b, bool direct);
 
-    //
-    Particle ronge_cutt(Particle &a, int &index);
+    //высчитывает часть производной скорости от действия граничной частицы
+    inline static double two_part_bforse(const Particle &a, const Particle &b, bool direct);
 
-    //
-    std::pair<int, int> rebaze(Particle &new_part, const int &row, const int &colum);
+    inline double calc_particle_dir(function<double(const Particle &, const Particle &, bool)>& derivative_specific,
+            Particle &a, vector<Cell *> &for_sum_calculating, bool direction, DERIVATIVES &what_dir);
 
-    virtual void calculate_derivatives();
+    //старые функции, что тут всегда были
+    inline void calc_target_derivatives(function<double(const Particle &, const Particle &, bool)> derivative_specific,
+                                 Cell &target, vector<Cell *> &for_sum_calculating,
+                                 DERIVATIVES &what_dir, bool direction,
+                                 int &row, int &column);
 
-    void calculate_final();
+    inline void calculate_derivatives();
 
-    void recalculate_consts(); //пересчитывает D, deltaT
+//тупо пересчет новых значений физ величин
+    inline void recalculate_parameters();
 
-    bool get_maxv_mindt(Cell &target, double &cur_max_v, double &cur_min_dt);
+    double boundary_forse(Particle& a, vector<Cell *> &for_sum_calculating, bool direction);
 
-    void replace();
+    bool to_boundary(Particle& a, Cell &target);
 
-    void check_empty();
-
-    int calc_non_empty(vector<std::pair<int, int>> &indexes_of_nonempty);
+    bool to_boundary(Particle& a, Point& A, Point& B);
 
 public:
+    static double current_time;
 
-    Calculator(SpaceParsing *target) {
-        parsing = target;
-    }
-
+    Calculator(SpaceParsing *target);
+    //основной метод, вызываемый снаружи
+/*
+ * в нем сначала дергается calculate_derivatives();-метод, высчитывающий производные
+ * затем метод calculate_final();-метод, который высчитывает новые значения для частиц на новом шаге по времени
+ * calculations::curent_time+=calculations::deltaT; обновляет счетчик времени
+*/
     void calculate();
 
+    void draw_debug(vector<Cell *> &for_sum_calculating);
+
+    int get_iteration(){
+        return iteration;
+    }
+
+    double get_time(){
+        return current_time;
+    }
+
+    double get_V_theory(){
+        return V_theoretical;
+    }
+
+    double get_maxV(){
+        return max_V;
+    }
+
+    double get_maxP(){
+        return max_P;
+    }
+
+    double get_minP(){
+        return min_P;
+    }
+
 };
+
+
 
 
 #endif //SPHSM6_CALCULATOR_H

@@ -17,17 +17,6 @@ class Cell {
     bool is_contain;
     bool boundary;
     vector<Particle> *boundary_line;
-    static int C;//для дебажирования юзаю
-
-    bool is_inside(Particle &particle) {
-        if (
-                (particle.X() >= left_bottom.x && particle.X() < right_top.x)
-                && (particle.Y() >= left_bottom.y && particle.Y() < right_top.y)
-                ) {
-            return true;
-        }
-        return false;
-    }
 
     //boundary_cell это ячейка, которая является ближайшей граничной
     void create_sim_part(Particle *target, Cell *boundary_cell) {
@@ -69,6 +58,16 @@ public:
 
     friend class SpaceParsing;
 
+    bool is_inside(Particle &particle) {
+        if (
+                (particle.X() >= left_bottom.x && particle.X() < right_top.x)
+                && (particle.Y() >= left_bottom.y && particle.Y() < right_top.y)
+                ) {
+            return true;
+        }
+        return false;
+    }
+
     //получение углов квадрата
     Point get_left_bottom() const {
         return left_bottom;
@@ -82,10 +81,13 @@ public:
     //попытка вставки частицы в this Cell
     bool insert(Particle &particle) {
         bool inside = is_inside(particle);//проверка вхождения частицы внутрь
+        //если вошла,и частица является граничной, силовой
         if (inside == true && particle.boundary_status() == true) {
             boundary_group.push_back(&particle);
             boundary = true;
-        } else if (inside == true && particle.boundary_status() == false) {
+        }
+            //если входит и является реальной
+        else if (inside == true && particle.boundary_status() == false) {
             real_group.push_back(&particle);
         }
         return inside;
@@ -100,10 +102,6 @@ public:
         return boundary;
     }
 
-    void add_part(Particle *p) {
-        real_group.push_back(p);
-    }
-
     void create_simetric(Cell *boundary_cell) {
         //   cout << Cell::C << endl;
         //   Cell::C++;
@@ -115,7 +113,7 @@ public:
     }
 
     void remove_part(int &index) {
-        swap(real_group.back(), real_group[index]);
+        swap(real_group[real_group.size()-1], real_group[index]);
         real_group.pop_back();
     }
 
@@ -127,32 +125,18 @@ public:
         return &real_group;
     }
 
+    const vector<Particle *>* get_bound() const {
+        return &boundary_group;
+    }
+
     //проверить на пустоту и если пуста, сделать пустой
     void emptiness() {
         if (real_group.size() != 0) is_contain = true;
         else is_contain = false;
     }
-    //внешняя проверка на пустоту
-    bool is_non_empty() {
-        return is_contain;
-    }
 
-    friend std::istream &operator<<(ostream &is, Cell &income) {
-        is << income.left_bottom;
-        is << ' ' << 800 << endl;
-        is << income.right_top;
-        is << ' ' << 800 << endl;
-        for (int i = 0; i < income.boundary_group.size(); ++i) {
-            is << income.boundary_group[i]->X() << ' ' << income.boundary_group[i]->Y() << ' ' << 0 << endl;
-        }
-        //
-        for (int i = 0; i < income.real_group.size(); ++i) {
-            is << income.real_group[i]->X() << ' ' << income.real_group[i]->Y() << ' ' << 300 << endl;
-        }
-        //
-        for (int i = 0; i < income.symetric_group.size(); ++i) {
-            is << income.symetric_group[i].X() << ' ' << income.symetric_group[i].Y() << ' ' << 500 << endl;
-        }
+    void clear_shadow() {
+        symetric_group.clear();
     }
 
     Cell(Point &l_b, Point &r_t) {
@@ -166,15 +150,21 @@ public:
     }
 };
 
+struct Include_to {
+    vector<Cell*> to;
+    vector<int> for_including;
+};
+
 class SpaceParsing {
     vector<Particle> *data_ptr;
     int cells_per_x;
     int cells_per_y;
-    double x_size;
-    double y_size;
+    int x_size;
+    int y_size;
     vector<vector<Cell>> part_groups;//groups of particles
+    vector<vector<Include_to>> replacement;
 
-    double *extrude_square(vector<vector<Particle>> &boundaries) {
+    int *extrude_square(vector<vector<Particle>> &boundaries) {
         double low_x = 0, top_x = 0, low_y = 0, top_y = 0;
         for (int i = 0; i < boundaries.size(); ++i) {
             for (int j = 0; j < boundaries[i].size(); ++j) {
@@ -185,7 +175,7 @@ class SpaceParsing {
 
             }
         }
-        double *square = new double[4];
+        int *square = new int[4];
         square[0] = low_x;
         square[1] = top_x;
         square[2] = low_y;
@@ -193,10 +183,10 @@ class SpaceParsing {
         return square;
     }
 
-    //
+    //Построение Cell ов
     void build_cells(vector<vector<Particle>> &boundaries) {
-        double *square = extrude_square(boundaries);
-        x_size = (square[1] - square[0]) / (cells_per_x - 1);
+        int *square = extrude_square(boundaries);
+        x_size = (square[1] - square[0]) / (cells_per_x - 1  );
         y_size = (square[3] - square[2]) / (cells_per_y - 1);
 
         for (int i = 0; i < cells_per_y; ++i) {
@@ -211,41 +201,39 @@ class SpaceParsing {
         delete[] square;
     }
 
-    //
-    bool insert(Particle &particle) {//insert particle in part_groups
+    //начальная вставка частицы для построения начального распределения
+    bool insert(Particle &particle) {
         bool findStatus = false;
         for (int i = 0; i < part_groups.size(); ++i) {
             for (int j = 0; j < part_groups[i].size(); ++j) {
                 findStatus = part_groups[i][j].insert(particle);
-                if (findStatus == true) return findStatus;
+                if (findStatus == true) {
+                    return findStatus;
+                }
             }
         }
         return findStatus;
     }
 
-    //
+    //Рспределение граничных частиц (те, что дают силу)
     void distribute_boundaries(vector<vector<Particle>> &boundaries) {
         int k = 0;
         for (int i = 0; i < boundaries.size(); ++i) {
             for (int j = 0; j < boundaries[i].size(); ++j) {
-                //for debuging. Should always be true, since  part_groups covers all space
+                //for debuging. Should always be true, since  part_groups vector covers all space
                 bool status = insert(boundaries[i][j]);
                 //cout<<i<<' '<<j<<' '<<status<<' '<<k<<endl; ++k;
             }
         }
     }
 
-    //
+    //распределим начальные частицы
     void distribute_initial(vector<Particle> &data) {
         data_ptr = &data;
         for (int i = 0; i < data.size(); ++i) {
-            Particle debug = data[i];
             bool status = insert(data[i]);
 //            assert (status == true);
             //  cout<<i<<endl;
-            if (i == 288) {
-                int a = 0;
-            }
         }
     }
 
@@ -267,7 +255,9 @@ class SpaceParsing {
         for (int i = 0; i < part_groups.size(); ++i) {
             for (int j = 0; j < part_groups[i].size(); ++j) {
                 boundary_cell = is_near_boundary(i, j);
-
+                if(i==5 && j==4) {
+                    int a=1;
+                }
                 if (part_groups[i][j].is_boundary() == true) {
                     part_groups[i][j].create_simetric(&part_groups[i][j]);
                 } else if (part_groups[i][j].is_boundary() == false && boundary_cell != nullptr) {
@@ -277,53 +267,29 @@ class SpaceParsing {
             }
         }
     }
-
+    //конструктор, который тупо объявляет двумерный масиив Cell
     SpaceParsing(vector<vector<double>> &geometry, int per_x, int per_y) {
-        cells_per_y = per_y;
-        cells_per_x = per_x;
+        cells_per_y = per_y+1;
+        cells_per_x = per_x+1;
         part_groups.resize(cells_per_y);
+        replacement.resize(cells_per_y);
         for (int i = 0; i < cells_per_y; ++i) {
             part_groups[i].resize(cells_per_x);
+            replacement[i].resize(cells_per_x);
         }
 
     }
 
-    //
-    void set_cells_perax(int per_x, int per_y) {
-        cells_per_x = per_x;
-        cells_per_y = per_y;
-    }
+    //для перемещения частиц- проход по 8-окрестности row column и поиск, куда там входит target
+    Cell* find_around(const int &row, const int &column, Particle &target) {
 
-    //для перемещения частиц
-    std::pair<int, int> find_around(const int &row, const int &column, Particle &target) {
-        int r = row;
-        int c = column;
-        if (r - 1 >= 0 && part_groups[r - 1][c].is_inside(target) == true) {//case0
-            std::pair<int, int> result(r - 1, c);
-            return result;
-        } else if (r - 1 >= 0 && c - 1 >= 0 && part_groups[r - 1][c - 1].is_inside(target) == true) {//case1
-            std::pair<int, int> result(r - 1, c - 1);
-            return result;
-        } else if (c - 1 >= 0 && part_groups[r][c - 1].is_inside(target) == true) { //case2
-            std::pair<int, int> result(r, c - 1);
-            return result;
-        } else if (c - 1 >= 0 && r + 1 < cells_per_y && part_groups[r + 1][c - 1].is_inside(target) == true) { //case3
-            std::pair<int, int> result(r + 1, c - 1);
-            return result;
-        } else if (r + 1 < cells_per_y && part_groups[r + 1][c].is_inside(target) == true) {//case4
-            std::pair<int, int> result(r + 1, c);
-            return result;
-        } else if (r + 1 < cells_per_y && c + 1 < cells_per_x &&
-                   part_groups[r + 1][c + 1].is_inside(target) == true) {//case5
-            std::pair<int, int> result(r + 1, c + 1);
-            return result;
-        } else if (c + 1 < cells_per_x && part_groups[r][c + 1].is_inside(target) == true) {//case6
-            std::pair<int, int> result(r, c + 1);
-            return result;
-        } else if (r - 1 >= 0 && c + 1 < cells_per_x && part_groups[r - 1][c + 1].is_inside(target) == true) {
-            std::pair<int, int> result(r - 1, c + 1);
-            return result;
+        for(int i = 0; i < 8; ++i) {
+            Cell* current = get_cell_clockwise(row, column, i);
+            if( current != nullptr)
+                if(current->is_inside( target ))
+                    return current;
         }
+        return nullptr;
     }
 
     //
@@ -381,11 +347,82 @@ class SpaceParsing {
 
     };
 
+    void fill_for_ij(int& row, int& column, Include_to& for_ij) {
+
+        vector<Particle *>& group_ref = part_groups[row][column].real_group;
+        int size = group_ref.size() ;
+        for(int i = 0; i < size; ++i) {
+            if( !part_groups[row][column].is_inside( *group_ref[i] ) ){
+                Cell* to = find_around(row, column, *group_ref[i]);
+                if(to != nullptr) {
+                    for_ij.to.push_back(to);
+                    for_ij.for_including.push_back(i);
+                }
+            }
+        }
+    }
+
+    void fill_replacement() {
+
+        for(int i = 0; i< cells_per_y; ++i){
+            for(int j = 0; j < cells_per_x; ++j) {
+                Include_to for_ij;
+                fill_for_ij(i, j, for_ij);
+                replacement[i][j].for_including = std::move(for_ij.for_including);
+                replacement[i][j].to = std::move(for_ij.to);
+            }
+        }
+    }
+    //
+    void acctualy_replace() {
+        //сначала добавим
+        for(int i = 0; i< cells_per_y; ++i) {
+            for (int j = 0; j < cells_per_x; ++j) {
+                //если есть что переместить из этой ячейки
+                if(replacement[i][j].to.size() != 0) {
+                    Include_to &current = replacement[i][j];
+                    for (int k = 0; k < current.to.size(); ++k) {
+                        //переместить из i,j Cell частичку с к-атой позиции в k-й Cell
+                        current.to[k]->real_group.push_back(part_groups[i][j].real_group[current.for_including[k]]);
+                    }
+                }
+            }
+        }
+        //теперь удалим ie индексы
+        for(int i = 0; i< cells_per_y; ++i) {
+            for (int j = 0; j < cells_per_x; ++j) {
+                if(replacement[i][j].to.size() != 0) {
+
+                    Include_to &current = replacement[i][j];
+                    for (int k = current.to.size()-1; k >= 0; --k) {
+                        //удалим  из i,j Cell частички с к-атой позиций
+                        part_groups[i][j].remove_part(current.for_including[k]);
+                        int qwerty=1;
+                    }
+                }
+            }
+        }
+    }
+
+    void clear_symetric_groups() {
+        //теперь удалим ie индексы
+        for(int i = 0; i< cells_per_y; ++i) {
+            for (int j = 0; j < cells_per_x; ++j) {
+                part_groups[i][j].clear_shadow();
+            }
+        }
+    }
 
 public:
     friend class Calculator;
 
     friend class Calculator_Drawer;
+
+
+    void replace() {
+        fill_replacement();
+        acctualy_replace();
+    }
 
     static SpaceParsing *init
             (
@@ -399,25 +436,15 @@ public:
         space->build_cells(boundaries);
         space->distribute_boundaries(boundaries);
         space->distribute_initial(data);
-        space->create_symetric_groups();
 
         return space;
     }
-
-    //
-    friend std::istream &operator<<(ostream &is, SpaceParsing &income) {
-        //
-        for (int i = 0; i < income.cells_per_y; ++i) {
-            for (int j = 0; j < income.cells_per_x; ++j) {
-                is << income.part_groups[i][j];
-            }
-        }
-    }
-
     //
     const vector<vector<Cell>> *get_parsing() {
         return &part_groups;
     }
+
+
 };
 
 

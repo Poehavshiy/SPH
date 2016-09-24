@@ -1,744 +1,427 @@
 //
 // Created by nikita on 30.05.16.
 //
+//размер ячейки 50
 
-
-#include "Calculator.h"
 #include "Flow.h"
+#include "Calculator.h"
 
+//для трубы делай r0 = h/5 (максимум 6) D = 2maxV*maxV
 QGraphicsScene *scene_debug;
+
+double Calculator::current_time = 0;
+double Calculator::h;//выбирается из соображения того, что рядом должна быть 21 частица
+// размер ячейки равен 2h
+double Calculator::R = 8.31;
+double Calculator::k = 1.4;
+double Calculator::M = 0.029;
+double Calculator::viscous = 0.00023;
+double Calculator::alpha = 0.9;
+double Calculator::beta = 0.9;
+//для подсчета силы от гарничных частиц
+double Calculator::r0;
+double Calculator::D = 0;//равен квадрату наибольшей скорости
+double Calculator::n1 = 12;
+double Calculator::n2 = 6;
+int Calculator::iteration = 0;
+
 //typedef vector<vector<Particle*>*> PartPointers;
 //typedef vector<vector<Particle>*> PartPointers_add;
 
-void draw_debug(PartPointers &all_real, PartPointers_add &all_add, PartPointers &all_bound) {
+void Calculator::draw_debug(vector<Cell *> &for_sum_calculating) {
     double rad = 2;
-    for (int i = 0; i < all_real.size(); ++i) {
-        for (int j = 0; j < all_real[i]->size(); ++j) {
-            Particle *curent = all_real[i]->operator[](j);
-            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+    const vector<Particle *> *real;
+    const vector<Particle> *shadow;
+    const vector<Particle *> *bound;
+    for (int i = 0; i < for_sum_calculating.size(); ++i) {
+        real = for_sum_calculating[i]->get_real();
+        for (int j = 0; j < real->size(); ++j) {
+            const Particle *b = real->operator[](j);
+            scene_debug->addEllipse(b->X() - rad, b->Y() - rad, rad * 2.0, rad * 2.0,
                                     QPen(Qt::green), QBrush(Qt::SolidPattern));
         }
-    }
-    //
-    for (int i = 0; i < all_add.size(); ++i) {
-        for (int j = 0; j < all_add[i]->size(); ++j) {
-            Particle *curent = &all_add[i]->operator[](j);
-            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+        shadow = for_sum_calculating[i]->get_shadow();
+        for (int j = 0; j < shadow->size(); ++j) {
+            const Particle *b = &shadow->operator[](j);
+            scene_debug->addEllipse(b->X() - rad, b->Y() - rad, rad * 2.0, rad * 2.0,
                                     QPen(Qt::blue), QBrush(Qt::SolidPattern));
         }
-    }
-    //
-    for (int i = 0; i < all_bound.size(); ++i) {
-        for (int j = 0; j < all_bound[i]->size(); ++j) {
-            Particle *curent = all_bound[i]->operator[](j);
-            scene_debug->addEllipse(curent->X() - rad, curent->Y() - rad, rad * 2.0, rad * 2.0,
+        //теперь, если считается скорость, посчитаем силу отталкивания
+        bound = for_sum_calculating[i]->get_bound();
+        for (int j = 0; j < bound->size(); ++j) {
+            const Particle *b = bound->operator[](j);
+            scene_debug->addEllipse(b->X() - rad, b->Y() - rad, rad * 2.0, rad * 2.0,
                                     QPen(Qt::black), QBrush(Qt::SolidPattern));
         }
     }
+}
+
+bool Calculator::to_boundary(Particle &a, Cell &target) {
+    Particle *A = target.get_bound()->operator[](0);
+    Particle *B = target.get_bound()->back();
+    double m = (B->Y() - A->Y()) / (B->X() - A->X());
+    double k = m * A->X() + A->Y();
+    double x_N = (a.X() + m * a.Y() - m * k) / (pow(m, 2) + 1);
+    double y_N = m * (a.X() + m * a.Y() - m * k) / (pow(m, 2) + 1) + k;
+    double normal_x = x_N - a.X();
+    double normal_y = y_N - a.Y();
+    double sc_product = normal_x * a.Vx() + normal_y * a.Vy();
+    if (sc_product > 0)
+        return true;
+    else
+        return false;
+
+}
+//
+bool Calculator::to_boundary(Particle &a, Point &A, Point &B) {
+    double m = (B.y - A.y) / (B.x - A.x);
+    double k = m * A.x + A.y;
+    double x_N = (a.X() + m * a.Y() - m * k) / (pow(m, 2) + 1);
+    double y_N = m * (a.X() + m * a.Y() - m * k) / (pow(m, 2) + 1) + k;
+    double normal_x = x_N - a.X();
+    double normal_y = y_N - a.Y();
+    double sc_product = normal_x * a.Vx() + normal_y * a.Vy();
+    if (sc_product > 0)
+        return true;
+    else
+        return false;
+}
+
+void Calculator::delta_coor(const Particle &a, const Particle &b, double &deltaX, double &deltaY) {
+    deltaX = a.X() - b.X();
+    deltaY = a.Y() - b.Y();
+}
+
+void Calculator::delta_velocity(const Particle &a, const Particle &b, double &delta_Vx, double &delta_Vy) {
+    delta_Vx = a.Vx() - b.Vx();
+    delta_Vy = a.Vy() - b.Vy();
+}
+
+//Производная W по координате direction(0-x 1-y)
+//для вязкости
+double Calculator::two_part_E(const Particle &a, const Particle &b, bool direct) {
+    //direct 0 -> вычисляем Exy, если direct 1 -> вычисляем Eyx
+    double mj_pj = b.M() / b.p();
+
+    //произведение Yскорости на Xпроизводную
+    double Vj_y_Wi_x;
+    //произведение Xскорости на Yпроизводную
+    double Vj_x_Wi_y;
+    double deltaX;
+    double deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+
+    if (direct == 0) {
+        Vj_y_Wi_x = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
+        Vj_x_Wi_y = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
+    } else {
+        Vj_y_Wi_x = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
+        Vj_x_Wi_y = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
+    }
+    double result = mj_pj * (Vj_y_Wi_x + Vj_x_Wi_y);
+    return result;
+}
+
+//искусскственная вязкость
+double Calculator::two_part_art_visc(const Particle &a, const Particle &b) {
+    double delta_vx, delta_vy;
+    double deltaX, deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+    delta_velocity(a, b, delta_vx, delta_vy);
+    if( (delta_vx*deltaX + delta_vy*deltaY) < 0) return 0;
+    double r = hypot(deltaX, deltaY);
+    double V = hypot(deltaX, deltaY);
+
+
+    double phi = h * r * V / (pow(r, 2) + pow(0.1 * h, 2));
+    double result;
+    result = 2 * (-alpha * 0.5 * (a.C() + b.C()) * phi + beta * pow(phi, 2)) / (a.p() + b.p());
+    return result;
+}
+
+//искусственная теплота
+double Calculator::two_part_art_heat(const Particle &a, const Particle &b, bool direct = 0) {
+    /* double deltaX = b.X() - a.X();
+     double deltaY = b.Y() - a.Y();
+     double divVa = b.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
+     double qi = alpha*h*a.p()*a.C()*abs(divVa)+beta*h*a.p()*pow(divVa,2);
+
+     double divVb = a.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
+     double qj = alpha*h*b.p()*b.C()*abs(divV)+beta*h*b.p()*pow(divV,2);*/
+    return 0;
 
 }
 
-
-namespace calculations {
-
-    double current_time = 0;
-
-    double h = 11;
-
-    double R = 8.31;
-
-    double k = 1.2;
-
-    double M = 0.029;
-
-    double viscous = 0.00023;
-
-    double alpha = 1.1;
-
-    double beta = 1.1;
-
-//для подсчета силы от гарничных частиц
-    double r0 = 0.5;
-
-    double D = 0;//равен квадрату наибольшей скорости
-
-    double n1 = 12;
-
-    double n2 = 6;
-
-    double deltaT = 0.001;//меняется по оду расчета
-
-    void delta_coor(Particle &a, Particle &b, double &deltaX, double& deltaY) {
-        deltaX = a.X() - b.X();
-        deltaY = a.Y() - b.Y();
+double Calculator::grad_w_test(double x, double y, bool direction, double h_inc) {
+    //double a = 15 / (7*3.14 * pow(h, 2));
+    double a = 1 / (3.14 * pow(h, 4));
+    double r = hypot(x, y) / h;
+    double minR = 0.001;
+    if (r < 0 || r > 2 || r < minR) return 0;
+    double result;
+    double factor;
+    if (direction == 0) {
+        factor = x / hypot(x, y);
+    } else {
+        factor = y / hypot(x, y);
     }
+    //  a = 15/(7*3.14*h*h);
+    // result = -9*r/4 + 19*pow(r,2)/8 - 5*pow(r,3)/8;
+    if (r > 0 && r <= 1) result = 9 * pow(r, 2) / 4 - 3 * r;
+    else if (r > 1 && r <= 2) result = -(3 / 4) * pow(2 - r, 2);
+   // result = a*(-18*r / 8 + 57*pow(r,2)/24 - 20*pow(r,3)/32);
 
-    void delta_velocity(Particle &a, Particle &b, double &delta_Vx, double& delta_Vy) {
-        delta_Vx = a.Vx() - b.Vx();
-        delta_Vy = a.Vy() - b.Vy();
-    }
-
-    //Производная W по координате direction(0-x 1-y)
-    /*
-       double grad_w_test(double x, double y, bool direction, double h_inc) {
-           double r = hypot(x, y);
-           double minR = 0.001;
-           if (r > 2 * h_inc || r < minR) return 0;
-           //
-           double result = 0;
-           double a = -2 / (3 * h_inc);
-           double b = 1 / (6 * h_inc);
-           double factor;
-           if (direction == 0) {
-               factor = x / r;
-           } else {
-               factor = y / r;
-           }
-
-           if (r > 0 && r < h_inc) {
-               result = -3 * (a * pow(h_inc - r, 2) + b * pow(r - 2 * h_inc, 2)) / pow(h_inc, 3);
-           } else if (r > h_inc && r < 2 * h_inc) {
-               result = -3 * b * (pow(r - 2 * h_inc, 2)) / pow(h_inc, 3);
-           }
-
-
-           result *= factor;
-           return result;
-       }
-   */
-    double grad_w_test(double x, double y, bool direction, double h_inc) {
-        double a = 1 / ( 3.14 * pow(h ,4) );
-        double r = hypot(x, y)/h;
-        double minR = 0.001;
-        if(r < 0 || r > 2 || r < minR) return 0;
-        double result;
-        double factor;
-        if (direction == 0) {
-            factor = x / hypot(x, y);
-        } else {
-            factor = y / hypot(x, y);
-        }
-        if( r> 0 && r< 1) result = 9*r*r/4 - 3*r;
-        else if( r> 1 && r<2 ) result = -(3/4)*pow( 2- x, 2) ;
-        return result*a*factor;
-    }
-
-    //для вязкости
-    double two_part_E(Particle &a, Particle &b, bool direct) {
-        //direct 0 -> вычисляем Exy, если direct 1 -> вычисляем Eyx
-        double mj_pj = b.M() / b.p();
-
-        //произведение Yскорости на Xпроизводную
-        double Vj_y_Wi_x;
-        //произведение Xскорости на Yпроизводную
-        double Vj_x_Wi_y;
-        double deltaX;
-        double deltaY;
-        delta_coor(a, b, deltaX, deltaY);
-
-        if (direct == 0) {
-            Vj_y_Wi_x = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
-            Vj_x_Wi_y = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
-        } else {
-            Vj_y_Wi_x = b.Vx() * grad_w_test(deltaX, deltaY, 1, a.h());
-            Vj_x_Wi_y = b.Vy() * grad_w_test(deltaX, deltaY, 0, a.h());
-        }
-        double result = mj_pj * (Vj_y_Wi_x + Vj_x_Wi_y);
-        return result;
-    }
-
-    //искусскственная вязкость
-    double two_part_art_visc(Particle &a, Particle &b) {
-        double aR = sqrt(pow(a.X(), 2) + pow(a.Y(), 2));
-        double bR = sqrt(pow(b.X(), 2) + pow(b.Y(), 2));
-        double deltaR = aR - bR;
-        //
-        double av = sqrt(pow(a.Vx(), 2) + pow(a.Vy(), 2));
-        double bv = sqrt(pow(b.Vx(), 2) + pow(b.Vy(), 2));
-        double deltaV = aR - bR;
-
-
-        double phi = a.h() * deltaR * deltaV / (pow(deltaR, 2) + pow(0.1 * a.h(), 2));
-        double result;
-        if (deltaR * deltaV < 0) result = 0;
-        else result = 2 * (-alpha * 0.5 * (a.C() + b.C()) * phi + beta * pow(phi, 2)) / (a.p() + b.p());
-        return result;
-    }
-
-    //искусственная теплота
-    double two_part_art_heat(Particle &a, Particle &b, bool direct) {
-        /* double deltaX = b.X() - a.X();
-         double deltaY = b.Y() - a.Y();
-         double divVa = b.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
-         double qi = alpha*h*a.p()*a.C()*abs(divVa)+beta*h*a.p()*pow(divVa,2);
-
-         double divVb = a.M() *(b.Vx()*grad_w_test(deltaX, deltaY, 0)+b.Vy()*grad_w_test(deltaX, deltaY, 1))/b.p();
-         double qj = alpha*h*b.p()*b.C()*abs(divV)+beta*h*b.p()*pow(divV,2);*/
-        return 0;
-
-    }
-
-    //
+    return result * a * factor;//factor instead of 1
+}
 
 //
-    double two_part_p(Particle &a, Particle &b) {
-        double Mj = b.M();
-        double delta_vx, delta_vy;
-        double deltaX, deltaY;
-        delta_coor(a, b, deltaX, deltaY);
-        delta_velocity(a, b, delta_vx, delta_vy);
-        //скалярное произведение скоростей и градиента
-        double d_Wx = grad_w_test(deltaX, deltaY, 0, a.h());
-        double d_Wy = grad_w_test(deltaX, deltaY, 1, a.h());
-        double VijWij = (delta_vx * d_Wx) + (delta_vy * d_Wy);
-        double res = Mj * VijWij;
-        return res;
-    }
-
-    //
-    double two_part_v(Particle &a, Particle &b, bool direct) {
-        double Mj = b.M();
-        double deltaX ;
-        double deltaY ;
-        delta_coor(a , b, deltaX, deltaY);
-        double Wij = grad_w_test(deltaX, deltaY, direct, a.h());
-
-        double brackets1 = -(a.P() / pow(a.p(), 2) +
-                            b.P() / pow(b.p(), 2));
-        //
-        double res = Mj * brackets1 * Wij;//1е слагаемоеж
-        //считаем 2е
-        if (EULER == false) {
-            double brackets2 = viscous * two_part_E(a, b, direct) / pow(a.p(), 2) +
-                               //второе слагаемое  Ej a b поменяли
-                               viscous * two_part_E(b, a, direct) / pow(b.p(), 2);
-            res += Mj * brackets2 * Wij;
-            //добавим иск вязкость
-            double H = two_part_art_visc(a, b);
-
-            res += H * Wij;
-        }
-
-        return res;
-    }
+double Calculator::two_part_p(const Particle &a, const Particle &b, bool direct) {
+    double Mj = b.M();
+    double delta_vx, delta_vy;
+    double deltaX, deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+    delta_velocity(a, b, delta_vx, delta_vy);
+    //скалярное произведение скоростей и градиента
+    double VijWij = delta_vx * grad_w_test(deltaX, deltaY, 0, h) + delta_vy * grad_w_test(deltaX, deltaY, 1, h);
+    double res = Mj * VijWij;
+    return res;
+}
 
 //
-    double two_part_energy(Particle &a, Particle &b) {
-        double delta_vx, delta_vy;
-        double deltaX, deltaY;
-        delta_coor(a, b, deltaX, deltaY);
-        delta_velocity(a, b, delta_vx, delta_vy);
-        //скалярное произведение Vij и Wij
-        double VijWij = (delta_vx * grad_w_test(deltaX, deltaY, 0, a.h())) +
-                        (delta_vy * grad_w_test(deltaX, deltaY, 1, a.h()));
-        //
-        double Mj = b.M();
-        double brackets1 = (a.P() / pow(a.p(), 2) +
-                            b.P() / pow(b.p(), 2));
-        //
+double Calculator::two_part_v(const Particle &a, const Particle &b, bool direct) {
+    double Mj = b.M();
+    double deltaX;
+    double deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+    double Wij = grad_w_test(deltaX, deltaY, direct, h);
+    double H = two_part_art_visc(a, b);
+    double brackets1 = -(a.P() / pow(a.p(), 2) +
+                         b.P() / pow(b.p(), 2) + H);
+    //
+    double res = Mj * brackets1 * Wij;//1е слагаемоеж
+    //считаем 2е
+    if (EULER == false) {
+        double brackets2 = viscous * two_part_E(a, b, direct) / pow(a.p(), 2) +
+                           //второе слагаемое  Ej a b поменяли
+                           viscous * two_part_E(b, a, direct) / pow(b.p(), 2);
+        res += Mj * brackets2 * Wij;
+        //добавим иск вязкость
         double H = two_part_art_visc(a, b);
-        if (EULER == false) {
-            double H = two_part_art_visc(a, b);
-            brackets1 += H;
-        }
-        double res = 0.5 * VijWij * Mj * brackets1;
-        if (EULER == false) {
-            ///?????????????????????????????????
-            double brackets2 = (viscous / (2 * a.p())) * two_part_E(a, b, 0) * two_part_E(a, b, 1);
-            res += brackets2;
-        }
-        //??????????????????????????????????????????
-        //вязкость
-        return res;
 
+        res += H * Wij;
     }
+
+    return res;
+}
+
+//
+double Calculator::two_part_energy(const Particle &a, const Particle &b, bool direct) {
+    double delta_vx, delta_vy;
+    double deltaX, deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+    delta_velocity(a, b, delta_vx, delta_vy);
+    //скалярное произведение Vij и Wij
+    double VijWij = delta_vx * grad_w_test(deltaX, deltaY, 0, h) +
+                    delta_vy * grad_w_test(deltaX, deltaY, 1, h);
+    //
+    double Mj = b.M();
+    double H = two_part_art_visc(a, b);
+    double brackets1 = (a.P() / pow(a.p(), 2) +
+                        b.P() / pow(b.p(), 2) + H);
+    //
+
+    double res = 0.5 * VijWij * Mj * brackets1;
+    if (EULER == false) {
+        ///?????????????????????????????????
+        double brackets2 = (viscous / (2 * a.p())) * two_part_E(a, b, 0) * two_part_E(a, b, 1);
+        res += brackets2;
+    }
+    //??????????????????????????????????????????
+    return res;
+
+}
 
 //высчитывает часть производной скорости от действия граничной частицы
-    double two_part_bforse(Particle &a, Particle &b, bool direct) {
-        double deltaX, deltaY;
-        delta_coor(a, b, deltaX, deltaY);
-        double r = hypot(deltaX, deltaY);
-        double ratio = r0 / r;
-        if (ratio > 1) return 0;
-        else {
-            double x = deltaX;
-            if (direct == 1) x = deltaY;
-            double res = D * (pow(ratio, n1) - pow(ratio, n2)) * x / r;
-            res = res / a.M();
-            return -res;
-        }
+double Calculator::two_part_bforse(const Particle &a, const Particle &b, bool direct = 0) {
+    double deltaX, deltaY;
+    delta_coor(a, b, deltaX, deltaY);
+    double r = hypot(deltaX, deltaY);
+    double ratio = r0 / r;
+    if (ratio > 1) return 0;
+    else {
+        double x = deltaX;
+        if (direct == 1) x = deltaY;
+        double res = D * (pow(ratio, n1) - pow(ratio, n2)) * x / r;
+        res = res / a.M();
+        return -res;
     }
-
-    //
-//Вот эти 3 функции считают соответствующую  производную для частицы а векторы, переддаваемые
-//в функции содержат все частицы, которые потенциально могут прореагировать с а
+}
 
 /*
- * просто без задней мысли идем по всем реальным частицам и находим часть
- * от взаимодействия целевой Particle &a и all_real[i][j]
- *
+ считаем взаимодействие частицы a cо всеми частицами в HomeCell и  for_sum_calculating
  */
-    double calc_p_d(Particle &a, PartPointers &all_real, PartPointers_add &all_add) {
-        double res = 0;
-        for (int i = 0; i < all_real.size(); ++i) {
+double Calculator::calc_particle_dir(function<double(const Particle &, const Particle &, bool)> &derivative_specific,
+                                     Particle &a,
+                                     vector<Cell *> &for_sum_calculating, bool direction, DERIVATIVES &what_dir) {
 
-            for (int j = 0; j < all_real[i]->size(); ++j) {
-                res += calculations::two_part_p(a, *all_real[i]->operator[](j));
-            }
+    //debugin
+    if (debug_mode == true && &a == debug_draw_part) {
+        double rad = 5;
+        draw_debug(for_sum_calculating);
+        scene_debug->addEllipse(debug_draw_part->X() - rad, debug_draw_part->Y() - rad, rad * 2.0, rad * 2.0,
+                                QPen(Qt::green), QBrush(Qt::SolidPattern));
+    }
+
+    double res = 0;
+    ////пройдем по реальным
+    const vector<Particle *> *real;
+    const vector<Particle> *shadow;
+    for (int i = 0; i < for_sum_calculating.size(); ++i) {
+        real = for_sum_calculating[i]->get_real();
+        for (int j = 0; j < real->size(); ++j) {
+            const Particle *b = real->operator[](j);
+            res += derivative_specific(a, *b, direction);
         }
         //теперь от виртуальных частиц
-        //теперь тут надо посчитать от симетричных частиц за границей
-        for (int i = 0; i < all_add.size(); ++i) {
-
-            for (int j = 0; j < all_add[i]->size(); ++j) {
-                res += calculations::two_part_p(a, all_add[i]->operator[](j));
-            }
+        // if (what_dir == VX || what_dir == VY) {
+        shadow = for_sum_calculating[i]->get_shadow();
+        for (int j = 0; j < shadow->size(); ++j) {
+            const Particle *b = &shadow->operator[](j);
+            res += derivative_specific(a, *b, direction);
         }
-
-        return res;
+        //}
     }
-
-//
-/*
-* просто без задней мысли идем по всем реальным граничным и теневым частицам и находим часть
-* от взаимодействия целевой Particle &a и all_real[i][j]
-* от взаимодействия целевой Particle &a и all_add[i][j]
-* от взаимодействия целевой Particle &a и all_bound[i][j]
-*/
-    double calc_V_d(Particle &a,
-                    PartPointers &all_real,
-                    PartPointers &all_bound,
-                    PartPointers_add &all_add, bool direct) {
-        if (for_debugin == &a) {
-            draw_debug(all_real, all_add, all_bound);
-            double rad = 5;
-            scene_debug->addEllipse(a.X() - rad, a.Y() - rad, rad * 2.0, rad * 2.0,
-                                    QPen(Qt::red), QBrush(Qt::SolidPattern));
-        }
-        double res = 0;
-        //здесь м посчитали часть производной скорости от других реальныз частиц
-        for (int i = 0; i < all_real.size(); ++i) {
-
-            for (int j = 0; j < all_real[i]->size(); ++j) {
-                res += calculations::two_part_v(a, *all_real[i]->operator[](j), direct);
-            }
-        }
-        //теперь тут надо посчитать от симетричных частиц за границей
-        for (int i = 0; i < all_add.size(); ++i) {
-
-            for (int j = 0; j < all_add[i]->size(); ++j) {
-                res += calculations::two_part_v(a, all_add[i]->operator[](j), direct);
-            }
-        }
-        //а вот тут надо посчитать производную от действия граничных частиц
-        for (int i = 0; i < all_bound.size(); ++i) {
-
-            for (int j = 0; j < all_bound[i]->size(); ++j) {
-                res += calculations::two_part_bforse(a, *all_bound[i]->operator[](j), direct);
-            }
-        }
-        return res;
-    }
-
-//
-    double calc_E_d(Particle &a,
-                    PartPointers &all_real,
-                    PartPointers_add &all_add) {
-        //здесь м посчитали часть производной энергии от других реальныз частиц
-        double res = 0;
-        for (int i = 0; i < all_real.size(); ++i) {
-            for (int j = 0; j < all_real[i]->size(); ++j) {
-                res += calculations::two_part_energy(a, *all_real[i]->operator[](j));
-            }
-        }
-        //
-        //теперь от виртуальных частиц
-        //теперь тут надо посчитать от симетричных частиц за границей
-        for (int i = 0; i < all_add.size(); ++i) {
-
-            for (int j = 0; j < all_add[i]->size(); ++j) {
-                res += calculations::two_part_energy(a, all_add[i]->operator[](j));
-            }
-        }
-        return res;
-    }
+    return res;
 }
-
-
-//
-//Calculator class
-void *Calculator::get_part_around(int row, int column, int i, int type) {
-    int r_row = row;
-    int r_column = column;
-    switch (i) {
-        case 0:
-            r_row--;
-            if (r_row >= 0) break;
-            else return NULL;
-        case 1:
-            r_column--;
-            r_row--;
-            if (r_column >= 0 && r_row >= 0) break;
-            else return NULL;
-        case 2:
-            r_column--;
-            if (r_column >= 0) break;
-            else return NULL;
-        case 3:
-            r_column--;
-            r_row++;
-            if (r_column >= 0 && r_row < parsing->cells_per_y) break;
-            else return NULL;
-        case 4:
-            r_row++;
-            if (r_row < parsing->cells_per_y) break;
-            else return NULL;
-        case 5:
-            r_column++;
-            r_row++;
-            if (r_row < parsing->cells_per_y && r_column < parsing->cells_per_x) break;
-            else return NULL;
-        case 6:
-            r_column++;
-            if (r_column < parsing->cells_per_x) break;
-            else return NULL;
-        case 7:
-            r_column++;
-            r_row--;
-            if (r_row >= 0 && r_column < parsing->cells_per_x) break;
-            else return NULL;
-        default:
-            return NULL;
-    }
-
-    if (type == 0) {
-        return &parsing->part_groups[r_row][r_column].real_group;
-    } else if (type == 1) return &parsing->part_groups[r_row][r_column].boundary_group;
-
-    else return &parsing->part_groups[r_row][r_column].symetric_group;
-}
-
-//функция должна собрать все реальные частицы из  Cellов вокруг i,j Cell
-PartPointers Calculator::get_real_part(int &row, int &column) {
-    vector<vector<Particle *> *> result;
-    result.push_back(&(parsing->part_groups[row][column].real_group));
-    for (int i = 0; i < 8; ++i) {
-        vector<Particle *> *cur = (vector<Particle *> *) get_part_around(row, column, i, 0);
-        if (cur != NULL) {
-            result.push_back(cur);
-        }
-    }
-    return result;
-}
-
-//
-PartPointers Calculator::get_bound_part(int &row, int &column) {
-    vector<vector<Particle *> *> result;
-    result.push_back(&(parsing->part_groups[row][column].boundary_group));
-    for (int i = 0; i < 8; ++i) {
-        vector<Particle *> *cur = (vector<Particle *> *) get_part_around(row, column, i, 1);
-        if (cur != NULL) {
-            result.push_back(cur);
-        }
-    }
-    return result;
-}
-
-//
-PartPointers_add Calculator::get_sym_part(int &row, int &column) {
-    vector<vector<Particle> *> result;
-    result.push_back(&(parsing->part_groups[row][column].symetric_group));
-    for (int i = 0; i < 8; ++i) {
-        vector<Particle> *cur = (vector<Particle> *) get_part_around(row, column, i, 2);
-        if (cur != NULL) {
-            result.push_back(cur);
-        }
-    }
-    return result;
-}
-
 
 //вот этот метод дергается в методе calculate, который во Flow
 void Calculator::calculate_derivatives() {
-    /*для каждой i,j области пространства создаются вектора всех реальных, граничных и теневых
+    /*
+     * для каждой i,j области пространства создаются вектора всех реальных, граничных и теневых
      * частиц с которыми потенциально может провзаимодействовать любая частица в этой i,j области
      */
     for (int i = 0; i < parsing->cells_per_y; ++i) {
-
         for (int j = 0; j < parsing->cells_per_x; ++j) {
+            if (parsing->part_groups[i][j].real_group.size() != 0) {//если ячейка содержит реальные частицы
 
-            PartPointers all_real = get_real_part(i, j);
-
-            PartPointers all_bound = get_bound_part(i, j);
-
-            PartPointers_add all_add = get_sym_part(i, j);
-
-            //для частиц каждой каждой группы высчитываются производные и запихиваются в соответствующие
-            // вектрора этих производных
-            calc_p_derivatives(parsing->part_groups[i][j], all_real, all_add);
-
-            calc_vx_derivatives(parsing->part_groups[i][j], all_real, all_bound, all_add);
-
-            calc_vy_derivatives(parsing->part_groups[i][j], all_real, all_bound, all_add);
-
-            calc_e_derivatives(parsing->part_groups[i][j], all_real, all_add);
-        }
-    }
-}
-
-//чтобы посчитать производную плотности нам нужно иметь список всех реальных и ВОЗМОЖНО теневых частиц
-void Calculator::calc_p_derivatives(Cell &target,
-                                    PartPointers &all_real,
-                                    PartPointers_add &all_add) {
-
-    for (int i = 0; i < target.real_group.size(); ++i) {
-        double res = calculations::calc_p_d(*target.real_group[i], all_real, all_add);
-        p_derivatives.push_back(res);
-    }
-}
-
-//
-void Calculator::calc_vx_derivatives(Cell &target,
-                                     PartPointers &all_real,
-                                     PartPointers &all_bound,
-                                     PartPointers_add &all_add) {
-    for (int i = 0; i < target.real_group.size(); ++i) {
-        double res = calculations::calc_V_d(*target.real_group[i], all_real, all_bound, all_add, 0);
-        vx_derivatives.push_back(res);
-    }
-}
-
-//
-void Calculator::calc_vy_derivatives(Cell &target,
-                                     PartPointers &all_real,
-                                     PartPointers &all_bound,
-                                     PartPointers_add &all_add) {
-    for (int i = 0; i < target.real_group.size(); ++i) {
-        double res = calculations::calc_V_d(*target.real_group[i], all_real, all_bound, all_add, 1);
-        vy_derivatives.push_back(res);
-    }
-}
-
-//
-void Calculator::calc_e_derivatives(Cell &target,
-                                    PartPointers &all_real,
-                                    PartPointers_add &all_add) {
-    for (int i = 0; i < target.real_group.size(); ++i) {
-        double res = calculations::calc_E_d(*target.real_group[i], all_real, all_add);
-        e_derivatives.push_back(res);
-    }
-
-}
-
-
-//
-/*здесь мы идем по всем Cell так же как мы шли при рассчете производных
- * и для частиц каждого Cell рассчитываем значения параметров на t+dt временном слое
- * этим занимается функция Calculator::calc_t_values(Cell &target, int &row, int &colum)
- * после того как значения параметров на новом временном слое рассчитаны, а так же
- * заполнен вектор for_replacement который хранит пары, где второй элемент указатель на Cell
- * а 1й номер-список, хранящий пары из пары индексов Cell куда нужно переместь и индекса частицы
- * в векторе rel_part у Cell*
- * Функция replace(from_second_replace &replase_inf) в цикле производит необходимые перемещения
- * */
-
-void Calculator::calculate_final() {
-    for (int i = 0; i < parsing->cells_per_y; ++i) {
-        for (int j = 0; j < parsing->cells_per_x; ++j) {
-            calc_t_values(parsing->part_groups[i][j], i, j);
-            //заодно в этом же цикле очистим вектора виртуальных частиц
-            parsing->part_groups[i][j].symetric_group.clear();
-        }
-    }
-    //теперь переместим частицы в другие cells
-    replace();
-}
-//
-//
-/*
- * вот это краеугольно важная функция для рассчета значения на новом временном слое
- * в нее передается Cell и индексы этого Cell  в parsing->part_groups
- * индесы нужны для рассчета позиции производной для этой частицы в векторе производных
-*/
-void Calculator::calc_t_values(Cell &target_cell, const int &row, const int &colum) {
-    //Cell*-куда, ште - идекс в target
-    vector<pair<Cell *, int>> to_cell_pid;
-    for (int i = 0; i < target_cell.real_group.size(); ++i) {
-        //вернули новые параметры
-        Particle new_param = ronge_cutt(*target_cell.real_group[i], index);
-        //определили, нужно ли перемещать частицу
-        if (index == 3) {
-            int r = 0;
-        }
-        std::pair<int, int> new_indexes = rebaze(new_param, row, colum);
-        if (new_indexes.first != -1) {
-            //если нужно, то запомнили Cell куда переместить и откуда
-            //target.real_group которую нужно переместить
-            pair<Cell *, int> replace_i_to(&parsing->part_groups[new_indexes.first][new_indexes.second], i);
-            to_cell_pid.push_back(replace_i_to);
-        }
-        //теперь после того как мы нашли новые параметры и выяснили, нужно ли что то перемещать
-        //можно старой частеце установить новые параметры
-        target_cell.real_group[i]->set_from(new_param);
-        ++index;
-    }
-    From_cell_to_cells new_replace_set(&target_cell, to_cell_pid);
-    for_replacement.push_back(new_replace_set);
-    //теперь для этого Cell сформирован вектор частиц, которые нужно переместить
-}
-
-//пока что это просто эйлер этот метод находит параметры на +dt слое и возвращает их
-Particle Calculator::ronge_cutt(Particle &a, int &index) {
-    double dt = calculations::deltaT;
-    double mass = a.M();
-    double new_p = a.p() + dt * p_derivatives[index];
-    double new_e = a.E() + dt * e_derivatives[index];
-    double new_vx = a.Vx() + dt * vx_derivatives[index];
-    double new_vy = a.Vy() + dt * vy_derivatives[index];
-    //
-    //определение наибольшей скорости для пересчета D
-    double new_V = pow(new_vx * new_vx + new_vy * new_vy, 0.5);
-    if (new_V > largest_V) largest_V = new_V;
-    //Пересчитаем delta_t
-    double c = sqrt(1.4 * calculations::R * a.T() / calculations::M);
-    double new_dt = calculations::h / c;
-    if (new_dt < dt) dt = new_dt;
-    //
-    double new_P = new_e * 0.4 * new_p;
-    Particle result(0, new_p, new_P, new_e, new_vx, new_vy, mass);
-    double new_x = a.X() + dt * new_vx;
-    double new_y = a.Y() + dt * new_vy;
-    Point new_pos(new_x, new_y);
-    result.set_pos(new_pos);
-    return result;
-}
-
-/*этот метод определяет, нужно ли перемещать частицу new_part из Cell
- * и индексами int &row, int &colum
- * и если все таки нужно то куда
- * куда возвращается в виде пары индексов
-*/
-std::pair<int, int> Calculator::rebaze(Particle &new_part, const int &row, const int &colum) {
-    if (parsing->part_groups[row][colum].is_inside(new_part) == true) {
-        return pair<int, int>(-1, -1);
-    } else {
-        //если частица больше не внутри своей старой позиции то мы найдем индексы нового cell
-        std::pair<int, int> new_indexes = parsing->find_around(row, colum, new_part);
-        return new_indexes;
-    }
-}
-//
-
-/*
- * переместить все частицы которые нужно перемещать
- * информации о них хранится в ячейках вектора for_replacement
- */
-void Calculator::replace() {
-    for (int i = 0; i < for_replacement.size(); ++i) {
-        for_replacement[i].replace();
-    }
-}
-
-//
-void Calculator::recalculate_consts() {
-    double v_max = -100500;
-    double min_dt = 100500;
-    double cur_max_v, cur_min_dt;
-    for (int i = 0; i < parsing->cells_per_y; ++i) {
-        for (int j = 0; j < parsing->cells_per_x; ++j) {
-            bool status = get_maxv_mindt(parsing->part_groups[i][j], cur_max_v, cur_min_dt);
-            if (status != false) {
-                if (cur_max_v > v_max) {
-                    v_max = cur_max_v;
+                vector<Cell *> for_sum_calculating;
+                //соберем всех соседей i,j Cell
+                for (int k = 0; k < 8; ++k) {
+                    Cell *current = parsing->get_cell_clockwise(i, j, k);
+                    if (current != nullptr)
+                        for_sum_calculating.push_back(current);
                 }
-                if (cur_min_dt < min_dt) {
-                    min_dt = cur_min_dt;
+                for_sum_calculating.push_back(&parsing->part_groups[i][j]);
+                //для частиц каждой каждой группы высчитываются производные и запихиваются в соответствующие
+                for (int it = DENSITY; it <= ENERGY; ++it) {
+                    DERIVATIVES dir = static_cast<DERIVATIVES >(it);
+                    bool direction = 0;
+                    if (dir == VY) direction = 1;
+                    calc_target_derivatives(derivative_functions[it],
+                                            parsing->part_groups[i][j], for_sum_calculating, dir,
+                                            direction, i, j);
                 }
             }
         }
     }
-
-    //непосредственно переприсвоим
-    calculations::D = v_max * v_max;
-    calculations::deltaT = min_dt;
 }
 
-bool Calculator::get_maxv_mindt(Cell &target, double &cur_max_vin, double &cur_min_dtin) {
-    if (target.real_group.size() == 0) return false;
-    else {
-        double v_max = -100500;
-        double min_dt = 100500;
-        double cur_max_v, cur_min_dt;
-        for (int i = 0; i < target.real_group.size(); ++i) {
-            cur_max_v = sqrt(
-                    pow(target.real_group.operator[](i)->Vx(), 2) + pow(target.real_group.operator[](i)->Vy(), 2));
-            if (cur_max_v > v_max) {
-                v_max = cur_max_v;
-            }
-            double C = sqrt(
-                    (calculations::k * calculations::R / calculations::M) * target.real_group.operator[](i)->T());
-            cur_min_dt = C / calculations::h;
-            if (cur_min_dt < min_dt) {
-                min_dt = cur_min_dt;
-            }
+//вот эти 4 функции считают прозводные ДЛЯ ВСЕХ ЧАСТИЦ В target
+void Calculator::calc_target_derivatives(function<double(const Particle &, const Particle &, bool)> derivative_specific,
+                                         Cell &target, vector<Cell *> &for_sum_calculating,
+                                         DERIVATIVES &what_dir, bool direction,
+                                         int &row, int &column) {
+//посчитаем
+    int size = target.real_group.size();
+    double res = 0;
+    for (int i = 0; i < size; ++i) {
+        Particle &target_p = *target.real_group[i];
+        res = calc_particle_dir(derivative_specific, target_p, for_sum_calculating, direction, what_dir);
+
+        if ((what_dir == VX || what_dir == VY) && target.is_boundary() == true) {
+            double b_forse = boundary_forse(target_p, for_sum_calculating, direction);
+            res += b_forse;
+
         }
-        cur_max_vin = cur_max_v;
-        cur_min_dt = cur_min_dt;
-        return true;
+        target.real_group[i]->set_dir(res, what_dir);
     }
 }
 
-void Calculator::check_empty() {
-    for (int i = 0; i < parsing->cells_per_y; ++i) {
 
-        for (int j = 0; j < parsing->cells_per_x; ++j) {
-            parsing->part_groups[i][j].emptiness();
-        }
+void Calculator::recalculate_parameters() {
+    int data_size = parsing->data_ptr->size();
+    double cur_maxV = 0;
+    double cur_maxC = 0;
+    double cur_maxP = 0;
+    double cur_minP = 0;
+    for (int i = 0; i < data_size; ++i) {
+        Particle *particle = &parsing->data_ptr->operator[](i);
+        particle->ronge_kutt(dt);
+
+        cur_maxV = particle->V();
+        cur_maxC = particle->C();
+        cur_maxP = particle->P();
+        cur_minP = particle->P();
+        if (cur_maxV > max_V) max_V = cur_maxV;
+        if (cur_maxC > max_C) max_C = cur_maxC;
+        if (cur_maxP > max_P) max_P = cur_maxP;
+        if (cur_minP < min_P) min_P = cur_minP;
     }
 }
 
-int Calculator::calc_non_empty(vector<std::pair<int, int>> &indexes_of_nonempty) {
-    int counter = 0;
-    for (int i = 0; i < parsing->cells_per_y; ++i) {
-        for (int j = 0; j < parsing->cells_per_x; ++j) {
-            if (parsing->part_groups[i][j].is_non_empty() == true) {
-                ++counter;
-                indexes_of_nonempty.push_back(pair<int, int>(i, j));
-            }
+double Calculator::boundary_forse(Particle &a, vector<Cell *> &for_sum_calculating, bool direction) {
+    double res = 0;
+    int size = for_sum_calculating.size();
+    for (int i = 0; i < size; ++i) {
+        const vector<Particle *> &bound = *for_sum_calculating[i]->get_bound();
+        int boundsize = bound.size();
+        for (int j = 0; j < boundsize; ++j) {
+            res += two_part_bforse(a, *bound[j], direction);
         }
     }
-    return counter;
-
+    return res;
 }
-//основной метод, вызываемый снаружи
-/*
- * в нем сначала дергается calculate_derivatives();-метод, высчитывающий производные
- * затем метод calculate_final();-метод, который высчитывает новые значения для частиц на новом шаге по времени
- * calculations::curent_time+=calculations::deltaT; обновляет счетчик времени
-*/
+
 void Calculator::calculate() {
 
-    check_empty();
-    //для дебажтрования
-    vector<std::pair<int, int>> indexes_of_nonempty;
-    int how_many_nonempty = calc_non_empty(indexes_of_nonempty);
-    //
-    calculate_derivatives();
-    calculate_final();
-    recalculate_consts();
-    int check = for_replacement.size();
-    // очистим все вспомогательные вектора
-    p_derivatives.clear();
-    vx_derivatives.clear();
-    vy_derivatives.clear();
-    e_derivatives.clear();
-    for_replacement.clear();
-    //заново нужно создать теневые частицы
+    max_V = 0;
+    max_C = 0;
+    //всякие информативные штуки
+    max_P = 0;
+    min_P = 100500;
+
+    parsing->clear_symetric_groups();
     parsing->create_symetric_groups();
-    index = 0;
-    calculations::D = largest_V * largest_V;
-    calculations::deltaT = dt;
-    calculations::current_time += calculations::deltaT;
-    // cout<<calculations::deltaT<<endl;
-    //  assert(calculations::deltaT<1);
+    calculate_derivatives();
+    recalculate_parameters();//пересчитали конечные параметры
+    parsing->replace();
+
+    D = max_V * max_V * 3;
+    dt = h / (6 * max_C);
+    current_time += dt;
+    iteration++;
+    //
+}
+
+//
+Calculator::Calculator(SpaceParsing *target) {
+    //
+    derivative_functions[0] = &(Calculator::two_part_p);
+    derivative_functions[1] = &(Calculator::two_part_v);
+    derivative_functions[2] = &(Calculator::two_part_v);
+    derivative_functions[3] = &(Calculator::two_part_energy);
+    //
+    parsing = target;
+    debug_draw_part = &target->data_ptr->operator[](50);
+    V_theoretical = sqrt(4 * k * parsing->data_ptr->operator[](0).E() / (k - 1));
+    max_V = 0;
+    max_C = 0;
+    dt = 0.1;
+    //всякие информативные штуки
+    max_P = 0;
+    min_P = 100500;
+    //
+    debug_mode = false;
+    h = parsing->x_size/2;
+    r0 =parsing->x_size/5;
 }
