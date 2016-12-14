@@ -9,7 +9,8 @@
 class QGraphicsScene;
 
 class Flow_Drawer : public Flow {
-    int cof; int cof1;
+    int cof;
+    int cofx , cofy;
     /*
    Return a RGB colour value given a scalar v in the range [vmin,vmax]
    In this case each colour component ranges from 0 (no contribution) to
@@ -22,6 +23,12 @@ class Flow_Drawer : public Flow {
     } COLOUR;
 
     string mathplot_path = "/home/nikita/SPH/python/";
+
+    int python_iter = 0;
+
+    vector<int> frames;
+
+    vector<double> times;
 
     COLOUR GetColour(double v,double vmin,double vmax);
 

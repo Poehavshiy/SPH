@@ -5,13 +5,7 @@
 #ifndef SPHSM6_PARTICILE_H
 #define SPHSM6_PARTICILE_H
 
-//
-#include <cmath>
-#include <iostream>
-#include <vector>
-#include<map>
-#include <assert.h>
-#include "algorithm"
+#include "W_functions.h"
 //
 //QTшные либы
 #include <QMainWindow>
@@ -30,16 +24,12 @@
 //
 using namespace std;
 
-enum DERIVATIVES {
-    DENSITY, VX, VY, ENERGY
-};
-//
-
 struct Point {
     Point() {
-        x=0;
-        y=0;
+        x = 0;
+        y = 0;
     }
+
     Point(double X, double Y) {
         x = X;
         y = Y;
@@ -48,12 +38,12 @@ struct Point {
     double x;
     double y;
 
-    friend std::istream& operator<<(ostream& is, Point& income) {
-        is<<income.x<<' '<<income.y;
+    friend std::istream &operator<<(ostream &is, Point &income) {
+        is << income.x << ' ' << income.y;
     }
 
-    friend bool operator==(const Point& left, const Point& right) {
-        if((left.x==right.x) && (left.y==right.y)) return true;
+    friend bool operator==(const Point &left, const Point &right) {
+        if ((left.x == right.x) && (left.y == right.y)) return true;
         else return false;
     }
 };
@@ -68,6 +58,7 @@ class Particle {
     double molar_mass = 0.029;
     //
     double density;
+    double next_density;
     double pressure;
     double energy;
     //
@@ -87,27 +78,35 @@ class Particle {
 
     static constexpr double molar = 0.029;
 
-    static constexpr double h0 = 40;
+    void delta_coor(const Particle &left, double &deltaX, double &deltaY);
 
+    void delta_velocity(const Particle &left, double &delta_Vx, double &delta_Vy);
+
+//искусскственная вязкость
+    double two_part_art_visc(const Particle &a, const Particle &b);
 
 public:
+
     Particle();
 
     //
     Particle(bool status, double p = 0,
              double P = 0, double E = 0, double Vx = 0, double Vy = 0, double M = 0);
+
+    void calculate_derivatives(const Particle &left, double &h) ;
+
     //get functions
     double X() const {
         return pos.x;
     }
 
     //
-    double Y() const{
+    double Y() const {
         return pos.y;
     }
 
     //
-    double p() const{
+    double p() const {
         return density;
     }
 
@@ -116,41 +115,46 @@ public:
         return pressure;
     }
 
-    double E() const{
+    double E() const {
         return energy;
     }
 
     double V() const {
         return hypot(vx, vy);
     }
+
     //
-    double Vx() const{
+    double Vx() const {
         return vx;
     }
 
     //
-    double Vy() const{
+    double Vy() const {
         return vy;
     }
 
     //
-    double M() const{
+    double M() const {
         return mass;
     }
+
     //
-    double T() const{
-       return  pressure*molar_mass/(density*R_costil);
+    double T() const {
+        return pressure * molar_mass / (density * R_costil);
     }
+
     //
-    double C() const{
-        double C = sqrt( k_costil * (k_costil - 1) * energy );
+    double C() const {
+        double C = sqrt(k_costil * (k_costil - 1) * energy);
     }
+
     //
-    double h() const{
-        return h0*(pow((p0/density), 2));
+    double h(double &h0) const {
+        return 1.3 * pow(mass / density, 0.3333333);
     }
+
     //
-    Point position() const{
+    Point position() const {
         return pos;
     }
 
@@ -158,23 +162,28 @@ public:
         pos.x = X;
         pos.y = Y;
     }
+
     //
-    void set_pos(Point& income) {
+    void set_pos(Point &income) {
         pos.x = income.x;
         pos.y = income.y;
     }
+
     //
     void set_vx(double income) {
-        vx=income;
+        vx = income;
     }
+
     //
     void set_vy(double income) {
-        vy=income;
+        vy = income;
     }
+
     //
-    void set_p_dir(double inc){
+    void set_p_dir(double inc) {
         density_dir = inc;
     }
+
     //
     void set_vx_dir(double inc) {
         vx_dir = inc;
@@ -185,69 +194,53 @@ public:
         vy_dir = inc;
     }
     //
-    void set_dir(double& inc, DERIVATIVES& what_dir) {
-        if (what_dir == DENSITY) {
-           density_dir = inc;
-        } else if (what_dir == VX) {
-           vx_dir = inc;
-        } else if (what_dir == VY) {
-            vy_dir = inc;
-        } else if (what_dir == ENERGY) {
-           energy_dir = inc;
-        }
-    }
-    //
     void set_e_dir(double inc) {
         energy_dir = inc;
     }
+
     //
-    void set_pressure(double& data) {
-        pressure=data;
+    void set_pressure(double &data) {
+        pressure = data;
     }
+
     //
-    void set_density(double& data) {
-        density=data;
+    void set_density(double &data) {
+        density = data;
     }
+
     //
-    void set_energy(double& data) {
-        energy=data;
+    void set_energy(double &data) {
+        energy = data;
     }
+
     //
-    void set_mass(double& data) {
-        mass=data;
+    void set_mass(double &data) {
+        mass = data;
     }
 
     //пересчет значений
-    void ronge_kutt(double dt){
-        density += dt * density_dir;
-        energy +=  dt * energy_dir;
-        vx +=      dt * vx_dir;
-        vy +=      dt *vy_dir;
-        //
-        pos.x += dt * vx;
-        pos.y += dt * vy;
-        pressure = energy * (k_costil -1) * density;
-    }
+    void ronge_kutt(double dt);
+
     //
-    void set_from(Particle& data) {
-        mass=data.mass;
+    void set_from(Particle &data) {
+        mass = data.mass;
         //position
-        pos=data.pos;
+        pos = data.pos;
         //
-        density=data.density;
-        pressure=data.pressure;
-        energy=data.energy;
+        density = data.density;
+        pressure = data.pressure;
+        energy = data.energy;
         //
-        vx=data.vx;
-        vy=data.vy;
+        vx = data.vx;
+        vy = data.vy;
     }
+
     //
     bool boundary_status() {
         return isBoundary;
     }
     //
 };
-
 
 
 #endif //SPHSM6_PARTICILE_H

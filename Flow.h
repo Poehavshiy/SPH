@@ -18,6 +18,8 @@ class Flow {
 
     double maxP, maxp, maxe;
 
+    double smooth_length;
+
     int N;
     //
     SpaceParsing *s_distribution;
@@ -36,11 +38,7 @@ class Flow {
     //
     void build_bound_part();
     //
-    void build_init_part(vector<Point> &branch,vector<double>& cond, int step, double r);
-    //
-    void build_init_part(vector<Point> &branch, vector<double> &cond, int step);
-    //
-    void build_sphere( pair<double, double> center,double rad, int angle_step, int partic_per_step, vector<double>& cond);
+    void build_init_part(vector<Point> &branch, vector<double> &cond, int step,bool shape);
 public:
     friend class Flow_Drawer;
     //
