@@ -4,25 +4,29 @@
 
 #include "Help.h"
 #include "SpaceParsing.h"
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+
+
 
 //1- x1, 2-y1, 3-x2, 4-y2, 5-number of 1st type particles //seems ok
 void ReadWrite::parse_bound(string &current, vector<vector<double>> &geometry) {
-    int j = 0, signs = 0;
-    int n = 0;
-    vector<double> curG;
-    curG.resize(5);
-    for (int i = 0; i <= current.size(); ++i) {
-        // char cur=current[i];
-        //help+=cur;
-        if (current[i] == ' ' || current[i] == '\0') {
-            j = i - signs;
-            int cur = stoi(current.substr(j, i));
-            curG[n] = cur;
-            signs = 0;
-            ++n;
-        }
-        ++signs;
+    std::string segment;
+    std::vector<std::string> seglist;
+    vector<double> curG(5);
+    std::stringstream test(current);
+    while(std::getline(test, segment, ' '))
+    {
+        seglist.push_back(segment);
     }
+    std::string::size_type sz;
+    for(int i = 0; i < 5; ++i){
+        const char* check_c = seglist[i].c_str();
+        double check = atof(check_c);//stod(seglist[i], &sz);
+        curG[i] = check;
+    }
+
     geometry.push_back(curG);
 }
 

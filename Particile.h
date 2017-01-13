@@ -61,6 +61,7 @@ class Particle {
     double next_density;
     double pressure;
     double energy;
+    double  full_energy;
     //
     double vx;
     double vy;
@@ -71,6 +72,8 @@ class Particle {
     double energy_dir;
     double vx_dir;
     double vy_dir;
+    double full_energy_dir;
+    double eps_disser;
 
     static constexpr double R_costil = 8.31;
 
@@ -95,6 +98,8 @@ public:
 
     void calculate_derivatives(const Particle &left, double &h) ;
 
+    void calculate_derivatives_dis(const Particle& left, double opt_h = -1);
+
     //get functions
     double X() const {
         return pos.x;
@@ -110,6 +115,9 @@ public:
         return density;
     }
 
+    double D() const{
+        return pow(6 * mass/ density, 0.3333);
+    }
     //
     double P() const {
         return pressure;
@@ -145,7 +153,8 @@ public:
 
     //
     double C() const {
-        double C = sqrt(k_costil * (k_costil - 1) * energy);
+       // double C = sqrt(k_costil * (k_costil - 1) * energy);
+        return sqrt(pressure/density);
     }
 
     //
@@ -220,6 +229,8 @@ public:
 
     //пересчет значений
     void ronge_kutt(double dt);
+
+    double disser_integr(double dt);
 
     //
     void set_from(Particle &data) {

@@ -5,9 +5,9 @@
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" buildAllGenerated="true">
     <generated>
-      <config projectName="sph_interface" targetName="sph_interface_automoc" />
-      <config projectName="SPHSm6" targetName="SPHSm6_automoc" />
       <config projectName="sph_interface" targetName="sph_interface" />
+      <config projectName="SPHSm6" targetName="SPHSm6_automoc" />
+      <config projectName="sph_interface" targetName="sph_interface_automoc" />
       <config projectName="SPHSm6" targetName="SPHSm6" />
     </generated>
   </component>
@@ -18,26 +18,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="926c6e3e-e6f7-4707-a31b-dee2342f2b9b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/W_functions.cpp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/W_functions.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/txt/testB_228.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/txt/testI_228.txt" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/python/mathplot.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/SPHSm6.iml" afterPath="$PROJECT_DIR$/.idea/SPHSm6.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Calculator.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Calculator.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Flow.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Flow.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Flow_drawer.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Flow_drawer.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Help.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Help.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/MainWindow.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/MainWindow.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/MyQGraphicsView.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/MyQGraphicsView.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Particile.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Particile.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/SPHSm6_automoc.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/SPHSm6_automoc.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/SpaceParsing.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/SpaceParsing.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Visualisator.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/Visualisator.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/W_functions.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/W_functions.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/main.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/main.cpp.o" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/SPHSm6" afterPath="$PROJECT_DIR$/cmake-build-debug/SPHSm6" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Calculator.cpp" afterPath="$PROJECT_DIR$/Calculator.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Calculator.h" afterPath="$PROJECT_DIR$/Calculator.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow.cpp" afterPath="$PROJECT_DIR$/Flow.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow.h" afterPath="$PROJECT_DIR$/Flow.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow_drawer.cpp" afterPath="$PROJECT_DIR$/Flow_drawer.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Flow_drawer.h" afterPath="$PROJECT_DIR$/Flow_drawer.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Help.cpp" afterPath="$PROJECT_DIR$/Help.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Particile.cpp" afterPath="$PROJECT_DIR$/Particile.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Particile.h" afterPath="$PROJECT_DIR$/Particile.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SpaceParsing.h" afterPath="$PROJECT_DIR$/SpaceParsing.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/W_functions.h" afterPath="$PROJECT_DIR$/W_functions.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/CXX.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPHSm6.dir/CXX.includecache" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myqgraphicsview.h" afterPath="$PROJECT_DIR$/myqgraphicsview.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_2.txt" afterPath="$PROJECT_DIR$/txt/testB_2.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_2.txt" afterPath="$PROJECT_DIR$/txt/testI_2.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/mathplot1.txt" afterPath="$PROJECT_DIR$/python/mathplot1.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/mathplot2.txt" afterPath="$PROJECT_DIR$/python/mathplot2.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/mathplot3.txt" afterPath="$PROJECT_DIR$/python/mathplot3.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/mathplot4.txt" afterPath="$PROJECT_DIR$/python/mathplot4.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_.txt" afterPath="$PROJECT_DIR$/txt/testB_.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_3.txt" afterPath="$PROJECT_DIR$/txt/testB_3.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_4.txt" afterPath="$PROJECT_DIR$/txt/testB_4.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testB_5.txt" afterPath="$PROJECT_DIR$/txt/testB_5.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_.txt" afterPath="$PROJECT_DIR$/txt/testI_.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_3.txt" afterPath="$PROJECT_DIR$/txt/testI_3.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_4.txt" afterPath="$PROJECT_DIR$/txt/testI_4.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/txt/testI_5.txt" afterPath="$PROJECT_DIR$/txt/testI_5.txt" />
     </list>
     <ignored path="SPHSm6.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -57,14 +76,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Flow.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Flow.cpp">
+      <file leaf-file-name="Calculator.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Calculator.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1530">
-              <caret line="102" column="21" lean-forward="false" selection-start-line="102" selection-start-column="21" selection-end-line="102" selection-end-column="21" />
+            <state relative-caret-position="263">
+              <caret line="58" column="43" lean-forward="true" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
               <folding>
-                <element signature="e#380#887#0" expanded="false" />
-                <element signature="e#889#1181#0" expanded="false" />
+                <element signature="e#344#1676#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -73,26 +91,47 @@
       <file leaf-file-name="Particile.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Particile.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2160">
-              <caret line="144" column="1" lean-forward="false" selection-start-line="144" selection-start-column="1" selection-end-line="144" selection-end-column="1" />
-              <folding />
+            <state relative-caret-position="291">
+              <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
+              <folding>
+                <element signature="e#951#1668#0" expanded="false" />
+                <element signature="e#1670#3357#0" expanded="false" />
+                <element signature="e#5345#5704#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Calculator.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Calculator.cpp">
+      <file leaf-file-name="SpaceParsing.h" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SpaceParsing.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
+            <state relative-caret-position="372">
+              <caret line="53" column="65" lean-forward="false" selection-start-line="53" selection-start-column="65" selection-end-line="53" selection-end-column="65" />
               <folding>
-                <element signature="e#344#1676#0" expanded="false" />
-                <element signature="e#1678#2445#0" expanded="false" />
-                <element signature="e#2447#3637#0" expanded="false" />
-                <element signature="e#3640#4019#0" expanded="false" />
-                <element signature="e#4021#4707#0" expanded="false" />
-                <element signature="e#4710#5113#0" expanded="false" />
-                <element signature="e#5115#5656#0" expanded="false" />
+                <element signature="e#6148#6624#0" expanded="false" />
+                <element signature="e#7162#7450#0" expanded="false" />
+                <element signature="e#7456#7787#0" expanded="false" />
+                <element signature="e#8494#8929#0" expanded="false" />
+                <element signature="e#8935#9367#0" expanded="false" />
+                <element signature="e#9373#11265#0" expanded="false" />
+                <element signature="e#11272#11812#0" expanded="false" />
+                <element signature="e#11818#12196#0" expanded="false" />
+                <element signature="e#12202#13457#0" expanded="false" />
+                <element signature="e#13463#13708#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Flow_drawer.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="287">
+              <caret line="130" column="65" lean-forward="false" selection-start-line="130" selection-start-column="65" selection-end-line="130" selection-end-column="65" />
+              <folding>
+                <element signature="e#2432#3655#0" expanded="false" />
+                <element signature="e#4725#6032#0" expanded="false" />
+                <marker date="1484299826379" expanded="true" signature="1116:1167" ph="..." />
               </folding>
             </state>
           </provider>
@@ -106,7 +145,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/testB.sph" />
         <option value="$PROJECT_DIR$/testI.sph" />
         <option value="$PROJECT_DIR$/a.txt" />
         <option value="$PROJECT_DIR$/result.txt" />
@@ -125,38 +163,39 @@
         <option value="$PROJECT_DIR$/Visualisator.h" />
         <option value="$PROJECT_DIR$/Visualisator.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/txt/testB_4.txt" />
-        <option value="$PROJECT_DIR$/txt/testI_4.txt" />
-        <option value="$PROJECT_DIR$/txt/testI_3.txt" />
-        <option value="$PROJECT_DIR$/txt/testB_3.txt" />
-        <option value="$PROJECT_DIR$/Help.cpp" />
         <option value="$PROJECT_DIR$/SpaceParsing.cpp" />
-        <option value="$PROJECT_DIR$/txt/testB_.txt" />
-        <option value="$PROJECT_DIR$/txt/testI_5.txt" />
-        <option value="$PROJECT_DIR$/SpaceParsing.h" />
         <option value="$PROJECT_DIR$/txt/testI_1.txt" />
         <option value="$PROJECT_DIR$/txt/testI_6.txt" />
         <option value="$PROJECT_DIR$/txt/testB_6.txt" />
         <option value="$PROJECT_DIR$/MyQGraphicsView.cpp" />
-        <option value="$PROJECT_DIR$/txt/testB_5.txt" />
         <option value="$PROJECT_DIR$/python/mathplot.txt" />
         <option value="$PROJECT_DIR$/txt/testB_1.txt" />
         <option value="$PROJECT_DIR$/txt/testball_B.txt" />
         <option value="$PROJECT_DIR$/txt/testball_I.txt" />
-        <option value="$PROJECT_DIR$/Flow_drawer.h" />
         <option value="$PROJECT_DIR$/txt/testI_228.txt" />
         <option value="$PROJECT_DIR$/txt/testB_228.txt" />
-        <option value="$PROJECT_DIR$/Flow.h" />
-        <option value="$PROJECT_DIR$/myqgraphicsview.h" />
-        <option value="$PROJECT_DIR$/Particile.h" />
-        <option value="$PROJECT_DIR$/W_functions.h" />
         <option value="$PROJECT_DIR$/Calculator.h" />
         <option value="$PROJECT_DIR$/txt/testI_2.txt" />
-        <option value="$PROJECT_DIR$/Flow.cpp" />
         <option value="$PROJECT_DIR$/txt/testB_2.txt" />
-        <option value="$PROJECT_DIR$/Particile.cpp" />
+        <option value="$PROJECT_DIR$/txt/testI_.txt" />
+        <option value="$PROJECT_DIR$/txt/testB_.txt" />
+        <option value="$PROJECT_DIR$/Flow_drawer.h" />
+        <option value="$PROJECT_DIR$/txt/testI_3.txt" />
+        <option value="$PROJECT_DIR$/txt/testB_4.txt" />
+        <option value="$PROJECT_DIR$/txt/testI_4.txt" />
+        <option value="$PROJECT_DIR$/W_functions.h" />
+        <option value="$PROJECT_DIR$/Flow.h" />
+        <option value="$PROJECT_DIR$/txt/testB_3.txt" />
+        <option value="$PROJECT_DIR$/Particile.h" />
+        <option value="$PROJECT_DIR$/myqgraphicsview.h" />
+        <option value="$PROJECT_DIR$/txt/testI_5.txt" />
+        <option value="$PROJECT_DIR$/Flow.cpp" />
+        <option value="$PROJECT_DIR$/txt/testB_5.txt" />
+        <option value="$PROJECT_DIR$/Help.cpp" />
         <option value="$PROJECT_DIR$/Flow_drawer.cpp" />
+        <option value="$PROJECT_DIR$/Particile.cpp" />
         <option value="$PROJECT_DIR$/Calculator.cpp" />
+        <option value="$PROJECT_DIR$/SpaceParsing.h" />
       </list>
     </option>
   </component>
@@ -169,9 +208,9 @@
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
     <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="y" value="-4" />
     <option name="width" value="1301" />
-    <option name="height" value="744" />
+    <option name="height" value="772" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -200,6 +239,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SPHSm6" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SPH" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="txt" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -210,6 +263,8 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
+    <property name="nodejs_interpreter_path" value="/usr/bin/node" />
+    <property name="js.eslint.eslintPackage" value="" />
   </component>
   <component name="RunManager" selected="Application.SPHSm6">
     <configuration default="true" type="CLion_Remote" factoryName="GDB Remote Debug" remoteCommand="" symbolFile="" sysroot="">
@@ -224,6 +279,12 @@
       <method />
     </configuration>
     <configuration default="true" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -489,34 +550,49 @@
       <workItem from="1481648287307" duration="1996000" />
       <workItem from="1481650320495" duration="4729000" />
       <workItem from="1481659781914" duration="692000" />
+      <workItem from="1481742281981" duration="35000" />
+      <workItem from="1482416915732" duration="617000" />
+      <workItem from="1483035847145" duration="1604000" />
+      <workItem from="1483634242822" duration="1397000" />
+      <workItem from="1483707045453" duration="5244000" />
+      <workItem from="1483807116952" duration="5079000" />
+      <workItem from="1483812544649" duration="4418000" />
+      <workItem from="1483955806484" duration="8618000" />
+      <workItem from="1483980951033" duration="3621000" />
+      <workItem from="1483985662718" duration="1948000" />
+      <workItem from="1483988656861" duration="1191000" />
+      <workItem from="1483991042747" duration="133000" />
+      <workItem from="1484063964185" duration="602000" />
+      <workItem from="1484222367297" duration="10102000" />
+      <workItem from="1484299173053" duration="2855000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="352082000" />
+    <option name="totallyTimeSpent" value="399546000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21829362" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18831667" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35724962" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32884902" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09118087" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18834081" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19581465" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.013452915" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32884902" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20179372" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -555,12 +631,18 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="555" />
+      <option name="time" value="610" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
-        <watch expression="*this-&gt;parsing-&gt;data_ptr" language="ObjectiveC" />
-        <watch expression="buffer[0]" language="ObjectiveC" />
+        <watch expression="this" />
+        <watch expression="PDijx" />
+        <watch expression="PDijy" />
+        <watch expression="D" />
+        <watch expression="left" />
+        <watch expression="vx_dir" />
+        <watch expression="vy_dir" />
+        <watch expression="mass" />
       </configuration>
     </watches-manager>
   </component>
@@ -576,24 +658,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/csv/test.csv.7" />
-    <entry file="file://$PROJECT_DIR$/Help.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/4.8/bits/move.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="389">
           <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_3.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="21" lean-forward="false" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -611,73 +679,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_4.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="6" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_3.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="7" lean-forward="false" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_4.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="5" lean-forward="false" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/4.8/bits/stl_vector.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="902" column="0" lean-forward="false" selection-start-line="902" selection-start-column="0" selection-end-line="902" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SpaceParsing.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_5.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="3" lean-forward="false" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_6.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="18" lean-forward="false" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_6.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -688,43 +693,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_5.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/mathplot.txt" />
-    <entry file="file://$PROJECT_DIR$/txt/testI_1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_228.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testB_228.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -746,32 +715,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myqgraphicsview.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="25" lean-forward="false" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/5/bits/stl_iterator_base_types.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/stl_vector.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="779" column="0" lean-forward="false" selection-start-line="779" selection-start-column="0" selection-end-line="779" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -789,31 +736,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Flow_drawer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/W_functions.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particile.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1629">
-          <caret line="221" column="31" lean-forward="false" selection-start-line="221" selection-start-column="31" selection-end-line="221" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -824,105 +750,267 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/W_functions.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="21" column="15" lean-forward="true" selection-start-line="21" selection-start-column="15" selection-end-line="21" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/testI_2.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="7" lean-forward="false" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Calculator.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SpaceParsing.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="423" column="27" lean-forward="true" selection-start-line="423" selection-start-column="27" selection-end-line="423" selection-end-column="27" />
-          <folding>
-            <element signature="e#127#4308#1" expanded="false" />
-            <element signature="e#4311#4385#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MyQGraphicsView.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-120">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="102" column="21" lean-forward="false" selection-start-line="102" selection-start-column="21" selection-end-line="102" selection-end-column="21" />
-          <folding>
-            <element signature="e#380#887#0" expanded="false" />
-            <element signature="e#889#1181#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="156" column="52" lean-forward="false" selection-start-line="156" selection-start-column="52" selection-end-line="156" selection-end-column="52" />
-          <folding>
-            <element signature="e#96#732#0" expanded="false" />
-            <element signature="e#735#1095#0" expanded="false" />
-            <element signature="e#1098#1684#0" expanded="false" />
-            <element signature="e#1686#2199#0" expanded="false" />
-            <element signature="e#2201#3424#0" expanded="false" />
-            <element signature="e#3426#4460#0" expanded="false" />
-            <element signature="e#4462#5743#0" expanded="false" />
-            <element signature="e#5745#6288#0" expanded="false" />
-            <element signature="e#6290#6856#0" expanded="false" />
-            <element signature="e#6858#7149#0" expanded="false" />
-            <element signature="e#7151#7560#0" expanded="false" />
-            <element signature="e#7562#7979#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/txt/testB_2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_6.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="18" lean-forward="false" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_228.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Particile.cpp">
+    <entry file="file://$PROJECT_DIR$/MainWindow.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2160">
-          <caret line="144" column="1" lean-forward="false" selection-start-line="144" selection-start-column="1" selection-end-line="144" selection-end-column="1" />
+        <state relative-caret-position="285">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Calculator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="17" lean-forward="true" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="3" lean-forward="false" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="3" lean-forward="true" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MyQGraphicsView.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SpaceParsing.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/W_functions.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="106" column="47" lean-forward="false" selection-start-line="106" selection-start-column="47" selection-end-line="106" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_3.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="3" lean-forward="false" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_4.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="9" lean-forward="false" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_228.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_6.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_4.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_3.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="112" column="12" lean-forward="false" selection-start-line="112" selection-start-column="12" selection-end-line="112" selection-end-column="12" />
+          <folding>
+            <element signature="e#826#1333#0" expanded="false" />
+            <marker date="1484226373111" expanded="true" signature="2520:2588" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testI_5.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myqgraphicsview.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-97">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow_drawer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-247">
+          <caret line="12" column="16" lean-forward="false" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Particile.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2505">
+          <caret line="167" column="0" lean-forward="false" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+          <folding>
+            <element signature="e#455#906#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Help.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="46" lean-forward="false" selection-start-line="45" selection-start-column="46" selection-end-line="45" selection-end-column="46" />
+          <folding>
+            <element signature="e#41#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/testB_5.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/stl_vector.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="779" column="0" lean-forward="false" selection-start-line="779" selection-start-column="0" selection-end-line="779" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flow_drawer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="130" column="65" lean-forward="false" selection-start-line="130" selection-start-column="65" selection-end-line="130" selection-end-column="65" />
+          <folding>
+            <element signature="e#2432#3655#0" expanded="false" />
+            <element signature="e#4725#6032#0" expanded="false" />
+            <marker date="1484299826379" expanded="true" signature="1116:1167" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Calculator.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="62" column="31" lean-forward="false" selection-start-line="62" selection-start-column="31" selection-end-line="62" selection-end-column="31" />
+        <state relative-caret-position="263">
+          <caret line="58" column="43" lean-forward="true" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
           <folding>
             <element signature="e#344#1676#0" expanded="false" />
-            <element signature="e#1678#2445#0" expanded="false" />
-            <element signature="e#2447#3637#0" expanded="false" />
-            <element signature="e#3640#4019#0" expanded="false" />
-            <element signature="e#4021#4707#0" expanded="false" />
-            <element signature="e#4710#5113#0" expanded="false" />
-            <element signature="e#5115#5656#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Particile.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="173" column="0" lean-forward="false" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
+          <folding>
+            <element signature="e#951#1668#0" expanded="false" />
+            <element signature="e#1670#3357#0" expanded="false" />
+            <element signature="e#5345#5704#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SpaceParsing.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="53" column="65" lean-forward="false" selection-start-line="53" selection-start-column="65" selection-end-line="53" selection-end-column="65" />
+          <folding>
+            <element signature="e#6148#6624#0" expanded="false" />
+            <element signature="e#7162#7450#0" expanded="false" />
+            <element signature="e#7456#7787#0" expanded="false" />
+            <element signature="e#8494#8929#0" expanded="false" />
+            <element signature="e#8935#9367#0" expanded="false" />
+            <element signature="e#9373#11265#0" expanded="false" />
+            <element signature="e#11272#11812#0" expanded="false" />
+            <element signature="e#11818#12196#0" expanded="false" />
+            <element signature="e#12202#13457#0" expanded="false" />
+            <element signature="e#13463#13708#0" expanded="false" />
           </folding>
         </state>
       </provider>

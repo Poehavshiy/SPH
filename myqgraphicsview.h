@@ -23,11 +23,14 @@ public slots:
     void mouseDoubleClickEvent(QMouseEvent *e);
 
 private:
-    string calc_case = "2";
+    //3 - как у товарнова
+    //4 - как у типов
+    //5 труба как у товарнова
+    string calc_case = "5";
     string file1 = "/home/nikita/SPH/txt/testB_" + calc_case + ".txt";
-    string file2 = "/home/nikita/SPH/txt/testI_" +calc_case + ".txt";
+    string file2 = "/home/nikita/SPH/txt/testI_" + calc_case + ".txt";
     string path_tovis = "/home/nikita/SPHS/csv";
-    Visualisator* vis;
+    Visualisator *vis;
     QGraphicsScene *scene;
     Flow_Drawer *flow;
     //
@@ -36,8 +39,6 @@ public:
     void draw();
 
     void clear();
-
-
 };
 
 #endif

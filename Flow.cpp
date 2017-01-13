@@ -7,7 +7,26 @@
 
 Particle *for_debugin;
 
+void Flow::test_W() {
+    std::ofstream outfile("/home/nikita/ClionProjects/dummy_sph/python/check_W.txt");
+    outfile << "begin.\n";
+    double x = -2;
+    double sum = 0;
+    double dx = 0.01;
+    while (x < 2) {
+        double value = W_functions::dW_disser(x, 1);
+        outfile << x << " " << value << '\n';
+        x += dx;
+        sum += dx * value;
+    }
+// assert(fabs(sum - 1) < 0.001);
+    outfile << "end.\n";
+}
+
+
+
 Flow::Flow(const string &boundaryFile, const string &initFile) {
+    test_W();
     int per_x, per_y;
 
     N = 1500;
@@ -18,7 +37,7 @@ Flow::Flow(const string &boundaryFile, const string &initFile) {
 
     set_init(initFile);
 
-    s_distribution = SpaceParsing::init(geometry, boundaries, data, per_x, per_y);
+    s_distribution = SpaceParsing::init(geometry, boundaries, data, per_x, per_y, h);
 }
 
 ////parsing boundary and initial conditions files
@@ -83,13 +102,19 @@ void Flow::set_init(const string &initFile) {
     }
     vector<vector<double>> conditions;
 
+    // шар мужиков r= 0.1
+//    maxp=1.63;
+//    maxe = 4.29 * 10E6;
+//    maxP = 0.4 * maxp * maxe;
+  //  maxp = 1;
+  //  maxP = 1;
 
-    maxp=1.63;
-    maxe = 4.29 * 10E6;
-    maxP = 0.4 * maxp * maxe;
+    maxp = 1;
+    maxP = 1;
+
     conditions = {
             {maxP, maxp, 1, 0, 0},
-            {1,    maxp,1, 0, 0}
+            {maxP/10, maxp/10, 1, 0, 0}
     };
     for(int i = 0; i < branches.size(); ++i) {
         build_init_part(branches[i], conditions[i], i, shapes[i]);
@@ -100,7 +125,7 @@ void Flow::set_init(const string &initFile) {
 //fill branc with particles with initial patameters
 //0- rectangle 1-circle
 void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step, bool shape) {
-    int number = 1000;
+    int number = 200;
     //стороны прямоугольника, который я заполняю частицами
     double X = abs(branch[0].x - branch[3].x);
     double Y = abs(branch[0].y - branch[1].y);
@@ -109,6 +134,8 @@ void Flow::build_init_part(vector<Point> &branch,vector<double>& cond, int step,
     int per_x = per_y * XYratio;//number / per_y;
     double xstep = X / per_x;
     double ystep = Y / per_y ;
+    //
+    h = 4 * xstep;
     //
     double P = cond[0];
     double p = cond[1];

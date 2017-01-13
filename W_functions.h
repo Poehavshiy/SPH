@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include<map>
+#include <map>
 #include <assert.h>
 #include "algorithm"
 
@@ -81,6 +81,36 @@ public:
             return  -3 * pow((2*h - q),2) * b2 * a;
         }
     }
+    //
+    static double W_disser(const double &r, const double &h){
+        double phi = fabs(r)/h;
+        if(phi >= 2) return 0;
+        double N = 1.5*h;
+        if(phi < 1){
+            double res = ( 1 - 3 * pow(phi, 2) / 2 + 3 * pow(phi, 3) / 4 ) / N;
+            return res;
+        }
+        else{
+            double res = ( pow(2 - phi, 3) / 4 ) / N;
+            return res;
+        }
+    }
+    //
+    static double dW_disser(double r_shtr,double h){
+        double fi = fabs(r_shtr )/ h;
+        if(fi >= 2.0)
+            return 0;
+
+        double n1 = 28 * 3.14 * h * h * h; //2D
+        if(fi >= 0.0) {
+            if(fi < 1.0) {
+                return (-12 * fi + 9 * fi * fi) / n1;
+            }
+            double ss = (2 - fi);
+            return -3.0 * ss * ss / n1;
+        }
+    }
+
 };
 
 

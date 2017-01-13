@@ -9,8 +9,8 @@
 class QGraphicsScene;
 
 class Flow_Drawer : public Flow {
-    int cof;
-    int cofx , cofy;
+    int cof = 1;
+    int cofx = 0 , cofy = 0;
     /*
    Return a RGB colour value given a scalar v in the range [vmin,vmax]
    In this case each colour component ranges from 0 (no contribution) to

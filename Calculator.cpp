@@ -51,12 +51,28 @@ void Calculator::calc_particle_dir(Particle &a, vector<Cell *> &for_sum_calculat
     ////пройдем по реальным
     const vector<Particle *> *real;
     const vector<Particle> *shadow;
+    const vector<Particle*> * bound;
     for (int i = 0; i < for_sum_calculating.size(); ++i) {
         real = for_sum_calculating[i] -> get_real();
         for (int j = 0; j < real -> size(); ++j) {
             const Particle &b = *real->operator[](j);
-            a.calculate_derivatives(b, h);
+            a.calculate_derivatives_dis(b);
         }
+        //пройдем по волшебным
+        if(for_sum_calculating[i] -> is_boundary()) {
+            shadow = for_sum_calculating[i]->get_shadow();
+            for (int j = 0; j < shadow->size(); ++j) {
+                const Particle &b = shadow->operator[](j);
+                a.calculate_derivatives_dis(b);
+            }
+            //
+            bound = for_sum_calculating[i]->get_bound();
+            for (int j = 0; j < bound->size(); ++j) {
+                const Particle &b = *bound->operator[](j);
+               // a.calculate_derivatives_dis(b);
+            }
+        }
+
     }
 }
 
@@ -104,9 +120,11 @@ void Calculator::recalculate_parameters() {
     double cur_maxC = 0;
     double cur_maxP = 0;
     double cur_minP = 0;
+    double new_dt = 100;
     for (unsigned long i = 0; i < data_size; ++i) {
         Particle *particle = &parsing->data_ptr->operator[](i);
-        particle->ronge_kutt(dt);
+        double cur_dt = particle->disser_integr(dt);
+        if(cur_dt < new_dt) new_dt = cur_dt;
         cur_maxV = particle->V();
         cur_maxC = particle->C();
         cur_maxP = particle->P();
@@ -116,6 +134,7 @@ void Calculator::recalculate_parameters() {
         if (cur_maxP > max_P) max_P = cur_maxP;
         if (cur_minP < min_P) min_P = cur_minP;
     }
+    //dt = new_dt;
 }
 
 
@@ -127,8 +146,8 @@ void Calculator::calculate() {
     max_P = 0;
     min_P = 2e+12;
 
-    //parsing->clear_symetric_groups();
-    //parsing->create_symetric_groups();
+    parsing->clear_symetric_groups();
+    parsing->create_symetric_groups();
     calculate_derivatives();
     recalculate_parameters();//пересчитали конечные параметры
     parsing->replace();
@@ -148,13 +167,13 @@ Calculator::Calculator(SpaceParsing *target, double smooth_length) {
     V_theoretical = sqrt(4 * 1.4 * parsing->data_ptr->operator[](0).E() / (1.4 - 1));
     max_V = 0;
     max_C = 0;
-    dt = 1e-7;
+    dt = 1e-3;
     //всякие информативные штуки
     max_P = 0;
     min_P = 2e+14;
     //
     debug_mode = false;
     //h = parsing->x_size / 15;
-    h = fabs((parsing->data_ptr->operator[](0).X() - parsing->data_ptr->operator[](1).X())) * 5;
-    int a = 0;
+    //h = fabs((parsing->data_ptr->operator[](0).X() - parsing->data_ptr->operator[](1).X())) * 5;
+    h = parsing->h;
 }

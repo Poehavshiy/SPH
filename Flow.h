@@ -21,6 +21,8 @@ class Flow {
     double smooth_length;
 
     int N;
+
+    double h;
     //
     SpaceParsing *s_distribution;
     //
@@ -39,6 +41,8 @@ class Flow {
     void build_bound_part();
     //
     void build_init_part(vector<Point> &branch, vector<double> &cond, int step,bool shape);
+    //
+    void test_W();
 public:
     friend class Flow_Drawer;
     //

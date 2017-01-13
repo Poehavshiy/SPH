@@ -37,11 +37,24 @@ Flow_Drawer::Flow_Drawer(const string &boundaryFile, const string &initFile) :
         Flow(boundaryFile, initFile),
         frames({50, 100, 150, 200}), times({0.025 / 1000, 0.05 / 1000, 0.075 / 1000, 0.1 / 1000}) {
     calculator = new Calculator(s_distribution, smooth_length);
-    /* cof  = 3;
-     cof1 = 200;*/
-    cof = 1;
-    cofx = 0;
-    cofy = 0;
+
+//    cof = 2; для трубы
+//    cofx = 200;
+//    cofy = 100;
+
+//    //шар как у товарнова кейс 3
+//    cof = 60;
+//    cofx = -100;
+//    cofy = -100;
+
+    //шар как у мужиков
+//    cof = 100;
+//    cofx = -100;
+//    cofy = -100;
+    //труба как у товарнова
+    cof = 700;
+    cofx = -150;
+    cofy = 150;
 
 };
 
@@ -110,12 +123,12 @@ void Flow_Drawer::draw_shadow(QGraphicsScene *scene) {
             for (int k = 0; k < curent_shadow->size(); ++k) {
                 double value = curent_shadow->operator[](k).P();
 
-                COLOUR currentC = GetColour(value, 0, maxP);
+                COLOUR currentC = GetColour(value, 0, calculator->get_maxP());
                 QColor QTcurrentC;
                 QTcurrentC.setRgb(255 * currentC.r, 255 * currentC.g, 255 * currentC.b);
                 scene->addEllipse(curent_shadow->operator[](k).X() * cof + cofx - rad,
                                   curent_shadow->operator[](k).Y() * cof + cofy - rad,
-                                  rad * 2.0, rad * 2.0, QPen(Qt::black), QBrush(Qt::black));
+                                  rad * 2.0, rad * 2.0,QTcurrentC /*QPen(Qt::black)*/, QBrush(Qt::black));
             }
         }
     }
@@ -145,8 +158,8 @@ void Flow_Drawer::draw_data_bycells(QGraphicsScene *scene) {
             const Cell *current = &data->operator[](i)[j];
             const vector<Particle *> *curent_real = current->get_real();
             for (int i = 0; i < curent_real->size(); ++i) {
-                scene->addEllipse(curent_real->operator[](i)->X() - rad,
-                                  curent_real->operator[](i)->Y() - rad,
+                scene->addEllipse(curent_real->operator[](i)->X() * cof + cofx - rad,
+                                  curent_real->operator[](i)->Y() * cof + cofy - rad,
                                   rad * 2.0, rad * 2.0, colors[colour_counter], QBrush(Qt::SolidPattern));
             }
             if (curent_real->size() != 0) ++colour_counter;
@@ -155,7 +168,7 @@ void Flow_Drawer::draw_data_bycells(QGraphicsScene *scene) {
 }
 
 void Flow_Drawer::draw_dataP(QGraphicsScene *scene) {
-    double rad = 1;
+    double rad = 2;
     for (int i = 0; i < data.size(); ++i) {
         double value = data[i].P();
         COLOUR currentC = GetColour(value, 0, calculator->get_maxP());
@@ -195,13 +208,13 @@ void Flow_Drawer::write_py_data(int target_itertion) {
 }
 
 void Flow_Drawer::calculate_step(QGraphicsScene *scene) {
-    calculator->calculate();
+
     draw_dataP(scene);
     //draw_data_bycells(scene);
 
-    //  draw_boundary(scene);
+    draw_boundary(scene);
     draw_grid(scene);
-    // draw_shadow(scene);
+    draw_shadow(scene);
     //
 
     show_information(scene);
@@ -210,7 +223,7 @@ void Flow_Drawer::calculate_step(QGraphicsScene *scene) {
         ++python_iter;
         write_py_data(python_iter);
     }
-
+    calculator->calculate();
 
 
     // cout<<data.size();
